@@ -1,9 +1,9 @@
 const express = require("express");
 const CustomerModel = require("../models/CustomerModel");
-const customerRouter = express.Router();
+const router = express.Router();
 
 
-customerRouter.post("/createCustomer", async (req, res) => {
+router.post("/createCustomer", async (req, res) => {
 
     try {
         const customer = new CustomerModel({
@@ -25,7 +25,7 @@ customerRouter.post("/createCustomer", async (req, res) => {
 }
 );
 
-customerRouter.post("/getCustomer", async (req, res) => {
+router.post("/getCustomer", async (req, res) => {
 
     try {
         const customer = await CustomerModel.find({});
@@ -38,7 +38,20 @@ customerRouter.post("/getCustomer", async (req, res) => {
     }
 });
 
-customerRouter.post("/updateCustomer", async (req, res) => {
+router.post("/getCustomerById", async (req, res) => {
+
+    try {
+        const customer = await CustomerModel.find({_id:req.body.custId});
+        res.json(customer);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+router.post("/updateCustomer", async (req, res) => {
 
     const id  = req.body.id;
     const  {fname,lname,email,password,contact_no}  = req.body;
@@ -52,7 +65,7 @@ customerRouter.post("/updateCustomer", async (req, res) => {
     }
 });
 
-customerRouter.post("/deleteCustomer", async (req, res) => {
+router.post("/deleteCustomer", async (req, res) => {
 
     const id  = req.body.id;
     try {
@@ -67,4 +80,4 @@ customerRouter.post("/deleteCustomer", async (req, res) => {
 
 
 
-module.exports = customerRouter
+module.exports = router
