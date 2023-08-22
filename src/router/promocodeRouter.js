@@ -38,6 +38,18 @@ router.post("/getPromocode", async (req, res) => {
         });
     }
 });
+router.post("/getPromocodeById", async (req, res) => {
+
+    try {
+        const promocode = await PromocodeModel.find({_id:req.body.promoId});
+        res.json(promocode);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
 
 router.post("/updatePromocode", async (req, res) => {
 

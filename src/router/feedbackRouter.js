@@ -25,6 +25,35 @@ router.post("/createFeeback", async (req, res) => {
 }
 );
 
+router.post("/getFeedbackByCustId", async (req, res) => {
+
+    try {
+        const feedback = await FeedbackModel.find({custId:req.body.custId});
+        res.json(feedback);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+
+router.post("/getFeedbackByEmpId", async (req, res) => {
+
+    try {
+        const feedback = await FeedbackModel.find({custId:req.body.empId});
+        res.json(feedback);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+
+
 router.post("/getFeedback", async (req, res) => {
 
     try {

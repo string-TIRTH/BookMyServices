@@ -60,6 +60,20 @@ router.post("/getService", async (req, res) => {
     }
 });
 
+
+router.post("/getServiceById", async (req, res) => {
+
+    try {
+        const service = await ServiceModel.find({_id : req.body.serId});
+        res.json(service);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
 router.post("/updateService", async (req, res) => {
 
     const id  = req.body.id;

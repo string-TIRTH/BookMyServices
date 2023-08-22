@@ -37,7 +37,18 @@ router.post("/getEmployee", async (req, res) => {
         });
     }
 });
+router.post("/getEmployeeById", async (req, res) => {
 
+    try {
+        const employee = await EmployeeModel.find({_id:req.body.empId});
+        res.json(employee);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
 router.post("/updateEmployee", async (req, res) => {
 
     const id  = req.body.id;

@@ -46,6 +46,45 @@ router.post("/getOrder", async (req, res) => {
     }
 });
 
+router.post("/getOrderById", async (req, res) => {
+
+    try {
+        const order = await OrderModel.find({_id:req.body.orderId});
+        res.json(order);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+
+router.post("/getOrderByCustId", async (req, res) => {
+
+    try {
+        const order = await OrderModel.find({custId:req.body.custId});
+        res.json(order);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+router.post("/getOrderByEmpId", async (req, res) => {
+
+    try {
+        const order = await OrderModel.find({empId:req.body.empId});
+        res.json(order);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
 router.post("/updateOrder", async (req, res) => {
 
     const id  = req.body.id;

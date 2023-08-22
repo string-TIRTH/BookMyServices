@@ -33,6 +33,31 @@ router.post("/getEmpSer", async (req, res) => {
         });
     }
 });
+router.post("/getEmpSerByEmpId", async (req, res) => {
+
+    try {
+        const empSer = await EmpSerModel.find({empID:req.body.empID});
+        res.json(empSer);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
+
+router.post("/getEmpSerBySerId", async (req, res) => {
+
+    try {
+        const empSer = await EmpSerModel.find({serID:req.body.serID});
+        res.json(empSer);
+    }
+    catch (err) {
+        res.json({
+            message: err
+        });
+    }
+});
 
 router.post("/updateEmpSer", async (req, res) => {
 
