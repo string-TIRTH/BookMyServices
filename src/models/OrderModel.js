@@ -35,6 +35,10 @@ const AddressSchema = new mongoose.Schema({
  })
 const OrderSchema = new mongoose.Schema({
   
+    orderId :{
+      type : mongoose.Schema.Types.ObjectId, 
+      require : true
+    },
     custId :{
         type : mongoose.Schema.Types.ObjectId, 
         ref: 'customer',

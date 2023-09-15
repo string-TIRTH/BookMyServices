@@ -14,6 +14,7 @@ module.exports = {
 
   createCustomer: async (req, res) => {
     try {
+      console.log(req);
     const customer = new Customer({
         fname : req.body.fname,
         lname : req.body.lname,
@@ -22,10 +23,10 @@ module.exports = {
         contact_no : req.body.contact_no,
         address : req.body.address
     });
-      const newCustomer = await newCustomer.save();
+      const newCustomer = await customer.save();
       res.status(201).json(newCustomer);
     } catch (error) {
-      res.status(400).json({ error: 'Bad request' });
+      res.status(400).json(error);
     }
   },
 
