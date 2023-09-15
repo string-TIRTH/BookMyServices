@@ -1,9 +1,11 @@
+const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose')
+const moment = require('moment-timezone');
+const nDate = new Date().toLocaleString('en-US', {
+  timeZone: 'Asia/Calcutta'
+});
+moment().tz("Asia/Kolkata").format();
 const AddressSchema = new mongoose.Schema({
-   address_id :{
-      type : String,
-      required : true,
-   },
    house_no :{
       type : String,
       required : true,
@@ -38,30 +40,43 @@ const OrderSchema = new mongoose.Schema({
         ref: 'customer',
         required : true,
     },
-    empId :{
-        type : mongoose.Schema.Types.ObjectId, 
-        ref: 'employee'
-    },
-    serList :[
-      {
-        serId :{
+    serId :{
         type : mongoose.Schema.Types.ObjectId, 
         ref: 'service',
         required : true,
-        },
-        isActive : {
-          type : Boolean,
-          default : true
-        }
-      } 
-    ],
-    booking_datetime:{
-        type : Date,
-        default : Date.now()
     },
-    service_datetime:{
-        type : Date,
-        default : Date.now()
+    empId :{
+        type : mongoose.Schema.Types.ObjectId, 
+        ref: 'employee',
+        default: null
+    },
+    qty :{
+      type : Number, 
+      default : 1,
+      },
+    endTime :{
+      type : String, 
+      default : moment().format("hh:mm:ss")
+    },
+    isActive : {
+      type : Boolean,
+      default : true
+    },
+    booking_datetime:{
+      type : String,
+      default : moment().format("YYYY-MM-DD hh:mm:ss")
+    },
+    service_date:{
+      type : String,
+      default : moment().format("YYYY-MM-DD")
+    },
+    service_startTime:{
+      type : String,
+      default : moment().format("hh:mm:ss")
+    },
+    service_endTime:{
+      type : String,
+      default : moment().format("hh:mm:ss")
     },
     address : {
       type : AddressSchema,

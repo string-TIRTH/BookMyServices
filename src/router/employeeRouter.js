@@ -1,9 +1,12 @@
 const express = require("express");
 const EmployeeModel = require("../models/EmployeeModel");
+const employeeController = require("../controllers/employeeController");
 const router = express.Router();
 
 
-router.post("/createEmployee", async (req, res) => {
+router.post("/createEmployee", employeeController.createEmployee);
+/**
+ * async (req, res) => {
 
     try {
         const employee = new EmployeeModel({
@@ -23,9 +26,10 @@ router.post("/createEmployee", async (req, res) => {
         });
     }
 }
-);
-
-router.post("/getEmployee", async (req, res) => {
+ */
+router.post("/getEmployee",employeeController.getAllEmployees);
+/**
+ *  async (req, res) => {
 
     try {
         const employee = await EmployeeModel.find({});
@@ -36,8 +40,11 @@ router.post("/getEmployee", async (req, res) => {
             message: err
         });
     }
-});
-router.post("/getEmployeeById", async (req, res) => {
+}
+ */
+router.post("/getEmployeeById", employeeController.getEmployeeById);
+/**
+ * async (req, res) => {
 
     try {
         const employee = await EmployeeModel.find({_id:req.body.empId});
@@ -48,8 +55,11 @@ router.post("/getEmployeeById", async (req, res) => {
             message: err
         });
     }
-});
-router.post("/updateEmployee", async (req, res) => {
+}
+ */
+router.post("/updateEmployee",employeeController.updateEmployee);
+/**
+ *  async (req, res) => {
 
     const id  = req.body.id;
     const  {fname,lname,email,password,contact_no}  = req.body;
@@ -61,9 +71,13 @@ router.post("/updateEmployee", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
+}
+ */
 
-router.post("/deleteEmployee", async (req, res) => {
+router.post("/deleteEmployee",employeeController.deleteEmployee);
+
+/**
+ *  async (req, res) => {
 
     const id  = req.body.id;
     try {
@@ -73,9 +87,8 @@ router.post("/deleteEmployee", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
-
-
+}
+ */
 
 
 module.exports = router

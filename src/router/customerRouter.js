@@ -1,9 +1,11 @@
 const express = require("express");
 const CustomerModel = require("../models/CustomerModel");
 const router = express.Router();
+const custController = require("../controllers/customerController");
+const customerController = require("../controllers/customerController");
 
-
-router.post("/createCustomer", async (req, res) => {
+router.post("/createCustomer",custController.createCustomer);
+/**async (req, res) => {
 
     try {
         const customer = new CustomerModel({
@@ -22,10 +24,11 @@ router.post("/createCustomer", async (req, res) => {
             message: err
         });
     }
-}
-);
+} */
 
-router.post("/getCustomer", async (req, res) => {
+router.post("/getCustomer", custController.getAllCustomers);
+/**
+ * {
 
     try {
         const customer = await CustomerModel.find({});
@@ -36,8 +39,8 @@ router.post("/getCustomer", async (req, res) => {
             message: err
         });
     }
-});
-
+}
+ */
 router.post("/getCustomerById", async (req, res) => {
 
     try {
@@ -51,11 +54,13 @@ router.post("/getCustomerById", async (req, res) => {
     }
 });
 
-router.post("/updateCustomer", async (req, res) => {
+router.post("/updateCustomer", customerController.updateCustomer);
+/**
+ * async (req, res) => {
 
     const id  = req.body.id;
     const  {fname,lname,email,password,contact_no}  = req.body;
-
+    
     try {
         const customer = await CustomerModel.findByIdAndUpdate(id, { fname,lname,email,password,contact_no}, { new: true });
         res.send(customer);
@@ -63,9 +68,11 @@ router.post("/updateCustomer", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
-
-router.post("/deleteCustomer", async (req, res) => {
+}
+ */
+router.post("/deleteCustomer", customerController.deleteCustomer);
+/**
+ * async (req, res) => {
 
     const id  = req.body.id;
     try {
@@ -75,9 +82,8 @@ router.post("/deleteCustomer", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
-
-
+}
+ */
 
 
 module.exports = router

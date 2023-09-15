@@ -1,27 +1,13 @@
 const express = require("express");
 const EmpSerModel = require("../models/EmployeeServiceModel");
 const router = express.Router();
+const empSerController = require("../controllers/employeeServiceController");
 
 
-router.post("/createEmpSer", async (req, res) => {
+router.post("/createEmpSer", empSerController.addEmpSer);
 
-    try {
-        const empSer = new EmpSerModel({
-            empId : req.body.empId,
-            serList : req.body.serList
-        });
-        const newEmpSer = await empSer.save();
-        res.json(newEmpSer);
-    }
-    catch (err) {
-        res.json({
-            message: err
-        });
-    }
-}
-);
-
-router.post("/getEmpSer", async (req, res) => {
+router.post("/getEmpSer",empSerController.getAllEmpSers);
+/** async (req, res) => {
 
     try {
         const empSer = await EmpSerModel.find({});
@@ -32,8 +18,11 @@ router.post("/getEmpSer", async (req, res) => {
             message: err
         });
     }
-});
-router.post("/getEmpSerByEmpId", async (req, res) => {
+} */
+router.post("/getEmpSerByEmpId",empSerController.getEmpSerByEmpId);
+
+/**
+ *  async (req, res) => {
 
     try {
         const empSer = await EmpSerModel.find({empID:req.body.empID});
@@ -44,9 +33,12 @@ router.post("/getEmpSerByEmpId", async (req, res) => {
             message: err
         });
     }
-});
+}
+ */
 
-router.post("/getEmpSerBySerId", async (req, res) => {
+router.post("/getEmpSerBySerId",empSerController.getEmpSerBySerId);
+/**
+ *  async (req, res) => {
 
     try {
         const empSer = await EmpSerModel.find({serID:req.body.serID});
@@ -57,9 +49,12 @@ router.post("/getEmpSerBySerId", async (req, res) => {
             message: err
         });
     }
-});
+}
+ */
 
-router.post("/updateEmpSer", async (req, res) => {
+router.post("/updateEmpSer",empSerController.updateEmpSer);
+/**
+ * async (req, res) => {
 
     const empID  = req.body.id;
     const  {serList}  = req.body;
@@ -71,9 +66,11 @@ router.post("/updateEmpSer", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
-
-router.post("/deleteEmpSer", async (req, res) => {
+}
+ */
+router.post("/deleteEmpSer", empSerController.deleteEmpSer);
+/**
+ * async (req, res) => {
 
     const id  = req.body.id;
     try {
@@ -83,7 +80,8 @@ router.post("/deleteEmpSer", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
+}
+ */
 
 
 
