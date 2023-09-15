@@ -1,7 +1,7 @@
 // Example customerController.js
 
 const Customer = require('../models/CustomerModel');
-
+var nodemailer = require('nodemailer');
 module.exports = {
   getAllCustomers: async (req, res) => {
     try {
@@ -29,7 +29,33 @@ module.exports = {
       res.status(400).json(error);
     }
   },
+  sendOTP : async (req,res)=>{
+    const transporter = nodemailer.createTransport({
+      port: 465,               // true for 465, false for other ports
+      host: "smtp.gmail.com",
+         auth: {
+              user: 'bookmyservices.one@gmail.com',
+              pass: 'dpxtivjexdkxucvq',
+           },
+      secure: true,
+      });
 
+      const mailData = {
+        from: 'bookmyservice@noreply.com',  // sender address
+          to: 'tirthprajapati26@gmail.com',   // list of receivers
+          subject: 'OTP for account authentication',
+          text: 'OTP for account authentication don\' share',
+          html: '<p>dont Share : </p><p style ="color:red;"><b> 123456<b> </p>',
+        };
+
+        transporter.sendMail(mailData, function (err, info) {
+          if(err)
+            console.log(err)
+          else
+            console.log(info);
+       });
+       res.send("ok");
+  },
   getCustomerById: async (req, res) => {
     const custId = req.params.custId;
 
