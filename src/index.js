@@ -3,6 +3,8 @@ const app = express()
 
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose')
+const fileUpload = require('express-fileupload');
+const multer = require('multer');
 const custRouter = require('./router/customerRouter')
 const empRouter = require('./router/employeeRouter')
 const empSerRouter = require('./router/employeeServiceRouter')
@@ -10,10 +12,17 @@ const feedbackRouter = require('./router/feedbackRouter')
 const promocodeRouter = require('./router/promocodeRouter')
 const serviceRouter = require('./router/serviceRouter')
 const orderRouter = require('./router/orderRouter')
+
+app.set('view engine', 'pug');
 app.use(express.json());
 TZ = 'Asia/Calcutta';
+app.use(fileUpload());
+// const upload = multer()
+// app.use(upload.array()); 
+app.use(express.static('public'));
 
-
+// app.set('views', './views');
+// app.use(multer().array())
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 // const uri = "mongodb+srv://bookmyservicesone:Ce109Ce114@cluster0.rg4p8ay.mongodb.net/bookMyServices?retryWrites=true&w=majority";

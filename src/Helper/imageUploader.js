@@ -1,8 +1,9 @@
-const cloudinary = require("../config/cloudinary")
-function uploadImage(){
-    cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
-        { public_id: "olympic_flag" }, 
-        function(error, result) {console.log(result); });
-        
+const cloudinary = require("../config/cloudinary");
+
+async function uploadImage (id, folderPath,imageName) {
+    let res = null;
+    await cloudinary.v2.uploader.upload("src/assets/uploads/" + imageName,
+    {folder: folderPath},function (error, result) { res = result});
+    return res;
 }
 module.exports = uploadImage;
