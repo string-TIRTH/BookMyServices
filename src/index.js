@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+
+var bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 const custRouter = require('./router/customerRouter')
 const empRouter = require('./router/employeeRouter')
@@ -52,7 +54,10 @@ mongoose.connect(url).then(()=>{
     console.log(err);
 });
 
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ 
+   extended: true 
+}));
 app.use("/customer",custRouter)
 app.use("/employee",empRouter)
 app.use("/empser",empSerRouter)

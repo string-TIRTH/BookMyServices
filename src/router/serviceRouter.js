@@ -1,6 +1,7 @@
 const express = require("express");
 const ServiceModel = require("../models/ServiceModel");
 const router = express.Router();
+const uploadImage = require("../Helper/imageUploader")
 /*
 name :{
     type : String,
@@ -27,6 +28,37 @@ name :{
     default : true
  },
 */
+
+router.post("/test", async (req, res) => {
+
+    try {
+        cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
+        { public_id: "olympic_flag" }, 
+        function(error, result) {console.log(result); });
+        res.json("ok")
+    }
+    catch (err) {
+        res.json(
+             err
+        );
+    }
+}
+);
+router.post("/test2", async (req, res) => {
+    try {
+        
+        uploadImage()        
+        console.log(req)
+        res.send('e')
+    }
+    catch (err) {
+        res.json(
+             err
+        );
+    }
+}
+);
+
 router.post("/createService", async (req, res) => {
 
     try {
