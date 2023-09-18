@@ -25,6 +25,10 @@ const ServiceSchema = new mongoose.Schema({
    type : String,
    default : "https://res.cloudinary.com/dexuvfg93/image/upload/v1694933313/demoService.jpg"
   },
+  imageId:{
+   type:String,
+   default : "1234556"
+  },
   isActive :{
      type : Boolean,
      default : true

@@ -1,11 +1,11 @@
 // Example customerController.js
 
-const Customer = require('../models/CustomerModel');
+const CustomerModel = require('../models/CustomerModel');
 var nodemailer = require('nodemailer');
 module.exports = {
   getAllCustomers: async (req, res) => {
     try {
-      const customer = await Customer.find({});
+      const customer = await CustomerModel.find({});
       res.status(200).json(customer);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
@@ -15,7 +15,7 @@ module.exports = {
   createCustomer: async (req, res) => {
     try {
       console.log(req);
-    const customer = new Customer({
+    const customer = new CustomerModel({
         fname : req.body.fname,
         lname : req.body.lname,
         email : req.body.email,
@@ -60,9 +60,9 @@ module.exports = {
     const custId = req.params.custId;
 
     try {
-      const customer = await Customer.findById(custId);
+      const customer = await CustomerModel.findById(custId);
       if (!customer) {
-        return res.status(404).json({ error: 'Customer not found' });
+        return res.status(404).json({ error: 'CustomerModel not found' });
       }
       res.status(200).json(customer);
     } catch (error) {
@@ -70,10 +70,21 @@ module.exports = {
     }
   },
   updateCustomer: async(req,res)=>{
-    const custId  = req.body.custId;
-    const  {fname,lname,email,password,contact_no}  = req.body;
+    // const custId  = req.body._id;
+    const address = [{
+      "address_id": "1",
+            "house_no": "21",
+            "society_name": "laxmandev park",
+            "landmark": "santram deri road",
+            "city": "nadiad",
+            "pincode": "387002",
+            "lat": "22.32",
+            "lng": "434.32",
+            "_id": "6504accc772500b71214147b"
+    }];
+    const  {_id,fname,lname,email,password,contact_no }  = req.body;
     try {
-        const customer = await CustomerModel.findByIdAndUpdate(custId, { fname,lname,email,password,contact_no}, { new: false });
+        const customer = await CustomerModel.findByIdAndUpdate(_id, { fname,lname,email,password,contact_no}, { new: false });
         res.send(customer);
     }catch (error) {
         console.error(error);

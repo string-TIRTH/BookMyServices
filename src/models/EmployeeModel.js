@@ -64,6 +64,14 @@ const EmployeeSchema = new mongoose.Schema({
   rating : {
     type : String,
     default : "Not Rated"
+  },
+  profileURL : {
+    type : String,
+    default : "https://res.cloudinary.com/dexuvfg93/image/upload/v1694933313/demoService.jpg"
+  },
+  imageId:{
+   type:String,
+   default : "1234556"
   }
 })
 

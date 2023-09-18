@@ -63,6 +63,15 @@ mongoose.connect(url).then(()=>{
     console.log(err);
 });
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'assets/uploads/'); // Destination folder for uploaded files
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Use the original filename
+    },
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 
    extended: true 
