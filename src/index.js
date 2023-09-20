@@ -52,8 +52,13 @@ app.use(express.static('public'));
 
 
 
-const url = "mongodb://127.0.0.1:27017/bookmyservices";
-// const url = "mongodb+srv://bookmyservicesone:Ce109Ce114@bookmyservices.neharrl.mongodb.net/";
+// const url = "mongodb://127.0.0.1:27017/bookmyservices";
+const url = "mongodb+srv://bookmyservicesone:Ce109Ce114@cluster0.rg4p8ay.mongodb.net/bookMyServices";
+
+// const connectionParams ={
+//     useNewUrlParser :true,
+//     useUnifiedTopology : true,
+// };
 mongoose.connect(url).then(()=>{
     console.log("Connected to DB")
     app.listen(5000,()=>{
