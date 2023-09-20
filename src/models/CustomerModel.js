@@ -1,37 +1,6 @@
  const mongoose = require('mongoose')
 
- const AddressSchema = new mongoose.Schema({
-   address_id :{
-      type : String,
-      required : true,
-   },
-   house_no :{
-      type : String,
-      required : true,
-   },
-   society_name :{
-      type : String,
-      required : true,
-   },
-   landmark :{
-      type : String
-   }, 
-   city :{
-      type : String
-   },
-   pincode :{
-      type : String,
-      required : true,
-   },
-   lat :{
-      type : String,
-      required : true,
-   },
-   lng :{
-      type : String,
-      required : true,
-   },
- })
+//  const AddressSchema =
  
  const CustomerSchema = new mongoose.Schema({
    fname :{
@@ -55,15 +24,48 @@
       required : true,
    },
    address : {
-      type : [AddressSchema]
+      type : { 
+         address_id :{
+            type : String,
+            required : false,
+         },
+         house_no :{
+            type : String,
+            required : true,
+         },
+         society_name :{
+            type : String,
+            required : true,
+         },
+         landmark :{
+            type : String
+         }, 
+         city :{
+            type : String
+         },
+         pincode :{
+            type : String,
+            required : false,
+         },
+         lat :{
+            type : String,
+            required : false,
+         },
+         lng :{
+            type : String,
+            required : false,
+         },
+      }
+       
    },
    status : {
       type : String,
       default : "Not Verified"
    }
+
  })
  
 
 
-const CustomerModel = mongoose.model('customer',CustomerSchema)
+const CustomerModel = mongoose.model('Customer',CustomerSchema)
 module.exports = CustomerModel

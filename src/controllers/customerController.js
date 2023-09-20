@@ -1,4 +1,4 @@
-// Example customerController.js
+
 
 const Customer = require('../models/CustomerModel');
 
@@ -13,18 +13,21 @@ module.exports = {
   },
 
   createCustomer: async (req, res) => {
+    // console.log(req.body)
     try {
+    
     const customer = new Customer({
         fname : req.body.fname,
         lname : req.body.lname,
-        email : req.body.email,
+        email : req.body.email, 
         password : req.body.password,
         contact_no : req.body.contact_no,
         address : req.body.address
     });
-      const newCustomer = await newCustomer.save();
+      const newCustomer = await customer.save();
       res.status(201).json(newCustomer);
     } catch (error) {
+      console.log(error)
       res.status(400).json({ error: 'Bad request' });
     }
   },

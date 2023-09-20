@@ -10,6 +10,8 @@ const serviceRouter = require('./router/serviceRouter')
 const orderRouter = require('./router/orderRouter')
 app.use(express.json());
 TZ = 'Asia/Calcutta';
+const cors = require('cors');
+app.use(cors({ origin: 'http://localhost:3001' }));
 
 
 

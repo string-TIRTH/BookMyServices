@@ -4,6 +4,7 @@ const router = express.Router();
 const custController = require("../controllers/customerController");
 const customerController = require("../controllers/customerController");
 
+
 router.post("/createCustomer",custController.createCustomer);
 /**async (req, res) => {
 
