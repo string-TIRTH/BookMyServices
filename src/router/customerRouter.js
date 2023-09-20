@@ -85,6 +85,7 @@ router.post("/deleteCustomer", customerController.deleteCustomer);
     }
 }
  */
+router.post("/sendOTP", customerController.sendOTP);
 
 
 module.exports = router
