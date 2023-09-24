@@ -1,0 +1,124 @@
+.login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.form-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 35px;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.login-form-bg {
+    background-color:rgba(8, 8, 8, 0.5);
+ /* Adjust the color and opacity as needed */
+    padding: 10px; /* Increase the padding to create more space inside the form */
+    border-radius: 30px;
+    
+     /* Add rounded corners */
+    width: 10px; /* Increase the width of the form container */
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-right: 50px;
+    margin-left:50px ;/* Add rounded corners */
+}
+.login-form-bg p {
+    text-align: left;
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+}
+
+/* ... (other styles) */
+
+
+.logo-container {
+    
+    margin-left: 0px;
+   /* Add space between logo and form content */
+}
+.logo-text {
+    font-size: 1.5rem; 
+    margin-right: 40px;
+    text-decoration: underline; 
+    margin-left: 20px;
+
+    /* Adjust the font size as needed */
+}
+
+.logo {
+    width: 100px;
+    border-radius: 120px;
+    height: 100px;
+    margin-left: 40px;
+}
+
+.form-content {
+    flex: 1; /* Allow form content to expand and fill available space */
+}
+.logo-and-text {
+    display: flex; /* Use flexbox for logo and text alignment */
+    align-items: center; 
+    justify-content: space-between; /* Vertically center logo and text */
+}
+.formg{
+    background-color: yellow;
+}
+.second-form-layer {
+    background-color: yellow; 
+}
