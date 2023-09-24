@@ -1,7 +1,9 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import './CssF/kogin.css'; // Import the CSS file
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
+import Swal from 'sweetalert2'
 // import Home from '../Components/Home'
 // Import the CSS file
 
@@ -36,11 +38,21 @@ const Kogin = () => {
 
     // Display validation messages
     if (!isEmailValid) {
-      alert('Invalid email address. Please enter a valid email.');
+      Swal.fire({
+        title: 'Invalid email address!',
+        text: ' Please enter a valid email.',
+        icon: 'warning',
+        confirmButtonText: 'Re-Enter'
+      })
     }
 
     if (!isPasswordValid) {
-      alert('Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.');
+      Swal.fire({
+        title: 'Invalid password!',
+        text: ' Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.',
+        icon: 'warning',
+        confirmButtonText: 'Re-Enter'
+      })
     }
 
 
@@ -60,28 +72,44 @@ const Kogin = () => {
       const response = await axios.post('http://localhost:5000/customer/getCustomerByEmail', data);
 
       console.log('Data sent successfully:', response.data);
-      if(response?.data?.length > 0)
-      {
-        if(response.data[0]?.password === password)
-        {
-          alert('Login Successfully')
+      if (response?.data?.length > 0) {
+        if (response.data[0]?.password === password) {
+          let timerInterval
+          Swal.fire({
+            title: 'Login Successfully',
+            timer: 1000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              const b = Swal.getHtmlContainer().querySelector('b')
+              timerInterval = setInterval(() => {
+                b.textContent = Swal.getTimerLeft()
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
           window.location.href = '/';
         }
-        else
-        {
+        else {
           alert('password is  Wrong / failed to Login')
           setPassword('');
         }
       }
-      else
-      {
+      else {
         alert('Failed to Login / Credentials are Wrong')
         setEmail('');
         setPassword('');
       }
-    
-    
-      
+
+
+
 
 
     } catch (error) {
@@ -150,7 +178,7 @@ const Kogin = () => {
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
         <p>
-          Forgot your password? <Link to ="/forgot">Reset password</Link>
+          Forgot your password? <Link to="/forgot">Reset password</Link>
         </p>
       </div>
     </div>

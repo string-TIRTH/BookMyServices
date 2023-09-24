@@ -77,7 +77,8 @@ module.exports = {
      if(customer){
       // console.log("true");
     
-     res.status(200).json({mess : true})
+     res.status(200).json({mess : true,
+    customer:customer})
     }
     else{
       // console.log("false")

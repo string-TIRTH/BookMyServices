@@ -53,12 +53,12 @@ getService:  async (req, res) => {
 },
 
 getServiceById:  async (req, res) => {
-const custId = req.body.serId;   
+const serId = req.body.serId;   
 
 console.log(req.body.serId) 
 try {
         
-        const service = await ServiceModel.findById(custId);
+        const service = await ServiceModel.findById(serId);
         res.json(service);
     }
     catch (err) {
