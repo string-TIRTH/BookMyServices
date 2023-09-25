@@ -28,6 +28,7 @@ router.post("/createCustomer",custController.createCustomer);
 } */
 
 router.post("/getCustomer", custController.getAllCustomers);
+router.post("/validateCustomer", custController.validateCustomer);
 router.post("/getCustomerByEmail", custController.getCustomerbyemail);
 /**
  * {

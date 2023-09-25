@@ -27,6 +27,7 @@ router.post("/createEmployee", employeeController.createEmployee);
     }
 }
  */
+router.post("/validateEmployee", employeeController.validateEmployee);
 router.post("/getEmployee",employeeController.getAllEmployees);
 /**
  *  async (req, res) => {

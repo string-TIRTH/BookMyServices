@@ -12,7 +12,7 @@ const DetailServices = () => {
   const [user, setuser] = useState({});
   // const [user,setuser] =useState({});
   const data = {
-    _id: id
+    serId: id
   };
   useEffect(() => {
 

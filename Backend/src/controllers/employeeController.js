@@ -12,6 +12,16 @@ module.exports = {
     }
   },
 
+  validateEmployee : async (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password
+    const employee = await Employee.findOne({"email": email},{password:true});
+    if(employee.password == password){
+      res.json({"message":true});
+    }else{
+      res.json({"message":false});
+    }
+  },
   createEmployee: async (req, res) => {
     
     try {

@@ -57,33 +57,42 @@ const Kogin = () => {
 
 
     if (!isEmailValid || !isPasswordValid) {
-      setEmail('');
-      setPassword('');
+      // setEmail('');
+      // setPassword('');
       return;
     }
     try {
       const data = {
 
         email: email,
-        // password: password,
+        password: password,
 
       }
 
-      const response = await axios.post('http://localhost:5000/customer/getCustomerByEmail', data);
+      const response = await axios.post('http://localhost:5000/customer/getCustomerByEmail', data)
+      if (response.data.message === false) {
+        console.log(response.message)
+        Swal.fire({
+          title: 'Account Does Not Exists!',
+          text: 'Create Account ?',
+          html: `<a href='/signup'>Create Account ?</a>`,
+          icon: 'warning',
+          confirmButtonText: 'Re-Enter'
+        })
+      } else {
+        const isValid = await axios.post('http://localhost:5000/customer/validateCustomer', data)
 
-      console.log('Data sent successfully:', response.data);
-      if (response?.data?.length > 0) {
-        if (response.data[0]?.password === password) {
+        console.log(JSON.stringify(isValid))
+        if (isValid.data.message === true) {
           let timerInterval
           Swal.fire({
-            title: 'Login Successfully',
+            title: 'Login Successful!',
             timer: 1000,
             timerProgressBar: true,
             didOpen: () => {
               Swal.showLoading()
-              const b = Swal.getHtmlContainer().querySelector('b')
               timerInterval = setInterval(() => {
-                b.textContent = Swal.getTimerLeft()
+                
               }, 100)
             },
             willClose: () => {
@@ -91,98 +100,99 @@ const Kogin = () => {
             }
           }).then((result) => {
             /* Read more about handling dismissals below */
+            window.location.href = '/';
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
             }
           })
-          window.location.href = '/';
-        }
-        else {
-          alert('password is  Wrong / failed to Login')
-          setPassword('');
-        }
-      }
-      else {
-        alert('Failed to Login / Credentials are Wrong')
+          // window.location.href = '/';
+         } else {
+        Swal.fire({
+          title: 'Failed!',
+          text: 'Wrong Email Or Password',
+          icon: 'warning',
+          confirmButtonText: 'Retry'
+        })
         setEmail('');
         setPassword('');
       }
-
-
-
-
-
-    } catch (error) {
-      alert('User Donot exists');
-      console.error('Error sending data:', error);
-
     }
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Role:', role);
+    } catch (error) {
+    Swal.fire({
+      title: 'Something Went Wrong!',
+      text: 'Please Try Again Later',
+      icon: 'question',
+      confirmButtonText: 'Got It!'
+    })
+    console.error('Error sending data:', error);
 
-  };
+  }
+  console.log('Email:', email);
+  console.log('Password:', password);
+  console.log('Role:', role);
+
+};
 
 
 
-  return (
+return (
 
-    <div className="login-container " >
-      <h2 className="login-heading">Login</h2>
-      <form>
-        <div>
-          <label className="label" htmlFor="email">
-            Email:
-          </label>
-          <input
-            type="email"
-            className="input-field"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleEmailChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="label" htmlFor="password">
-            Password:
-          </label>
-          <input
-            className="input-field"
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="label">Select Role:</label>
-          <select
-            className="input-field"
-            value={role}
-            onChange={handleRoleChange}
-          >
-            <option value="customer">Customer</option>
-            <option value="employee">Employee</option>
-          </select>
-        </div>
-        <button className="login-button" type="button" onClick={handleLogin}>
-          Login
-        </button>
-      </form>
-      <div className="links">
-        <p>
-          Don't have an account? <Link to="/signup">Sign up</Link>
-        </p>
-        <p>
-          Forgot your password? <Link to="/forgot">Reset password</Link>
-        </p>
+  <div className="login-container " >
+    <h2 className="login-heading">Login</h2>
+    <form>
+      <div>
+        <label className="label" htmlFor="email">
+          Email:
+        </label>
+        <input
+          type="email"
+          className="input-field"
+          id="email"
+          name="email"
+          value={email}
+          onChange={handleEmailChange}
+          required
+        />
       </div>
+      <div>
+        <label className="label" htmlFor="password">
+          Password:
+        </label>
+        <input
+          className="input-field"
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={handlePasswordChange}
+          required
+        />
+      </div>
+      <div>
+        <label className="label">Select Role:</label>
+        <select
+          className="input-field"
+          value={role}
+          onChange={handleRoleChange}
+        >
+          <option value="customer">Customer</option>
+          <option value="employee">Employee</option>
+        </select>
+      </div>
+      <button className="login-button" type="button" onClick={handleLogin}>
+        Login
+      </button>
+    </form>
+    <div className="links">
+      <p>
+        Don't have an account? <Link to="/signup">Sign up</Link>
+      </p>
+      <p>
+        Forgot your password? <Link to="/forgot">Reset password</Link>
+      </p>
     </div>
-  );
+  </div>
+);
 };
 
 export default Kogin;

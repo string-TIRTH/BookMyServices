@@ -12,6 +12,7 @@ const feedbackRouter = require('./router/feedbackRouter')
 const promocodeRouter = require('./router/promocodeRouter')
 const serviceRouter = require('./router/serviceRouter')
 const orderRouter = require('./router/orderRouter')
+const addOnRouter = require('./router/addOnRouter')
 const cors = require('cors'); 
  app.use(cors());
 
@@ -85,3 +86,4 @@ app.use("/feedback",feedbackRouter)
 app.use("/promocode",promocodeRouter)
 app.use("/service",serviceRouter)
 app.use("/order",orderRouter)
+app.use("/addOn",addOnRouter)

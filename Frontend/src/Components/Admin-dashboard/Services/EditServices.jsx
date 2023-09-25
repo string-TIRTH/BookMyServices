@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import Swal from "sweetalert2"
 function ServiceCreationForm() {
     const {id} = useParams();
     const [formData, setFormData] = useState({
@@ -41,7 +41,12 @@ function ServiceCreationForm() {
             });
             console.log('Service created:', response.data);
             if(response)
-            alert("Services is Updated Successfully")
+            Swal.fire({
+                title: 'Updated!',
+                text: 'Services is Updated Successfully!',
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            })
             window.location.href = '/';
           
         } catch (error) {

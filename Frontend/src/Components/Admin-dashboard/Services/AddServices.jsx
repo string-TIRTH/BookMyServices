@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import Swal from "sweetalert2"
 function ServiceCreationForm() {
     const [formData, setFormData] = useState({
         name: '',
@@ -38,7 +38,12 @@ function ServiceCreationForm() {
             });
             console.log('Service created:', response.data);
             if(response)
-            alert("Services is Created Successfully")
+            Swal.fire({
+                title: 'Services is Created Successfully',
+                text: 'new service added!',
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            })
             window.location.href = '/Admin/Services';
           
         } catch (error) {

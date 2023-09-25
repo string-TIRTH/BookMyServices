@@ -160,7 +160,7 @@ const Home = () => {
                             <Link to="/Customer/About" className="nav-item nav-link">About</Link>
                             <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
                             <div className="nav-item dropdown">
-                                <Link to="" className="nav-item nav-link " data-bs-toggle="dropdown">Cart</Link>
+                                <Link to="/Customer/Cart/" className="nav-item nav-link " >Cart</Link>
                             
                             </div>
                             <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>

@@ -3,6 +3,7 @@
 const Customer = require('../models/CustomerModel');
 var nodemailer = require('nodemailer');
 const ServiceModel = require('../models/ServiceModel');
+const CustomerModel = require('../models/CustomerModel');
 module.exports = {
   getAllCustomers: async (req, res) => {
     // console.log("Hello");
@@ -14,6 +15,23 @@ module.exports = {
     }
   },
 
+  validateCustomer : async (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password
+    const customer = await Customer.findOne({"email": email},{password:true});
+    console.log(customer)
+    if(customer != '' && customer != null){
+    if(customer.password == password){
+      console.log("success")
+      res.json({message:true});
+    }else{
+      res.json({message:false});
+    }
+  }
+    else{
+      res.json({message:false});
+    }
+  },
   createCustomer: async (req, res) => {
     try {
       // console.log(req);
@@ -75,14 +93,13 @@ module.exports = {
     try {
       const customer = await Customer.findOne({email:req.body.email});
      if(customer){
-      // console.log("true");
+      console.log("true");
     
-     res.status(200).json({mess : true,
-    customer:customer})
+     res.status(200).json({message : true})
     }
     else{
-      // console.log("false")
-      res.status(200).json({mess : false});
+      console.log("false")
+      res.status(200).json({message : false});
     }
      
     } catch (error) {

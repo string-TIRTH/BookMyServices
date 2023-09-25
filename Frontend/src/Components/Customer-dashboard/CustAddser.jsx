@@ -10,6 +10,7 @@ import Dialog from "@mui/material/Dialog";
 import axios from 'axios';
 // import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2"
 const CustAddser = () => {
 
     const id={
@@ -98,10 +99,20 @@ const CustAddser = () => {
     const HandleConfirm=()=>{
 
         if(!SelectedDay ){
-            alert('Select the day')
+            Swal.fire({
+                title: 'Date Not Selected!',
+                text: 'Select Date',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
         }
         if(! selectedTime){
-            alert('Select the time')
+            Swal.fire({
+                title: 'Time Not Selected!',
+                text: 'Select Time',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
         }
        if(SelectedDay && selectedTime ){
         const formattedDate = `${SelectedDay.year}-${SelectedDay.month}-${SelectedDay.date}`;
@@ -118,7 +129,12 @@ const CustAddser = () => {
               .then((response) => {
                
                 console.log(response.data)
-                   alert('Successfully Added to the Cart')
+                    Swal.fire({
+                        title: 'Sucess',
+                        text: 'Service Added To Cart',
+                        icon: 'Success',
+                        confirmButtonText: 'Okay'
+                    })
                    window.location.href='/Customer/Cart'
             
               

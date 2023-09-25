@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 // import { Link } from 'react-router-dom';
+
+import Swal from "sweetalert2"
 import axios from 'axios';
 const EditCustomer = (props) => {
   const checkEmailExists = async (email) => {
@@ -82,7 +84,12 @@ const EditCustomer = (props) => {
     }
     const emailExists = await checkEmailExists(data);
     if (emailExists) {
-      alert("Email address is already exist");
+      Swal.fire({
+        title: 'Invalid Email Address',
+        text: 'Enter different email!',
+        icon: 'warning',
+        confirmButtonText: 'Okay'
+    })
       setEmail('');
       setpassword('');
     }
@@ -92,11 +99,21 @@ const EditCustomer = (props) => {
 
       // Display validation messages
       if (!isEmailValid) {
-        alert('Invalid email address. Please enter a valid email.');
+        Swal.fire({
+          title: 'Invalid Email Address!',
+          text: 'Please Enter A Valid Email Address!',
+          icon: 'warning',
+          confirmButtonText: 'Okay'
+      })
       }
 
       if (!isPasswordValid) {
-        alert('Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.');
+        Swal.fire({
+          title: 'Invalid password!',
+          text: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit',
+          icon: 'warning',
+          confirmButtonText: 'Okay'
+      })
       }
 
 
@@ -142,13 +159,23 @@ const EditCustomer = (props) => {
           }
 
           const response = await axios.post('http://localhost:5000/customer/updateCustomer', data);
-          alert('Updated Successfully');
 
+          Swal.fire({
+            title: 'Updated',
+            text: 'Updated Successfully!',
+            icon: 'success',
+            confirmButtonText: 'Okay'
+        })
 
           console.log('Data sent successfully:', response.data);
           window.location.href = '/Admin/Customer';
         } catch (error) {
-          alert('Signup fails :(')
+          Swal.fire({
+            title: 'Ah.. Something Went Wrong...!',
+            text: 'Please Try Again Later',
+            icon: 'warning',
+            confirmButtonText: 'Got It'
+        })
           console.error('Error sending data:', error);
 
         }
