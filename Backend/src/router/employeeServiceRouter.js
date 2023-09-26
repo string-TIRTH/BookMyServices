@@ -4,7 +4,8 @@ const router = express.Router();
 const empSerController = require("../controllers/employeeServiceController");
 
 
-router.post("/createEmpSer", empSerController.addEmpSer);
+router.post("/addService", empSerController.addService);
+router.post("/removeService", empSerController.removeService);
 
 router.post("/getEmpSer",empSerController.getAllEmpSers);
 /** async (req, res) => {
