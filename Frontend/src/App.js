@@ -29,6 +29,8 @@ import About from './Components/Customer-dashboard/About';
 import Contact from './Components/Customer-dashboard/Contact';
 import Cart from './Components/Customer-dashboard/Cart';
 import Sample from './Components/Customer-dashboard/Sample';
+import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
+import AddEmpSer from './Components/Admin-dashboard/EmpSer/AddEmpSer';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
@@ -57,6 +59,8 @@ function App() {
           <Route path="/Admin/AddServices" element={<AddServices />} />
           <Route path="/Admin/EditServices/:id" element={<EditServices />} />
           <Route path="/Admin/DetailServices/:id" element={<DetailServices />} />
+          <Route path="/Admin/EmpSer/" element={<EmpSer />} />
+          <Route path="/Admin/AddEmpSer/:id" element={<AddEmpSer />} />
 
 
           <Route path="/" element={<Home></Home>} />

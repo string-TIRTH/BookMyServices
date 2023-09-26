@@ -326,7 +326,7 @@ const Home = () => {
 
                                     <Card.Body style={{ height: '70px' }}>
                                         <h6 style={{ color: "#0e2431" }}>Name: {item.name}</h6>
-                                        <h6 style={{ color: "#0e2431" }}>Price: ${item.price}</h6>
+                                        <h6 style={{ color: "#0e2431" }}>Price: ₹{item.price}</h6>
 
 
 

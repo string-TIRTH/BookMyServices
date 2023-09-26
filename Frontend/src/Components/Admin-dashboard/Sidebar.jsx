@@ -40,8 +40,8 @@ const Sidebar = ({children}) => {
             icon:<FaServer/>
         },
         {
-            path:"/Admin/product",
-            name:"Product",
+            path:"/Admin/EmpSer",
+            name:"EmpServices",
             icon:<FaShoppingBag/>
         },
         {

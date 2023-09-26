@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TablePagination from '@mui/material/TablePagination';
 
-const rowsPerPageOptions = [4, 5, 7];
+const rowsPerPageOptions = [4,5,7];
 
-const Services = () => {
-
-
+const EmpSer = () => {
+ 
+   
     const [empdata, empdatachange] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
-
+ 
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -21,24 +21,24 @@ const Services = () => {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        setPage(0); 
     };
 
 
-
+   
 
     const Removefunction = (id) => {
         const data = {
-            serId: id
+            _id: id
         };
-        if (window.confirm('Do you want to inActive the Service?')) {
-            axios.post(`http://localhost:5000/service/InactiveService`, data)
+        if (window.confirm('Do you want to inActive the Employee?')) {
+            axios.post(`http://localhost:5000/employee/deleteEmployee`, data)
                 .then((response) => {
                     // Set the fetched customer data in the state
                     // setCustomers(response.data);
                     console.log(response.data)
                     //   Fetc();
-                    axios.post(`http://localhost:5000/service/getService`)
+                    axios.post(`http://localhost:5000/employee/getEmployee`)
                         .then((response) => {
                             // Set the fetched customer data in the state
                             // setCustomers(response.data);
@@ -47,27 +47,27 @@ const Services = () => {
                         })
                         .catch((error) => {
                             // Handle any errors here
-                            console.error('Error fetching Services data:', error);
+                            console.error('Error fetching Employee data:', error);
                         });
                 })
                 .catch((error) => {
                     // Handle any errors here
-                    console.error('Error fetching Service data:', error);
+                    console.error('Error fetching Employee data:', error);
                 });
         }
     }
     const Activefunction = (id) => {
         const data = {
-            serId: id
+            _id: id
         };
-        if (window.confirm('Do you want to Active the Service?')) {
-            axios.post(`http://localhost:5000/service/ActiveService`, data)
+        if (window.confirm('Do you want to Active the employee?')) {
+            axios.post(`http://localhost:5000/employee/activeEmployee`, data)
                 .then((response) => {
                     // Set the fetched customer data in the state
                     // setCustomers(response.data);
                     console.log(response.data)
                     //   Fetc();
-                    axios.post(`http://localhost:5000/service/getService`)
+                    axios.post(`http://localhost:5000/employee/getEmployee`)
                         .then((response) => {
                             // Set the fetched customer data in the state
                             // setCustomers(response.data);
@@ -76,12 +76,12 @@ const Services = () => {
                         })
                         .catch((error) => {
                             // Handle any errors here
-                            console.error('Error fetching Service data:', error);
+                            console.error('Error fetching employee data:', error);
                         });
                 })
                 .catch((error) => {
                     // Handle any errors here
-                    console.error('Error fetching Service data:', error);
+                    console.error('Error fetching Employee data:', error);
                 });
         }
     }
@@ -90,29 +90,17 @@ const Services = () => {
 
 
     useEffect(() => {
-
-        axios.post(`http://localhost:5000/service/getService`)
+  
+        axios.post(`http://localhost:5000/Employee/getEmployee`)
             .then((response) => {
-
+        
                 empdatachange(response.data);
             })
             .catch((error) => {
-
+              
                 console.error('Error fetching employee data:', error);
             });
     }, []);
-
-    // const timeInMinutes = parseInt(user.time, 10);
-
-    // let timeToDisplay;
-
-    // if (timeInMinutes >= 60) {
-    //   const hours = Math.floor(timeInMinutes / 60);
-    //   const minutes = timeInMinutes % 60;
-    //   timeToDisplay = `${hours} hours ${minutes} minutes`;
-    // } else {
-    //   timeToDisplay = `${timeInMinutes} minutes`;
-    // }
 
     return (
 
@@ -122,63 +110,48 @@ const Services = () => {
                 <Sidebar></Sidebar>
             </div>
             <div className="right-content" >
-                <div className="centered-form" style={{ width: "900px", height: "100%" }}>
-                    <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "3px", marginRight: "0px" }}>
-                        <div className="card-title" style={{ marginLeft: "300px" }} >
+                <div className="centered-form" style={{width:"900px",height:"100%"}}>
+                    <div className="card" style={{ width: "1100px",height:"100%" , marginLeft:"3px",marginRight:"0px" }}>
+                        <div className="card-title" style={{ marginLeft: "300px"}} >
                             <h2>Employee Listing</h2>
                         </div>
                         <div className="card-body" >
                             <div className="divbtn">
-                                <Link to="/Admin/AddServices" className="btn btn-success">Add New (+)</Link>
+                                <Link to="/Admin/AddEmployee" className="btn btn-success">Add New (+)</Link>
                             </div>
                             <table className="table table-bordered">
                                 <thead className="bg-dark text-white">
                                     <tr>
                                         <td>ID</td>
                                         <td>Name</td>
-                                        <td>Price</td>
-                                        <td>time</td>
-                                        {/* <td>Rating</td> */}
+                                        <td>Email</td>
+                                        <td>Phone</td>
+                                     
                                         <td>Action</td>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style={{marginRight:"0px",textAlign:"center"}}>
 
                                     {
                                         empdata && empdata
-
+                                          
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((item, index) => (
+                                            .map((item,index) => (
                                                 <tr key={item._id}>
                                                     <td >{page * rowsPerPage + index + 1}</td>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.price}</td>
-                                                    {/* <td>{item.contact_no}</td> */}
-                                                    <td>   {item.time ? (
-                                                        (parseInt(item.time, 10) >= 60 ? (
-                                                            <>
-                                                                {Math.floor(parseInt(item.time, 10) / 60)} hours{' '}
-                                                                {parseInt(item.time, 10) % 60 !== 0 ? (
-                                                                    `${parseInt(item.time, 10) % 60} minutes`
-                                                                ) : (
-                                                                    "" // Don't display minutes if they are 0
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            `${item.time} minutes`
-                                                        ))
-                                                    ) : (
-                                                        'N/A' // Display 'N/A' if user.time is not available
-                                                    )}</td>
+                                                    <td>{item.fname} {item.lname}</td>
+                                                    <td>{item.email}</td>
+                                                    <td>{item.contact_no}</td>
+                                                  
+                                               
 
-
-                                                    <td><Link to={'/Admin/EditServices/' + item._id} className="btn btn-success" style={{ marginLeft: "5px" }}>Edit</Link>
-
-
-
-                                                        <Link to={'/Admin/DetailServices/' + item._id} className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</Link>
-                                                        {!item.isActive && <a onClick={() => { Activefunction(item._id) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>Active</a>}
-                                                        {item.isActive && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>InActive</a>}
+                                                    <td ><Link to={'/Admin/AddEmpSer/' + item._id} className="btn btn-success"style={{marginLeft:"5px"}}>Add Service</Link>
+                                                        
+                                                       
+                                                        
+                                                        <a onClick={() => { Activefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>Remove Service</a>
+                                                        <Link to={'/Admin/DetailEmployee/' + item._id} className="btn btn-primary" style={{marginLeft:"5px"}}>Details</Link>
+                                                       {/* { item.status === 'active'  && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>InActive</a>} */}
                                                     </td>
                                                 </tr>
                                             )
@@ -188,7 +161,7 @@ const Services = () => {
                                 </tbody>
 
                             </table>
-                            <div className="fluid-container" style={{ width: "600px", height: "10%" }}>
+                            <div className="fluid-container" style={{width:"600px",height:"10%"}}>
                                 <TablePagination
                                     rowsPerPageOptions={rowsPerPageOptions}
                                     component="div"
@@ -209,4 +182,4 @@ const Services = () => {
 
     );
 }
-export default Services;
+export default EmpSer;

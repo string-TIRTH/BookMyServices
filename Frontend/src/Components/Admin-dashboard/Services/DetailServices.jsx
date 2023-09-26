@@ -35,16 +35,30 @@ const DetailServices = () => {
       const handleclick=()=>{
         window.location.href = '/Admin/Services';
       } 
+  
 
+      const timeInMinutes = parseInt(user.time, 10);
 
+      let timeToDisplay;
+      
+      if (timeInMinutes >= 60) {
+        const hours = Math.floor(timeInMinutes / 60);
+        const minutes = timeInMinutes % 60;
+        if(minutes ===0 )
+        timeToDisplay = `${hours} hours`;
+      else
+      timeToDisplay= `${hours} hours  ${minutes} minutes`
+      } else {
+        timeToDisplay = `${timeInMinutes} minutes`;
+      }
     return (
 
         <Card style={{ width: '400px',margin: '0 auto',marginTop:"50px" }}>
         <Card.Img variant="top" src={user.url} />
         <Card.Body>
           <Card.Title>{user.name}</Card.Title>
-          <p>Price: ${user.price}</p>
-      <p>Time: {user.time} hours</p>
+          <p>Price: ₹{user.price}</p>
+      <p>Time: {timeToDisplay}</p>
       <p>Average Rating: {user.avgRating}</p>
       <p>Description: {user.desc}</p>
       <p>isActive: {user.isActive ? "True":"False"}</p>
