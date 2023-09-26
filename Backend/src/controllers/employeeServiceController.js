@@ -1,68 +1,123 @@
-const EmpSer = require('../models/EmployeeServiceModel');
+const EmpSerModel = require('../models/EmployeeServiceModel');
 
 module.exports = {
-  getAllEmpSers:  async (req, res) => {
+  getAllEmpSers: async (req, res) => {
     try {
-        const empSer = await EmpSerModel.find({});
-        res.status(200).json(empSer);
+      const empSer = await EmpSerModel.find({});
+      res.status(200).json(empSer);
     }
     catch (err) {
-        res.status(500).json({error:'Server error'});
+      res.status(500).json({ error: 'Server error' });
     }
   },
 
-  addEmpSer: async (req, res) => {
+  addService: async (req, res) => {
     try {
-        const empSer = new EmpSerModel({
-            empId : req.body.empId,
-            serList : req.body.serList
+      const empId = req.body.empId;
+      const serId = req.body.serId;
+      console.log(empId)
+      const empSer = await EmpSerModel.findOne({ "empId": empId });
+      const _id = empSer._id;
+      console.log(empSer)
+      if (empSer == null || empSer == '') {
+
+        const serList = {
+          serId: serId
+        }
+        const empSerNew = new EmpSerModel({
+          empId: req.body.empId,
+          serList: serList
         });
-        const newEmpSer = await empSer.save();
-        res.status(200).json(newEmpSer);
-    }
-    catch (err) {
-        res.status(500).json({ error: 'Server error' });
-    }
-  },
+        const response = await empSerNew.save();
 
-  getEmpSerByEmpId:  async (req, res) => {
-    try {
-        const empSer = await EmpSerModel.find({empId:req.body.empId});
-        res.status(200).json(empSer);
+        res.status(200).json("created new");
+      } else {
+        const isNew = await EmpSerModel.findOne({ "serList.serId": serId, empId: empId });
+        if (isNew == '' || isNew == null) {
+
+          const serList = empSer.serList;
+          console.log(empSer)
+          serList.push({ serId: serId });
+          empSer.serList = serList;
+          const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer)
+          res.status(200).json("added");
+        }
+        else {
+          res.status(200).json("already exists");
+        }
+      }
     }
     catch (err) {
-        res.status(500).json({error: 'Server error'});
+      console.log(err)
+      res.status(500).send(err);
     }
   },
-  getEmpSerBySerId:  async (req, res) => {
+  removeService: async (req, res) => {
+    const empId = req.body.empId;
+    const serId = req.body.serId;
+    const empSer = await EmpSerModel.findOne({ "empId": empId });
+    const _id = empSer._id;
+    if (empSer == null || empSer == '') {
+      res.status(200).json("employee does not have any services");
+    } else {
+      const isNew = await EmpSerModel.findOne({ "serList.serId": serId, empId: empId });
+      if (isNew == '' || isNew == null) {
+        res.status(200).json("service does not exists");
+      }
+      else {
+        const serList = empSer.serList;
+        for (let i = 0; i < serList.length; i++) {
+          if (serList[i].serId.toString() === serId) {
+            serList.splice(i, 1);
+            break; // Exit the loop after removing one item.
+          }
+        }
+        empSer.serList = serList;
+
+        // console.log(customer);
+        const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer);
+        res.status(200).json("removed");
+      }
+    }
+  },
+  getEmpSerByEmpId: async (req, res) => {
     try {
-        const empSer = await EmpSerModel.find({serId:req.body.serId});
-        res.status(200).json(empSer);
+      const empSer = await EmpSerModel.find({ empId: req.body.empId });
+      res.status(200).json(empSer);
     }
     catch (err) {
-        res.status(500).json({error: 'Server error'});
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
+  getEmpSerBySerId: async (req, res) => {
+    try {
+      const empSer = await EmpSerModel.find({ serId: req.body.serId });
+      res.status(200).json(empSer);
+    }
+    catch (err) {
+      res.status(500).json({ error: 'Server error' });
     }
   },
   updateEmpSer: async (req, res) => {
 
-    const id  = req.body.id;
-    const  {serList}  = req.body;
+    const id = req.body.id;
+    const { serList } = req.body;
     try {
-        const empSer = await EmpSerModel.findByIdAndUpdate(id, {serList}, { new: true });
-        res.status(200).json(empSer);
-    }catch (error) {
-        res.status(500).json({error: 'Server error'});
+      const empSer = await EmpSerModel.findByIdAndUpdate(id, { serList }, { new: true });
+      res.status(200).json(empSer);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
     }
-},
-  deleteEmpSer : async (req, res) => {
+  },
+  deleteEmpSer: async (req, res) => {
 
-    const id  = req.body.id;
+    const id = req.body.id;
     try {
-        const empSer = await EmpSerModel.findByIdAndDelete(id);
-        res.send(empSer);
-    }catch (error) {
-        res.status(500).json({error: 'Server error'});
+      const empSer = await EmpSerModel.findByIdAndDelete(id);
+      res.send(empSer);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
     }
-},
+  },
   // Similar functions for updating and deleting empSer...
 };
