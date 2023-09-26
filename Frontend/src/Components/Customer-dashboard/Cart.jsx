@@ -12,6 +12,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Swal from 'sweetalert2'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { red } from '@mui/material/colors';
 let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
@@ -86,8 +90,8 @@ const Cart = () => {
         return totalPrice;
     };
     const [address, setAddress] = useState({
-        houseNo: "",
-        society: "",
+        house_no: "",
+        society_name: "",
         landmark: "",
         city: "",
         pincode: "",
@@ -95,6 +99,7 @@ const Cart = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log("here " + name, value)
         setAddress({ ...address, [name]: value });
     };
 
@@ -133,7 +138,7 @@ const Cart = () => {
             console.error('Error fetching cart data:', error);
         }
     }
-    const total = calculateTotalPrice();
+    // const total = calculateTotalPrice();
     const handleOpenOrderDialog = () => {
         try {
             // Replace with the actual customer ID
@@ -141,9 +146,15 @@ const Cart = () => {
             axios.post("http://localhost:5000/Customer/getCustomerById", id)
                 .then((response) => {
                     setUser(response.data)
-                    console.log(response.data)
-
-                    // window.location.href = /Customer/cart/${customerId}
+                    // const address = {
+                    //     house_no: response.data[0].address[0].house_no,
+                    //     society_name: response.data[0].address[0].society_name,
+                    //     landmark: response.data[0].address[0].landmark,
+                    //     pincode: response.data[0].address[0].pincode,
+                    //     city : response.data[0].address[0].city   
+                    // }
+                    const address = response.data[0].address[0];
+                    setAddress(address);
                 })
         }
         catch (error) {
@@ -155,9 +166,38 @@ const Cart = () => {
     const handleCloseOrderDialog = () => {
         setOrderDialogOpen(false);
     };
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         try {
-            const response = axios.post("http://localhost:5000/Customer/removeService");
+            const placeOrderData = {
+                custId: id._id,
+                address: address
+            }
+            console.log(address)
+            const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
+            if (response) {
+                handleCloseOrderDialog();
+                // setCartItems(null);
+                cartItems.length = 0;
+                console.log(response.data)
+                if (response.data.code == 0) {
+                    let text = "";
+
+                    cartItems.map((item, index) => (item) => {
+                        text += "\n" + item.serviceDetails.name;
+                    });
+                    Swal.fire({
+                        title: 'Order Placed Successfully',
+                        icon: 'success',
+                        text: text,
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+                        const data = {
+                            custId: id._id
+                        }
+                        axios.post("http://localhost:5000/customer/removeCart", data);
+                    })
+                }
+            }
 
         } catch (error) {
             console.log(error);
@@ -166,7 +206,7 @@ const Cart = () => {
 
     return (
         <div >
-            <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
+            {/* <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
                 <Button
                     style={{ width: "400px" }}
                     variant="contained"
@@ -178,36 +218,53 @@ const Cart = () => {
                 >
                     Add More Services
                 </Button>
-            </div>
+            </div> */}
+
+            <div className="container-fluid">
+                <div className='col-md-12'> 
+                        {cartItems.length === 0 ? (
+                            <h1 style={{ textAlign: 'center' }}>Cart is Empty</h1>
+                        ) : (
+                            cartItems.map((item, index) => (
+                                <div className='row mt-2'>
+                                <div className='col-md-6'>
+                                <div className="card" key={index} style={{ backgroundColor: 'grey' }}>
+                                    <div className='row'>
+                                        <div className="col-md-12" style={{ padding: 20, color: 'white' }} onClick={() => handleClickOpen(item)}>
+                                            <h5 className="card-title" style={{ marginRight: "20%", marginLeft: "20%", textAlign: "center", backgroundColor: 'white', color: 'black', borderRadius: 20, fontSize: 30 }}> {item.serviceDetails.name}</h5>
+                                        </div>
+                                    </div>
+        
+                                        <div className='row'>
+                                            <div className="col-md-6">
+                                                <img className="rounded" src={item.serviceDetails.url} alt={item.serviceDetails.name} style={{ width: "100%", textAlign: "center", paddingLeft:20}} />
+                                            </div>
+                                           
+                                        
+                                   
+                                        <div className='col-md-6'>
+                                        
+                                            
+                                            <p style={{textAlign:'left',paddingLeft:'0'}}>Price : ₹{item.serviceDetails.price}</p>
+
+                                            
+                                        
+                                        <div className='row'>
+                                            
+
+                                                <p> Want on: {item.date} at: {item.time}</p> 
+                                            
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+                                        <button className="btn btn-danger" style={{ width: 50 }} onClick={() => HandleRemove(item)}> <BsTrash /></button>
+                                    </div>
+                                    <div className="col-md-6" style={{ margin: 10 }}>
 
 
-            {cartItems.length === 0 ? (
-                <h1>Cart is Empty</h1>
-            ) : (
-                cartItems.map((item, index) => (
-                    <div className='container mt-5 d-flex justify-content-left align-items-center' style={{ marginTop: "10px" }}>
-                        <div className="card" key={index} style={{ width: "520px" }}>
-                            <div className="row">
-                                <div className="col-md-6" style={{ margin: 10 }}>
-                                    <h5 className="card-title" style={{ textAlign: "center" }}> {item.serviceDetails.name}</h5>
-
-                                    <img src={item.serviceDetails.url} alt={item.serviceDetails.name} style={{ width: "100%" }} />
-                                </div>    
-                                <div className="col-md-6" style={{ margin: 10 }}>
-                                
-                                    <p style={{ textAlign: "center"}}   > ₹{item.serviceDetails.price}</p>
-
-
-
-                                    <p className="card-text"> time Slot: {item.time}</p>
-                                    <p className="card-text"> date: {item.date}</p>
-                                    <br></br>
-                                    <div className="container">
                                         <div className="row">
                                             <div className="col-md-8">
-                                                <Button variant="contained" color="success" onClick={() => handleClickOpen(item)}>
-                                                    Read More
-                                                </Button>
                                                 <Dialog open={open} onClose={handleClose} >
                                                     <DialogTitle>Item Details</DialogTitle>
                                                     <DialogContent>
@@ -234,42 +291,38 @@ const Cart = () => {
                                                     </DialogActions>
                                                 </Dialog>
                                             </div>
-
-
-                                            <div className="col-md-4">
-                                                <button className="btn btn-danger" onClick={() => HandleRemove(item)}> <BsTrash /></button>
-                                            </div>
-
-
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                                </div>
+
+                            ))
+                        )}
+
+                    </div>
+                    </div>
+            <div className="col-md-12 align-content-right ">
+                    <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "120px" }} >
+                        <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
+                            <div className="card-body">
+                                <h5 className="card-title">Total Price</h5>
+                                <p className="card-text">₹{calculateTotalPrice()}</p>
+                                <Button
+                                    style={{ width: "100px" }}
+                                    variant="contained"
+                                    color="warning"
+                                    onClick={handleOpenOrderDialog}
+
+
+                                >
+                                    Place Order
+                                </Button>
+
                             </div>
                         </div>
                     </div>
-                ))
-            )}
-            <div className="row" style={{ margin: "0px", marginRight: "10px", height: "100px" }}>
-                <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "120px" }} >
-                    <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
-                        <div className="card-body">
-                            <h5 className="card-title">Total Price</h5>
-                            <p className="card-text">₹{calculateTotalPrice()}</p>
-                            <Button
-                                style={{ width: "100px" }}
-                                variant="contained"
-                                color="warning"
-                                onClick={handleOpenOrderDialog}
-
-
-                            >
-                                Place Order
-                            </Button>
-
-                        </div>
-                    </div>
                 </div>
-            </div>
             <Dialog open={orderDialogOpen} onClose={handleCloseOrderDialog}>
                 <DialogTitle>Place Order</DialogTitle>
                 <DialogContent>
@@ -279,7 +332,8 @@ const Cart = () => {
                             <TextField
                                 label="House Number"
                                 name="houseNo"
-                                value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
+                                // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
+                                value={address.house_no}
                                 onChange={handleChange}
                                 fullWidth
                                 margin="normal"
@@ -287,7 +341,7 @@ const Cart = () => {
                             <TextField
                                 label="Society"
                                 name="society"
-                                value={user[0]?.address?.length > 0 ? user[0].address[0].society_name : "N/A"}
+                                value={address.society_name}
                                 onChange={handleChange}
                                 fullWidth
                                 margin="normal"
@@ -295,7 +349,7 @@ const Cart = () => {
                             <TextField
                                 label="Landmark"
                                 name="landmark"
-                                value={user[0]?.address?.length > 0 ? user[0].address[0].landmark : "N/A"}
+                                value={address.landmark}
                                 onChange={handleChange}
                                 fullWidth
                                 margin="normal"
@@ -303,7 +357,7 @@ const Cart = () => {
                             <TextField
                                 label="City"
                                 name="city"
-                                value={user[0]?.address?.length > 0 ? user[0].address[0].city : "N/A"}
+                                value={address.city}
                                 onChange={handleChange}
                                 fullWidth
                                 margin="normal"
@@ -311,7 +365,7 @@ const Cart = () => {
                             <TextField
                                 label="Pincode"
                                 name="pincode"
-                                value={user[0]?.address?.length > 0 ? user[0].address[0].pincode : "N/A"}
+                                value={address.pincode}
                                 onChange={handleChange}
                                 fullWidth
                                 margin="normal"

@@ -26,11 +26,11 @@ const AddressSchema = new mongoose.Schema({
    },
    lat :{
       type : String,
-      required : true,
+      required : false,
    },
    lng :{
       type : String,
-      required : true,
+      required : false,
    },
  })
 const OrderSchema = new mongoose.Schema({
@@ -100,7 +100,8 @@ const OrderSchema = new mongoose.Schema({
     },
     promo_code:{
       type : mongoose.Schema.Types.ObjectId, 
-      ref: 'promocode'
+      ref: 'promocode',
+      default : "64eb16b03ceedc047e4d6e53"
      },
     isActive : {
         type : Boolean,

@@ -65,6 +65,8 @@ module.exports = {
     createOrder: async (req, res) => {
         try {
             const custId = req.body.custId;
+            const address = req.body.address;
+            console.log(address)
             console.log(custId)
             const customer = await CustomerModel.findById(custId, { cart: true });
             console.log(customer)
@@ -129,10 +131,10 @@ module.exports = {
                         service_endTime: service_endTime,
                         service_date: ser.date,
                         address: req.body.address,
-                        payment_mode: req.body.payment_mode,
+                        payment_mode: req.body.payment_mode?? "Cash",
                         amount: price,
                         status: "assigned",
-                        promocode: req.body.promocode,
+                        promocode: req.body.promocode?? null,
                     });
                     // console.log(order);
                     i++;
