@@ -5,20 +5,147 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { MDBContainer, MDBRow, MDBCol, MDBBtnGroup } from 'mdb-react-ui-kit';
 
 import * as React from "react";
-import DialogTitle from "@mui/material/DialogTitle";
-import Dialog from "@mui/material/Dialog";
+// import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import moment from 'moment';
 import axios from 'axios';
 // import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2"
 const CustAddser = () => {
+    const [open, setOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(moment());
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+    const [next6Days, setNext6Days] = useState([]);
+    const [SerId, SetSerId] = useState('');
+    const handleClickOpen = (item) => {
+        SetSerId(item)
+        setOpen(true);
+    };
 
-    const id={
-        _id:"65045d16de311c998f1e4b64"
+    const handleClose = () => {
+        SetSerId('');
+        setOpen(false);
+    };
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setSelectedTimeSlot('');
+    };
+
+    const handleTimeSlotChange = (e) => {
+        setSelectedTimeSlot(e.target.value);
+    };
+
+    const handleConfirm = () => {
+        if (!selectedDate) {
+            Swal.fire({
+                title: 'Date Not Selected!',
+                text: 'Select Date',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+        }
+        if (!selectedTimeSlot) {
+            Swal.fire({
+                title: 'Time Not Selected!',
+                text: 'Select Time',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+        }
+        if (selectedDate && selectedTimeSlot) {
+            const formattedDate = `${SelectedDay.year}-${SelectedDay.month}-${SelectedDay.date}`;
+
+            const data = {
+                custId: id._id,
+                serId: SerId,
+                time: selectedTimeSlot,
+                date: selectedDate.format('YYYY-MM-DD')
+            }
+            try {
+
+                axios.post(`http://localhost:5000/customer/AddService`, data)
+                    .then((response) => {
+
+                        console.log(response.data)
+                        Swal.fire({
+                            title: 'Sucess',
+                            text: 'Service Added To Cart',
+                            icon: 'Success',
+                            confirmButtonText: 'Okay'
+                        })
+                      window.location.href = '/Customer/Cart'
+
+
+                    })
+            }
+            catch (error) {
+
+                console.error('Error fetching customer data:', error);
+            }
+
+
+
+
+            console.log('Selected Date:', selectedDate.format('YYYY-MM-DD'));
+            console.log('Selected Time Slot:', selectedTimeSlot);
+        }
+
+       
+
+  
+        handleClose();
+    };
+
+    // Generate buttons for the next 6 days including today
+    const generateNext6Days = () => {
+        const days = [];
+        for (let i = 0; i < 6; i++) {
+            const day = moment().add(i, 'days');
+            days.push(day);
+        }
+        setNext6Days(days);
+    };
+
+    // Initialize the date buttons
+    useState(() => {
+        generateNext6Days();
+    }, []);
+
+    const generateTimeSlots = () => {
+        const timeSlots = [];
+        const today = moment();
+        if (selectedDate.isSame(today, 'day')) {
+            const nextHour = moment().startOf('hour').add(1, 'hour');
+            while (nextHour.isBefore(moment().endOf('day')) && nextHour.hour() <= 24) {
+                timeSlots.push(nextHour.format('h:mm A'));
+                nextHour.add(1, 'hour');
+            }
+        } else {
+            // Display time slots from 8:00 AM to 6:00 PM for other days
+            let hour = 8;
+            while (hour <= 18) {
+                timeSlots.push(moment().hour(hour).format('h:00 A'));
+                hour++;
+            }
+        }
+        return timeSlots;
+    };
+
+    const timeSlots = generateTimeSlots();
+
+    const id = {
+        _id: "65045d16de311c998f1e4b64"
     }
     const [user, setuser] = useState([])
     const [thought, setthougth] = useState({})
-    const [openDialog, handleDisplay] = React.useState(false);
+    const [openDialog, handleDisplay] = React.useState(false);  
     const [SelectedDay, Setday] = React.useState({});
     const [next5DaysWithDayAndDate, setNext5DaysWithDayAndDate] = useState([]);
 
@@ -33,9 +160,9 @@ const CustAddser = () => {
                 nextDay.setDate(today.getDate() + i);
                 const dayName = daysOfWeek[nextDay.getDay()];
                 const month = nextDay.getMonth() + 1;;
-                const year =nextDay.getFullYear();
+                const year = nextDay.getFullYear();
                 const date = nextDay.getDate();
-                next5DaysWithDayAndDate.push({ dayName, date,month,year });
+                next5DaysWithDayAndDate.push({ dayName, date, month, year });
             }
 
             return next5DaysWithDayAndDate;
@@ -43,62 +170,34 @@ const CustAddser = () => {
         const next5Days = getNext5DaysWithDayAndDate();
         setNext5DaysWithDayAndDate(next5Days);
     }, []);
-    const [selectedDate, setSelectedDate] = useState('');
+
     const [selectedTime, setSelectedTime] = useState('');
     const [currentTime, setCurrentTime] = useState(new Date());
     const [service_id, setSevice_id] = useState('');
-  
-    const handleDateChange = (e) => {
-        setSelectedDate(e.target.value);
-    };
-
-    const [timeSlots, setTimeSlots] = useState([
-        '8:00:00',
-        '9:00:00',
-        '10:00:00',
-        '11:00:00',
-        '12:00:00',
-        '13:00:00',
-        '14:00:00',
-        '15:00:00',
-        '16:00:00',
-        '17:00:00',
-        '18:00:00',
-        '19:00:00',
-        '20:00:00',
-        '21:00:00',
-        '22:00:00'
 
 
 
-
-      
-    ]);
 
 
     const handleTimeChange = (e) => {
         setSelectedTime(e.target.value);
-       
+
 
     };
-    
-    
+
+
 
 
     const openDialogBox1 = (item) => {
-    
+
         setSevice_id(item._id);
         handleDisplay(true);
     };
-    
-    const handleClose = () => {
-      
-        setSevice_id('');
-        handleDisplay(false);
-    };
-    const HandleConfirm=()=>{
 
-        if(!SelectedDay ){
+
+    const HandleConfirm = () => {
+
+        if (!SelectedDay) {
             Swal.fire({
                 title: 'Date Not Selected!',
                 text: 'Select Date',
@@ -106,7 +205,7 @@ const CustAddser = () => {
                 confirmButtonText: 'Okay'
             })
         }
-        if(! selectedTime){
+        if (!selectedTime) {
             Swal.fire({
                 title: 'Time Not Selected!',
                 text: 'Select Time',
@@ -114,45 +213,45 @@ const CustAddser = () => {
                 confirmButtonText: 'Okay'
             })
         }
-       if(SelectedDay && selectedTime ){
-        const formattedDate = `${SelectedDay.year}-${SelectedDay.month}-${SelectedDay.date}`;
+        if (SelectedDay && selectedTime) {
+            const formattedDate = `${SelectedDay.year}-${SelectedDay.month}-${SelectedDay.date}`;
 
-            const data= {
-                custId:id._id,
-                serId:service_id,
-                time:selectedTime,
-                date:formattedDate
+            const data = {
+                custId: id._id,
+                serId: service_id,
+                time: selectedTime,
+                date: formattedDate
             }
-        try{
-   
-            axios.post(`http://localhost:5000/customer/AddService`,data)
-              .then((response) => {
-               
-                console.log(response.data)
-                    Swal.fire({
-                        title: 'Sucess',
-                        text: 'Service Added To Cart',
-                        icon: 'Success',
-                        confirmButtonText: 'Okay'
+            try {
+
+                axios.post(`http://localhost:5000/customer/AddService`, data)
+                    .then((response) => {
+
+                        console.log(response.data)
+                        Swal.fire({
+                            title: 'Sucess',
+                            text: 'Service Added To Cart',
+                            icon: 'Success',
+                            confirmButtonText: 'Okay'
+                        })
+                        window.location.href = '/Customer/Cart'
+
+
                     })
-                   window.location.href='/Customer/Cart'
-            
-              
-              })
             }
-              catch(error) {
-             
+            catch (error) {
+
                 console.error('Error fetching customer data:', error);
-              }
+            }
 
-            
 
-        console.log(formattedDate);
-        // console.log(SelectedDay);
-        console.log(selectedTime);
-        console.log(service_id);   
-       }
-      
+
+            console.log(formattedDate);
+            // console.log(SelectedDay);
+            console.log(selectedTime);
+            console.log(service_id);
+        }
+
     }
     useEffect(() => {
 
@@ -162,7 +261,7 @@ const CustAddser = () => {
 
         const intervalId = setInterval(updateTime, 1000);
 
-    
+
         return () => clearInterval(intervalId);
     }, []);
     const filteredTimeSlots = timeSlots.filter((slot) => {
@@ -244,12 +343,12 @@ const CustAddser = () => {
                 console.error('Error fetching customer data:', error);
             });
     }, []);
-    const handleday=(day)=>{
-     
+    const handleday = (day) => {
+
         Setday(day);
         // localStorage.setItem("day",SelectedDay)
         // localStorage.setItem("day",SelectedDay)
-        
+
     }
     return (
         <>
@@ -274,7 +373,9 @@ const CustAddser = () => {
                                 <div className="horizontal-product-card-buttons" style={{ marginTop: "0px", marginLeft: "0px", display: "flex", gap: "10px", marginRight: "40px" }}>
                                     <Link to={`/Home/DetailsServices/${item._id}`}><button button className="read-more-button" style={{ width: "100px" }}>Read More</button></Link>
                                     {/* <button onClick={()=>openDialogBox(item)} className="add-to-cart-button" style={{ width: "150px" }}>Add to Cart</button> */}
-                                    <button onClick={()=>openDialogBox1(item)} className="add-to-cart-button" style={{ width: "150px" }}>Add to Cart</button>
+                                    <Button variant="contained" color="primary" onClick={()=>handleClickOpen(item._id)}>
+                                      Add to cart
+                                    </Button>   
                                 </div>
 
                             </div>
@@ -291,71 +392,60 @@ const CustAddser = () => {
                 }} />
             </Link>
 
-            <Dialog onClose={handleClose} open={openDialog} style={{borderRadius:"100px"}}>
-                <DialogTitle >Add Your Time Slot for Particular Service </DialogTitle>
-                <div>
-                  
-                        <MDBContainer >
-                            <MDBRow>
-                    
-                            {next5DaysWithDayAndDate.map((day, index) => (                       
-                              <MDBCol
-                              key={index}
-                              size='md'
-                              style={{  marginRight: "5px", marginLeft: "5px" }}
-                            >
-                              <button
-                                className={`btn btn-sm ${day.dayName === "Sunday"| day.dayName==="Thursday" ? "btn-danger" : day.dayName==="Tuesday"? "btn-primary": "btn-success"}`} 
-                             
-                                onClick={() => handleday(day)} 
-                                style={{ width: "60px", height: "55px",borderRadius:"20px" }}
-                              >
-                                {day.dayName==="Sunday" ? "SUN" : day.dayName==="Monday"?"MON" : day.dayName==="Tuesday" ?"TUE":day.dayName==="Wednesday"?"WED" : day.dayName==="Thursday" ? "THU" :day.dayName==="Friday"?"FRI":"SAT" }<br />
-                                {day.date}
-                             
-                              </button>
-                            </MDBCol>
-                                
-                                ))}
-                            </MDBRow>
-                        </MDBContainer>
-                       
-                        <div className="mb-3 d-flex justify-content-center align-items-center">
-                            <label htmlFor="timeSlotSelect" className="form-label" style={{marginLeft:"10px"}}>
-                                Time Slot:
-                            </label>
-                            <select
-                                id="timeSlotSelect"
-                                className="form-select"
-                                value={selectedTime}
-                                onChange={handleTimeChange}
-                                style={{marginRight:"10px"}}
-                            >
-                                <option value="">Select a time slot</option>
-                                {filteredTimeSlots.map((slot) => (
-                                    <option key={slot} value={slot}> {slot}</option>
-                                ))}
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Select Date and Time Slot</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <div>
+                            <div>
+                                <h5>Select Date:</h5>
 
-                            </select>
+                                <div className="row">
 
+                                    {next6Days.map((day, index) => (
+                                        <div className="col-md-2" key={index}>
+                                            <button
+                                           
+                                                key={day}
+                                                className={`btn btn-sm ${day.isSame(selectedDate, 'day') ? 'btn-primary' : 'btn-success'
+                                                    }`}
+                                                onClick={() => handleDateChange(day)}
+                                                style={{ width: "65px", height: "50px",borderRadius:"14px" }}
+                                            >
+                                                {day.format('MMM DD')}
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
 
+                                <h5 style={{ marginTop: "10px" }}>Select Time Slot:</h5>
+                                <select
+                                    id="timeSlotSelect"
+                                    className="form-select"
+                                    value={selectedTimeSlot}
+                                    onChange={handleTimeSlotChange}
+                                >
+                                    <option value="">Select a time slot</option>
+                                    {timeSlots.map((slot) => (
+                                        <option key={slot} value={slot}>
+                                            {slot}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
-                   
-                </div>
-                <br></br>
-                <br></br>
-                <br></br>
-               
-                <div style={divStyle}>
-                  
-                    <button style={confirmButtonStyle} onClick={HandleConfirm}>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button  onClick={handleConfirm} variant="contained" color="warning">
                         Confirm
-                    </button>
-                   
-                    <button style={confirmButtonStyle} onClick={handleClose}>
+                    </Button>
+                    <Button onClick={handleClose} color="primary">
                         Cancel
-                    </button>
-                </div>
+                    </Button>
+                </DialogActions>
             </Dialog>
 
 

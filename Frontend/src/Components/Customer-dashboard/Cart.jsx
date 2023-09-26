@@ -12,10 +12,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Swal from 'sweetalert2'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { red } from '@mui/material/colors';
+// import Container from 'react-bootstrap/Container';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
+// import { red } from '@mui/material/colors';
 let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
@@ -179,7 +179,7 @@ const Cart = () => {
                 // setCartItems(null);
                 cartItems.length = 0;
                 console.log(response.data)
-                if (response.data.code == 0) {
+                if (response.data.code === 0) {
                     let text = "";
 
                     cartItems.map((item, index) => (item) => {
@@ -206,7 +206,7 @@ const Cart = () => {
 
     return (
         <div >
-            {/* <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
+            <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
                 <Button
                     style={{ width: "400px" }}
                     variant="contained"
@@ -218,7 +218,7 @@ const Cart = () => {
                 >
                     Add More Services
                 </Button>
-            </div> */}
+            </div>
 
             <div className="container-fluid">
                 <div className='col-md-12'> 

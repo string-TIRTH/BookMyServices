@@ -28,6 +28,7 @@ import OrderCart from './Components/Customer-dashboard/OrderCart'
 import About from './Components/Customer-dashboard/About';
 import Contact from './Components/Customer-dashboard/Contact';
 import Cart from './Components/Customer-dashboard/Cart';
+import Sample from './Components/Customer-dashboard/Sample';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
@@ -67,6 +68,7 @@ function App() {
           <Route path="/Customer/SetTime/:id" element={<SetTime />} />
           <Route path="/Customer/OrderCart/:id" element={<OrderCart />} />
           <Route path="/Customer/Cart" element={<Cart />} />
+          <Route path="/Customer/Sample" element={<Sample />} />
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}

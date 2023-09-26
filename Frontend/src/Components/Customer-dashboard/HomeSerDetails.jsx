@@ -47,7 +47,7 @@ const DetailServices = () => {
         <p>Time: {user.time} hours</p>
         <p>Average Rating: {user.avgRating}</p>
         <p>Description: {user.desc}</p>
-        <p>isActive: {user.isActive ? "True" : "False"}</p>
+        {/* <p>isActive: {user.isActive ? "True" : "False"}</p> */}
 
         <Button variant="primary" onClick={handleclick}>Go Back</Button>
       </Card.Body>
