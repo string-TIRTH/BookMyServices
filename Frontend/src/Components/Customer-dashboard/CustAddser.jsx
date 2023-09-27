@@ -83,7 +83,7 @@ const CustAddser = () => {
                             icon: 'Success',
                             confirmButtonText: 'Okay'
                         })
-                      window.location.href = '/Customer/Cart'
+                        window.location.href = '/Customer/Cart'
 
 
                     })
@@ -100,9 +100,9 @@ const CustAddser = () => {
             console.log('Selected Time Slot:', selectedTimeSlot);
         }
 
-       
 
-  
+
+
         handleClose();
     };
 
@@ -148,7 +148,7 @@ const CustAddser = () => {
     }
     const [user, setuser] = useState([])
     const [thought, setthougth] = useState({})
-    const [openDialog, handleDisplay] = React.useState(false);  
+    const [openDialog, handleDisplay] = React.useState(false);
     const [SelectedDay, Setday] = React.useState({});
     const [next5DaysWithDayAndDate, setNext5DaysWithDayAndDate] = useState([]);
 
@@ -371,32 +371,106 @@ const CustAddser = () => {
     return (
         <>
             <NavBar></NavBar>
-            {user &&
-                user
-                    .filter((item) => item.isActive)
-                    .map((item) => (
-                        <div className=" d-flex justify-content-center align-items-center"   >
-                            <div className="horizontal-product-card d-flex justify-content-center align-items-center" style={{ margin: `10px`, flexDirection: `row`, justifyContent: `center`, border: "2px solid  black", borderRadius: "10px", width: "1000px", backgroundColor: item.name === "Appliances Repairing" ? "#fcff82" : item.name === "Massage" ? "#5e63b6" : item.name === "salon for women" | item.name === "Painting" ? "#f5c7f7" : "#a393eb" }}>
-                                <div className="horizontal-product-card-image" style={{ marginRight: "50px", }}>
-                                    <img src={item.url} alt="Product" style={{ height: `100px`, borderRadius: "50px" }} />
-                                </div>
-                                <div className="horizontal-product-card-content " style={{ marginRight: "200px" }}  >
-                                    <h3> {item.name === "Appliances Repairing" ? "Repairing" : item.name}</h3>
-                                    <p>Product Price : ₹{item.price}</p>
-                                </div>
-                                <div className="horizontal-product-card-buttons" style={{ marginTop: "0px", marginLeft: "0px", display: "flex", gap: "10px", marginRight: "40px" }}>
-                                    <Link to={`/Home/DetailsServices/${item._id}`}><button button className="read-more-button" style={{ width: "100px" }}>Read More</button></Link>
-                                    {/* <button onClick={()=>openDialogBox(item)} className="add-to-cart-button" style={{ width: "150px" }}>Add to Cart</button> */}
-                                    <Button variant="contained" color="primary" onClick={()=>handleClickOpen(item._id)}>
-                                      Add to cart
-                                    </Button>   
-                                </div>
 
-                            </div>
-
+            <div>
+      <div className="d-flex">
+        <div className="left-container">
+          {user &&
+            user
+              .filter((item) => item.isActive)
+              .map((item) => (
+                <div
+                  key={item._id}
+                  className="card mb-3"
+                  style={{
+                    maxWidth: '600px',
+                    margin: '10px',
+                    marginLeft:"20px",
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    border: '2px solid black',
+                    borderRadius: '10px',
+                    backgroundColor:
+                      item.name === 'AC Repair'
+                        ? '#fcff82'
+                        : item.name === 'Massage'
+                        ? '#ff5d9e'
+                        : item.name === 'Hair Salon For Man' || item.name === 'Painting'
+                        ? '#f5c7f7'
+                        : '#a393eb',
+                  }}
+                >
+                  <div className="row g-0">
+                    <div className="col-md-4">
+                      <img
+                        src={item.url}
+                        alt="Product"
+                        className="card-img"
+                        style={{
+                            marginTop:"10px",
+                            marginBottom:"10px",
+                          height: '180px',
+                          borderRadius: '50px',
+                        }}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <div className="card-body">
+                        <h3 className="card-title">
+                          {item.name === 'Appliances Repairing' ? 'Repairing' : item.name}
+                        </h3>
+                        <p className="card-text">Product Price: ₹{item.price}</p>
+                        <div className="container">
+                          <Link to={`/Home/DetailsServices/${item._id}`}>
+                            <button className="btn btn-primary" style={{ width: '120px', marginRight: '10px' }}>
+                              Read More
+                            </button>
+                          </Link>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleClickOpen(item._id)}
+                            style={{ width: '220px',marginRight:"0px" }}
+                          >
+                            Add to Cart
+                          </button>
                         </div>
-                    ))
-            }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+        </div>
+        
+        <div className="right-container">
+          <div style={{ marginLeft: "50px" }}>
+            <iframe
+              style={{borderRadius:"20px"}}
+              width="600px"
+              height="400"
+              src="https://www.youtube.com/embed/BENmAwUev0Q"
+              frameborder="0"
+              allowfullscreen
+              title="YouTube Video"
+            ></iframe>
+          </div>
+          <div style={{ marginLeft: "50px" ,marginTop:"70px" }}>
+            <iframe
+              style={{borderRadius:"20px"}}
+              width="600px"
+              height="400"
+              src="https://www.youtube.com/embed/IJCEpbIHTa8"
+              frameborder="0"
+              allowfullscreen
+              title="YouTube Video"
+            ></iframe>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+
+
+
             <Link to={"/Customer/Cart/"}>
                 <FaShoppingCart size={50} color="blue" style={{
                     position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #e8630a',
@@ -419,12 +493,12 @@ const CustAddser = () => {
                                     {next6Days.map((day, index) => (
                                         <div className="col-md-2" key={index}>
                                             <button
-                                           
+
                                                 key={day}
                                                 className={`btn btn-sm ${day.isSame(selectedDate, 'day') ? 'btn-primary' : 'btn-success'
                                                     }`}
                                                 onClick={() => handleDateChange(day)}
-                                                style={{ width: "65px", height: "50px",borderRadius:"14px" }}
+                                                style={{ width: "65px", height: "50px", borderRadius: "14px" }}
                                             >
                                                 {day.format('MMM DD')}
                                             </button>
@@ -453,7 +527,7 @@ const CustAddser = () => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button  onClick={handleConfirm} variant="contained" color="warning">
+                    <Button onClick={handleConfirm} variant="contained" color="warning">
                         Confirm
                     </Button>
                     <Button onClick={handleClose} color="primary">

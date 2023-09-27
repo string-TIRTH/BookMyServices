@@ -1,7 +1,7 @@
 
 import './App.css';
 // import Admin from './Components/Admin-dashboard/Admin'
-import Login from './Components/Login';
+import Login from './Components/login';
 import Signup from './Components/Signup';
 import Home from './Components/Customer-dashboard/Home'
 // import Sidebar from './Components/Admin-dashboard/Sidebar';
@@ -28,6 +28,7 @@ import About from './Components/Customer-dashboard/About';
 import Contact from './Components/Customer-dashboard/Contact';
 import Cart from './Components/Customer-dashboard/Cart';
 import Sample from './Components/Customer-dashboard/Sample';
+import Sample2 from './Components/Customer-dashboard/Sample2';
 import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
 import AddEmpSer from './Components/Admin-dashboard/EmpSer/AddEmpSer';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
@@ -71,6 +72,7 @@ function App() {
           <Route path="/Customer/OrderCart/:id" element={<OrderCart />} />
           <Route path="/Customer/Cart" element={<Cart />} />
           <Route path="/Customer/Sample" element={<Sample />} />
+          <Route path="/Customer/Sample2" element={<Sample2 />} />
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}
