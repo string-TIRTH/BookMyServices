@@ -10,6 +10,7 @@ module.exports = {
         const email = req.body.email;
     const password = req.body.password;
     const role = req.body.role;
+    
     if(role === "customer"){
         const user = await Customer.findOne({"email": email},{password:true});
         if(user.password == password){
@@ -17,7 +18,7 @@ module.exports = {
         }else{
             res.json({"message":false});
         }
-    }else if(role === "employee"){
+    }else if(role === "Employee"){
         const user = await Employee.findOne({"email": email},{password:true});
         if(user.password == password){
             res.json({"message":true});
@@ -50,7 +51,7 @@ module.exports = {
         }else{
             res.json({"message":false});
         }
-    }else if(role === "employee"){
+    }else if(role === "Employee"){
         const user = await Employee.findOne({"email": email});
         if(user != null || user!=''){
             res.json({"message":true});
