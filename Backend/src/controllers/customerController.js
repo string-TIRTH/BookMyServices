@@ -81,7 +81,7 @@ module.exports = {
 
     try {
       const customer = await Customer.findById(custId);
-     
+      console.log(customer)
       res.status(200).json(customer);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });

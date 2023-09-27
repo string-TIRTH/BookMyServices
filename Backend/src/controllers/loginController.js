@@ -14,21 +14,21 @@ module.exports = {
     if(role === "customer"){
         const user = await Customer.findOne({"email": email},{password:true});
         if(user.password == password){
-            res.json({"message":true});
+            res.json({"message":true,"id":user._id});
         }else{
             res.json({"message":false});
         }
     }else if(role === "Employee"){
         const user = await Employee.findOne({"email": email},{password:true});
         if(user.password == password){
-            res.json({"message":true});
+            res.json({"message":true,"id":user._id});
         }else{
             res.json({"message":false});
         }
     }else if(role === "admin"){
         const user = await Admin.findOne({"email": email},{password:true});
         if(user.password == password){
-            res.json({"message":true});
+            res.json({"message":true,"id":user._id});
         }else{
             res.json({"message":false});
         }

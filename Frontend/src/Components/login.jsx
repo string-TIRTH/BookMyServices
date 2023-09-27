@@ -8,6 +8,10 @@ import Swal from 'sweetalert2'
 // Import the CSS file
 
 const Login = () => {
+  const id = localStorage.getItem('id')
+  if(id !== null ){
+    window.location.href = '/';
+  }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('customer'); // Default to 'customer'
@@ -84,6 +88,8 @@ const Login = () => {
 
         console.log(JSON.stringify(isValid))
         if (isValid.data.message === true) {
+          localStorage.setItem('id',isValid.data.id)
+          localStorage.setItem("role",md5(role))
           let timerInterval
           Swal.fire({
             title: 'Login Successful!',
@@ -101,9 +107,12 @@ const Login = () => {
           }).then((result) => {
             /* Read more about handling dismissals below */
             
-            localStorage.setItem("role",md5(role))
-
-            window.location.href = '/';
+            
+            if(role === 'customer'){
+              window.location.href = '/';
+            }else if(role === 'admin' || role === 'Admin'){
+              window.location.href = '/admin';
+            }
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
             }
