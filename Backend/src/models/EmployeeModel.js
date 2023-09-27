@@ -57,9 +57,9 @@ const EmployeeSchema = new mongoose.Schema({
   address : {
      type : [AddressSchema]
   },
-  status:{
-   type : String,
-   default :"active"
+  isActive:{
+   type : Boolean,
+   default :true
   }
   ,emailstatus : {
      type : String,
@@ -68,7 +68,7 @@ const EmployeeSchema = new mongoose.Schema({
   rating : {
     type : String,
     default : "Not Rated"
-  }
+  },
 })
 
 

@@ -150,8 +150,8 @@ const Employee = () => {
                                                        
                                                         
                                                         <Link to={'/Admin/DetailEmployee/' + item._id} className="btn btn-primary" style={{marginLeft:"5px"}}>Details</Link>
-                                                       {item.status === 'inactive' && <a onClick={() => { Activefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>Active</a>}
-                                                       { item.status === 'active'  && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>InActive</a>}
+                                                       {item.isActive === false && <a onClick={() => { Activefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>Active</a>}
+                                                       { item.isActive === true  && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>InActive</a>}
                                                     </td>
                                                 </tr>
                                             )

@@ -88,7 +88,7 @@ module.exports = {
   deleteEmployee : async (req, res) => {
     const empId  = req.body._id;
     try {
-      const employee = await Employee.findByIdAndUpdate(empId,{ status: 'inactive' },{new:true});
+      const employee = await Employee.findByIdAndUpdate(empId,{ isActive: false },{new:true});
         
         res.send(employee);
     }catch (error) {
@@ -101,7 +101,7 @@ module.exports = {
     // const status = req.body.status
     // console.log(req.body); 
     try {
-        const employee = await Employee.findByIdAndUpdate(empId,{ status: 'active' },{new:true});
+        const employee = await Employee.findByIdAndUpdate(empId,{ isActive:true },{new:true});
         
         
         res.send(employee);
