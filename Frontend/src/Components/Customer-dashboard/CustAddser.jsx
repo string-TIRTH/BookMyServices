@@ -368,7 +368,7 @@ const CustAddser = () => {
                                 </div>
                                 <div className="horizontal-product-card-content " style={{ marginRight: "200px" }}  >
                                     <h3> {item.name === "Appliances Repairing" ? "Repairing" : item.name}</h3>
-                                    <p>Product Price : {item.price}</p>
+                                    <p>Product Price : ₹{item.price}</p>
                                 </div>
                                 <div className="horizontal-product-card-buttons" style={{ marginTop: "0px", marginLeft: "0px", display: "flex", gap: "10px", marginRight: "40px" }}>
                                     <Link to={`/Home/DetailsServices/${item._id}`}><button button className="read-more-button" style={{ width: "100px" }}>Read More</button></Link>
