@@ -78,13 +78,20 @@ const CustAddser = () => {
 
                         console.log(response.data)
                         Swal.fire({
-                            title: 'Sucess',
-                            text: 'Service Added To Cart',
-                            icon: 'Success',
-                            confirmButtonText: 'Okay'
-                        })
-                        window.location.href = '/Customer/Cart'
-
+                            title: 'Service Added To Cart',
+                            text: "Added",
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonColor: '#0000FF',
+                            confirmButtonText: 'Add More Services',
+                            cancelButtonText: 'Go To Cart',
+                            cancelButtonColor: '#0000FF'
+                          }).then((result) => {
+                            if (!result.isConfirmed) {
+                                window.location.href = '/Customer/Cart'
+                            }
+                          })
+                        
 
                     })
             }
@@ -231,14 +238,28 @@ const CustAddser = () => {
                     .then((response) => {
 
                         console.log(response.data)
+                        // Swal.fire({
+                        //     title: 'Success',
+                        //     text: 'Service Added To Cart',
+                        //     icon: 'Success',
+                        //     confirmButtonText: 'Okay'
+                        // }).then(()=>{
+                        //     window.location.href = '/Customer/Cart'
+                        // })
                         Swal.fire({
-                            title: 'Sucess',
-                            text: 'Service Added To Cart',
-                            icon: 'Success',
-                            confirmButtonText: 'Okay'
-                        })
-                        window.location.href = '/Customer/Cart'
-
+                            title: 'Service Added To Cart',
+                            text: "Added",
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonColor: '#0000FF',
+                            confirmButtonText: 'Add More Services',
+                            cancelButtonText: 'Go To Cart',
+                            cancelButtonColor: '#0000FF'
+                          }).then((result) => {
+                            if (!result.isConfirmed) {
+                                window.location.href = '/Customer/Cart'
+                            }
+                          })
 
                     })
             }

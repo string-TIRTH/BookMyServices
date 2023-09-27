@@ -5,6 +5,8 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import logo from './img/BMS_LOGO.png';
+// import logo from '/src/public/logo/BMS_LOGO';
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userData,setUserData] = useState('')
@@ -47,8 +49,8 @@ const NavBar = () => {
             <div className="container-fluid  d-none d-lg-block" style={{ background: "#cca8e9", width: "100%" }}>
                 <div className="row align-items-center top-bar" style={{ height: "60px", marginLeft: 20, marginRight: 20 }}>
                     <div className="col-lg-3 col-md-12 text-center text-lg-start ">
-                        <Link to="" className="navbar-brand m-0 p-0">
-                            <h1 className="text m-0" style={{ textDecoration: "underline", color: "#272343" }}>BookMyServices</h1>
+                        <Link to="/" className="navbar-brand m-0 p-0">
+                            <img src={logo} style ={{width : '100%'}}alt="" />
                         </Link>
                     </div>
                     <div className="col-lg-9 col-md-12 text-end">
@@ -93,10 +95,6 @@ const NavBar = () => {
                 <Link to="" className="nav-item nav-link ">Home</Link>
                 <Link to="/Customer/About" className="nav-item nav-link">About</Link>
                 <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
-                <div className="nav-item dropdown">
-                    <Link to="/Customer/Cart/" className="nav-item nav-link " >Cart</Link>
-
-                </div>
                 <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>
             </div>
 
