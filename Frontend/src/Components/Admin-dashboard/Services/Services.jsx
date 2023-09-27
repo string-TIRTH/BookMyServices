@@ -152,7 +152,7 @@ const Services = () => {
                                                 <tr key={item._id}>
                                                     <td >{page * rowsPerPage + index + 1}</td>
                                                     <td>{item.name}</td>
-                                                    <td>{item.price}</td>
+                                                    <td>₹{item.price}</td>
                                                     {/* <td>{item.contact_no}</td> */}
                                                     <td>   {item.time ? (
                                                         (parseInt(item.time, 10) >= 60 ? (

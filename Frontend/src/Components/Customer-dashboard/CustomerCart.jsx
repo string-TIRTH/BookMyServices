@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BsTrash } from 'react-icons/bs'; 
+import { BsTrash } from 'react-icons/bs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
@@ -47,38 +47,38 @@ function Cart() {
         const updatedCart = cartItems.filter((item) => item !== itemToRemove);
         setCartItems(updatedCart);
     };
-    
 
-    const HandlePlaceOrder = async()=>{
+
+    const HandlePlaceOrder = async () => {
         // alert("Place Order?")
         // e.preventDefault();   
-    //    console.log(cartItems)
-    // console.log("he;lo");
-  
-    
-   
-    const requestData = {
-        _id: '650562f98aeef739f80b4106', 
-        serId: cartItems, 
+        //    console.log(cartItems)
+        // console.log("he;lo");
+
+
+
+        const requestData = {
+            _id: '650562f98aeef739f80b4106',
+            serId: cartItems,
+        };
+
+        try {
+
+            const response = await axios.post('http://localhost:5000/Customer/addServices', requestData);
+
+            if (response) {
+
+                console.log('Services booked successfully');
+            } else {
+                console.error('Error booking services');
+            }
+        } catch (error) {
+            console.error('Error booking services:', error);
+        }
     };
 
-    try {
-      
-        const response = await axios.post('http://localhost:5000/Customer/addServices', requestData);
-
-        if (response) {
-          
-            console.log('Services booked successfully');
-        } else {
-            console.error('Error booking services');
-        }
-    } catch (error) {
-        console.error('Error booking services:', error);
-    }
-};
 
 
-    
 
     return (
         // <div className='container'>
@@ -87,17 +87,17 @@ function Cart() {
                 <div className="col-md-6">
                     <div className="border p-3" style={{ width: "700px" }}>
                         <h2 className="mb-4" >Add Services to Cart
-                        <button  className="btn btn-success"
+                            <button className="btn btn-success"
                                 type="button"
                                 onClick={HandlePlaceOrder}
                                 disabled={cartItems.length === 0}
-                                style={{ width: "200px",marginLeft:"450px" }}>Place Order</button>
-                                </h2>
+                                style={{ width: "200px", marginLeft: "450px" }}>Place Order</button>
+                        </h2>
                         <div className="d-flex">
-                        
+
                             <select
                                 className="form-select me-3"
-                                value={selectedService }
+                                value={selectedService}
                                 onChange={(e) => setSelectedService(e.target.value)}
                             >
                                 <option value="" >
@@ -123,29 +123,37 @@ function Cart() {
                             </button>
                         </div>
                         <br></br>
-                        <ul className="list-group">
-                            {cartItems
-                                .map((item, index) => (
-                                    <li
-                                        key={index}
-                                        className="list-group-item d-flex justify-content-between align-items-center"
-                                    >
-                                        {item}
-                                        
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            style={{ width: "200px" }}
-                                            onClick={() => handleRemoveFromCart(item)}
-                                        >
-                                            <BsTrash />
-                                        </button>
-                                    
-                                    </li>
-                                   
-                                    
-                                ))}
-
-                        </ul>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-8 mx-auto mt-4">
+                                    <div className="card">
+                                        <div className="card-header">
+                                            Shopping Cart
+                                        </div>
+                                        <ul className="list-group list-group-flush">
+                                            {cartItems.map((item, index) => (
+                                                <li
+                                                    key={index}
+                                                    className="list-group-item d-flex justify-content-between align-items-center"
+                                                >
+                                                    {item}
+                                                    <button
+                                                        className="btn btn-danger btn-sm"
+                                                        style={{ width: "200px" }}
+                                                        onClick={() => handleRemoveFromCart(item)}
+                                                    >
+                                                        <BsTrash /> Remove
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="card-footer">
+                                            Total: $XXX.XX {/* You can replace this with the actual total price */}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
