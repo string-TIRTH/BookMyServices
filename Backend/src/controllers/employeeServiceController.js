@@ -17,7 +17,6 @@ module.exports = {
       const serId = req.body.serId;
       console.log(empId)
       const empSer = await EmpSerModel.findOne({ "empId": empId });
-      const _id = empSer._id;
       console.log(empSer)
       if (empSer == null || empSer == '') {
 
@@ -35,6 +34,8 @@ module.exports = {
         const isNew = await EmpSerModel.findOne({ "serList.serId": serId, empId: empId });
         if (isNew == '' || isNew == null) {
 
+          const _id = empSer._id;
+      
           const serList = empSer.serList;
           console.log(empSer)
           serList.push({ serId: serId });

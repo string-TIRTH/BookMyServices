@@ -9,7 +9,7 @@ router.post("/removeService", empSerController.removeService);
 
 router.post("/getEmpSer",empSerController.getAllEmpSers);
 /** async (req, res) => {
-
+~
     try {
         const empSer = await EmpSerModel.find({});
         res.json(empSer);
