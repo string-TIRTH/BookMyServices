@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import Carousels from './Carousels';
 import { FaShoppingCart } from 'react-icons/fa';
 import { MDBContainer, MDBRow, MDBCol, MDBBtnGroup } from 'mdb-react-ui-kit';
-
+import NavBar from '../NavBar';
 import * as React from "react";
 // import React, { useState } from 'react';
 import Button from '@mui/material/Button';
@@ -17,6 +17,9 @@ import axios from 'axios';
 // import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import '@fortawesome/fontawesome-free/css/all.css';
 const CustAddser = () => {
     const [open, setOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment());
@@ -350,13 +353,24 @@ const CustAddser = () => {
         // localStorage.setItem("day",SelectedDay)
 
     }
+    const linkStyle = {
+        textDecoration: 'none',
+        color: 'black', // Change the color to your preference
+    };
+
+    const iconStyle = {
+        fontSize: '24px', // Adjust the size as needed
+        cursor: 'pointer',
+    };
+    const cartIconStyle = {
+        border: '1px solid #e8630a',
+        borderRadius: '10px',
+        padding: '8px',
+        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', // Add the box shadow property
+    };
     return (
         <>
-
-            <h1 >Welcome User....</h1>
-            {"      "}<h4 style={{ color: "#82acff" }}>I have thought for you</h4>
-            <h6 style={{ justifyContent: "center", textAlign: "center", color: "#fc3a52" }}>{thought.content}</h6>
-
+            <NavBar></NavBar>
             {user &&
                 user
                     .filter((item) => item.isActive)

@@ -1,8 +1,7 @@
 
 import './App.css';
 // import Admin from './Components/Admin-dashboard/Admin'
-import Kogin from './Components/Kogin';
-import LoginForm from './Components/login';
+import Login from './Components/Login';
 import Signup from './Components/Signup';
 import Home from './Components/Customer-dashboard/Home'
 // import Sidebar from './Components/Admin-dashboard/Sidebar';
@@ -42,8 +41,7 @@ function App() {
       <Router>
 
         <Routes>
-          <Route path="/login" element={<LoginForm></LoginForm>} />
-          <Route path="/kogin" element={<Kogin></Kogin>} />
+          <Route path="/login" element={<Login></Login>} />
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/Admin/" element={<Dashboard />} />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CssF/signup.css';
+import NavBar from './NavBar';
 import { useEffect } from 'react';
 import axios from 'axios';
 // import {  useHistory } from 'react-router-dom'; // Import Link for navigation
@@ -26,7 +27,7 @@ const Signup = () => {
     const [longitude, setLongitude] = useState('');
     // const [passwordMatch, setPasswordMatch] = useState(true);   
 
-    const [selectedAddressOption, setSelectedAddressOption] = useState('');
+    const [selectedAddressOption, setSelectedAddressOption] = useState('currentLocation');
     const checkEmailExists = async (email) => {
         try {
           const response = await axios.post(`http://localhost:5000/customer/getCustomerByEmail`, email);
@@ -157,7 +158,7 @@ else{
     };
     const loginhandle=()=>{
        
-        window.location.href = '/kogin';
+        window.location.href = '/login';
         
     }
     useEffect(() => {
@@ -183,6 +184,7 @@ else{
     };
 
     return (
+        <>
         <div className="container mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-6">
@@ -303,6 +305,7 @@ else{
                                             className="form-check-input"
                                             name="addressOption"
                                             value="currentLocation"
+                                            
                                             checked={selectedAddressOption === 'currentLocation'}
                                             onChange={handleAddressOptionChange}
                                         />
@@ -391,7 +394,7 @@ else{
 
                             {log  &&<div> <button type="submit" className='btn btn-danger w-100' onClick={loginhandle}>Login</button></div>}
                             <div className="text-center mt-3">  
-                                Already have an account? <Link to="/kogin">Login</Link>
+                                Already have an account? <Link to="/login">Login</Link>
                             </div>
                             
                         </div>
@@ -399,6 +402,7 @@ else{
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

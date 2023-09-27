@@ -13,6 +13,7 @@ const promocodeRouter = require('./router/promocodeRouter')
 const serviceRouter = require('./router/serviceRouter')
 const orderRouter = require('./router/orderRouter')
 const addOnRouter = require('./router/addOnRouter')
+const loginRouter = require('./router/loginRouter')
 const cors = require('cors'); 
  app.use(cors());
 
@@ -56,7 +57,7 @@ app.use(express.static('public'));
 
 
 // const url = "mongodb://127.0.0.1:27017/bookmyservices";
-const url = "mongodb+srv://bookmyservicesone:Ce109Ce114@cluster0.rg4p8ay.mongodb.net/bookMyServices"
+const url = "mongodb+srv://bookmyservicestwo:Ce109Ce114@cluster0.rg4p8ay.mongodb.net/bookMyServices"
 mongoose.connect(url).then(()=>{
     console.log("Connected to DB")
     app.listen(5000,()=>{
@@ -87,3 +88,4 @@ app.use("/promocode",promocodeRouter)
 app.use("/service",serviceRouter)
 app.use("/order",orderRouter)
 app.use("/addOn",addOnRouter)
+app.use("/login",loginRouter)

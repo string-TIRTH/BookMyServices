@@ -33,7 +33,7 @@ const DetailServices = () => {
       });
   }, []);
   const handleclick = () => {
-    window.location.href = '/';
+    window.location.href = '/Customer/AddServices';
   }
   const timeInMinutes = parseInt(user.time, 10);
 

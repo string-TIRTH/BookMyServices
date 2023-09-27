@@ -1,6 +1,7 @@
 // import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 // import Carousels from './Carousels';
+import NavBar from '../NavBar';
 import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
 import img1 from './img/service-2.jpg';
@@ -13,21 +14,22 @@ import img7 from './img/team-2.jpg'
 import img8 from './img/team-3.jpg'
 import img9 from './img/team-4.jpg'
 import Card from 'react-bootstrap/Card';
+
 // import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import md5 from 'md5'
 // import img6 from '../img/carousel1.jpg'
 // import '../Components/CssF/home.css' 
 // import Carousel from "react-multi-carousel";
 // import "react-multi-carousel/lib/styles.css"
 
 import '@fortawesome/fontawesome-free/css/all.css';
+import Navbar from '../NavBar';
 // import { useState } from 'react';
 
 const Home = () => {
-
-
     const [user, setuser] = useState([{}])
     useEffect(() => {
 
@@ -35,9 +37,7 @@ const Home = () => {
             .then((response) => {
                 // Set the fetched customer data in the state
                 // setCustomers(response.data);
-                console.log(response.data)
                 setuser(response.data);
-
                 // console.log(response.data.address[0])
                 // empdatachange(response.data);
             })
@@ -117,85 +117,10 @@ const Home = () => {
     return (
         <>
 
-
+            <NavBar></NavBar>
 
             {/* topbar start */}
-            <div className="container-fluid  d-none d-lg-block" style={{ background: "#cca8e9", width: "100%" }}>
-                <div className="row align-items-center top-bar" style={{ height: "60px", marginLeft: 20, marginRight: 20 }}>
-                    <div className="col-lg-3 col-md-12 text-center text-lg-start ">
-                        <Link to="" className="navbar-brand m-0 p-0">
-                            <h1 className="text m-0" style={{ textDecoration: "underline", color: "#272343" }}>BookMyServices</h1>
-                        </Link>
-                    </div>
-                    <div className="col-lg-9 col-md-12 text-end">
-                        <div className="h-100 d-inline-flex align-items-center me-4">
-                            <Link to="https://www.ddu.ac.in/"><i className="fa fa-map-marker-alt text-danger me-2"></i></Link>
-                            <p className="m-0">Dharmsinh Desai University</p>
-                        </div>
-                        <div className="h-100 d-inline-flex align-items-center me-4">
-                            <Link to=""><i className="far fa-envelope-open text-danger me-2" ></i></Link>
-                            <p className="m-0">BookMySevices.com</p>
-                        </div>
-                        <div className="h-100 d-inline-flex align-items-center">
-
-                            <Link to="/kogin" className="btn btn-sm-square bg-white text-danger me-1">Login\signUp</Link>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Navbar start */}
-            <div className="container-fluid nav-bar" style={{ background: "#cca8e9" }}>
-                <nav className="navbar navbar-expand-lg navbar-light bg-white p-3 py-lg-0 px-lg-4">
-                    <Link to="" className="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none">
-                        <h1 className="text-primary m-0">Plumberz</h1>
-                    </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span className="fa fa-bars"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarCollapse">
-                        <div className="navbar-nav me-auto">
-                            <Link to="" className="nav-item nav-link ">Home</Link>
-                            <Link to="/Customer/About" className="nav-item nav-link">About</Link>
-                            <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
-                            <div className="nav-item dropdown">
-                                <Link to="/Customer/Cart/" className="nav-item nav-link " >Cart</Link>
-                            
-                            </div>
-                            <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>
-                        </div>
-
-                        <div className="d-flex flex-shrink-0 align-items-center justify-content-center bg-white" style={{ width: "45px", height: "50px;", marginRight: "10px", borderRadius: "20px", border: "2px solidblack" }}>
-                            <div style={cartIconStyle}>
-
-                                <Link to="/Customer/Cart/" style={linkStyle}>
-                                    <FontAwesomeIcon icon={faShoppingCart} style={iconStyle} />
-                                    Cart
-                                </Link>
-
-
-                            </div>
-
-                        </div>
-
-
-                        {/* ---- */}
-                        <div className="mt-4 mt-lg-0 me-lg-n4 py-3 px-4 bg-primary d-flex align-items-center">
-
-                            <div className="d-flex flex-shrink-0 align-items-center justify-content-center bg-white" style={{ width: "45px", height: "45px;" }}>
-                                <i className="fa fa-phone-alt text-primary"></i>
-                            </div>
-
-                            <div className="ms-3">
-                                <p className="mb-1 text-white">Emergency 24/7</p>
-                                <h5 className="m-0 text-secondary">+012 345 6789</h5>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-
+            
             {/* Carousel*/}
             <div style={{ textAlign: "center" }}>
                 {/* <h2>React Carousel Minimal</h2>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { BsTrash } from 'react-icons/bs';
 import { useEffect, useState } from "react";
 import { useReducer } from 'react';
+import NavBar from '../NavBar';
 // import React, { useState } from 'react';
 // import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -206,6 +207,7 @@ const Cart = () => {
 
     return (
         <div >
+            <NavBar></NavBar>
             <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
                 <Button
                     style={{ width: "400px" }}
