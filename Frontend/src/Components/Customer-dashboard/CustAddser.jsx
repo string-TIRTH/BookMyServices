@@ -124,14 +124,14 @@ const CustAddser = () => {
         if (selectedDate.isSame(today, 'day')) {
             const nextHour = moment().startOf('hour').add(1, 'hour');
             while (nextHour.isBefore(moment().endOf('day')) && nextHour.hour() <= 24) {
-                timeSlots.push(nextHour.format('h:mm A'));
+                timeSlots.push(nextHour.format('HH:mm:ss'));
                 nextHour.add(1, 'hour');
             }
         } else {
             // Display time slots from 8:00 AM to 6:00 PM for other days
             let hour = 8;
             while (hour <= 18) {
-                timeSlots.push(moment().hour(hour).format('h:00 A'));
+                timeSlots.push(moment().hour(hour).format('HH:00:00'));
                 hour++;
             }
         }

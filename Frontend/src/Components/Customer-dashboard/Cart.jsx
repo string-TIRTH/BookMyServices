@@ -228,9 +228,9 @@ const Cart = () => {
                             cartItems.map((item, index) => (
                                 <div className='row mt-2'>
                                 <div className='col-md-6'>
-                                <div className="card" key={index} style={{ backgroundColor: 'grey' }}>
+                                <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                                     <div className='row'>
-                                        <div className="col-md-12" style={{ padding: 20, color: 'white' }} onClick={() => handleClickOpen(item)}>
+                                        <div className="col-md-12" style={{ padding: 20, color: 'white' }} onClick={() => handleClickOpen(item.serviceDetails)}>
                                             <h5 className="card-title" style={{ marginRight: "20%", marginLeft: "20%", textAlign: "center", backgroundColor: 'white', color: 'black', borderRadius: 20, fontSize: 30 }}> {item.serviceDetails.name}</h5>
                                         </div>
                                     </div>
@@ -270,14 +270,13 @@ const Cart = () => {
                                                     <DialogContent>
                                                         <DialogContentText>
                                                             <div className='container d-flex'>
-                                                                <img src={item.serviceDetails.url} alt={item.serviceDetails.name} className="img-fluid" style={{ width: "50%" }} />
+                                                                <img src={Item.url} alt={Item.name} className="img-fluid" style={{ width: "50%" }} />
                                                                 <div style={{ marginLeft: "20px" }}>
-                                                                    <h5><strong>Name:</strong> {item.serviceDetails.name}</h5>
-                                                                    <h5><strong>Price:</strong>  ₹{item.serviceDetails.price}</h5>
-                                                                    <h5><strong>Description:</strong>  {item.serviceDetails.desc}</h5>
-                                                                    <h5><strong>Time for Service:</strong>  {item.serviceDetails.time} min</h5>
-                                                                    <h5><strong>Date:</strong>  {item.date}</h5>
-                                                                    <h5><strong>Time Slot:</strong>  {item.time}</h5>
+                                                                    <h5><strong>Name:</strong> {Item.name}</h5>
+                                                                    <h5><strong>Price:</strong>  ₹{Item.price}</h5>
+                                                                    <h5><strong>Description:</strong>  {Item.desc}</h5>
+                                                                    <h5><strong>Time for Service:</strong>  {Item.time} </h5>
+                                   
                                                                 </div>
                                                             </div>
 
