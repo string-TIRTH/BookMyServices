@@ -5,12 +5,14 @@ import img2 from './img/service-1.jpg';
 import img3 from './img/service-3.jpg';
 import img4 from './img/about-1.jpg'
 import img5 from './img/about-2.jpg'
+import NavBar from '../NavBar';
+import { colors } from '@mui/material';
 const About = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <>
-   
+              <NavBar></NavBar>
 
             <div className="d-flex justify-content-center align-items-center" style={{ marginTop: "100px",  }}>
                 {/* <div style={containerStyle}> */}
@@ -57,7 +59,7 @@ const About = () => {
                            
 
                         {/* Button to close the dialog */}
-                        <button onClick={() => setOpenDialog(false)}>Close</button>
+                        <button onClick={() => setOpenDialog(false) } style={{backgroundColor:" #8bffff" ,width:"100%"}}>Close</button>
                        
                     </div>
                 )}

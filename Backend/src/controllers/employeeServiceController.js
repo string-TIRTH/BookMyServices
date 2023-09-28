@@ -1,5 +1,6 @@
 const EmpSerModel = require('../models/EmployeeServiceModel');
 const ServiceModel = require('../models/ServiceModel');
+const ServiceModel = require('../models/ServiceModel');
 module.exports = {
   getAllEmpSers: async (req, res) => {
     try {
@@ -35,7 +36,7 @@ module.exports = {
         if (isNew == '' || isNew == null) {
 
           const _id = empSer._id;
-      
+
           const serList = empSer.serList;
           console.log(empSer)
           serList.push({ serId: serId });
@@ -54,31 +55,39 @@ module.exports = {
     }
   },
   removeService: async (req, res) => {
-    const empId = req.body.empId;
-    const serId = req.body.serId;
-    const empSer = await EmpSerModel.findOne({ "empId": empId });
-    const _id = empSer._id;
-    if (empSer == null || empSer == '') {
-      res.status(200).json("employee does not have any services");
-    } else {
-      const isNew = await EmpSerModel.findOne({ "serList.serId": serId, empId: empId });
-      if (isNew == '' || isNew == null) {
-        res.status(200).json("service does not exists");
-      }
-      else {
-        const serList = empSer.serList;
-        for (let i = 0; i < serList.length; i++) {
-          if (serList[i].serId.toString() === serId) {
-            serList.splice(i, 1);
-            break; // Exit the loop after removing one item.
-          }
+    console.log(req.body)
+    try {
+      const empId = req.body.empId;
+      const serId = req.body.serId;
+    
+      const empSer = await EmpSerModel.findOne({ "empId": empId });
+      const _id = empSer._id;
+      if (empSer == null || empSer == '') {
+        res.status(200).json("employee does not have any services");
+      } else {
+        const isNew = await EmpSerModel.findOne({ "serList.serId": serId, empId: empId });
+        if (isNew == '' || isNew == null) {
+          res.status(200).json("service does not exists");
         }
-        empSer.serList = serList;
+        else {
+          const serList = empSer.serList;
+          for (let i = 0; i < serList.length; i++) {
+            if (serList[i].serId.toString() === serId) {
+              serList.splice(i, 1);
+              break; // Exit the loop after removing one item.
+            }
+          }
+          empSer.serList = serList;
 
-        // console.log(customer);
-        const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer);
-        res.status(200).json("removed");
+          // console.log(customer);
+          const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer);
+          res.status(200).json("removed");
+        }
       }
+    }
+    catch (err) {
+      console.log(err)
+      res.status(500).send(err);
     }
   },
   getEmpSerByEmpId: async (req, res) => {

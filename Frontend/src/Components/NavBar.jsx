@@ -98,7 +98,7 @@ const NavBar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
             <div className="navbar-nav me-auto">
-                <Link to="" className="nav-item nav-link ">Home</Link>
+                <Link to="/" className="nav-item nav-link ">Home</Link>
                 <Link to="/Customer/About" className="nav-item nav-link">About</Link>
                 <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
                 <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>
