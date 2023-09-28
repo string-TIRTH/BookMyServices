@@ -1,6 +1,5 @@
 const EmpSerModel = require('../models/EmployeeServiceModel');
 const ServiceModel = require('../models/ServiceModel');
-const ServiceModel = require('../models/ServiceModel');
 module.exports = {
   getAllEmpSers: async (req, res) => {
     try {
@@ -95,19 +94,19 @@ module.exports = {
       const responseAck = {
 
       };
-      const empSer = await EmpSerModel.findOne({ empId: req.body.empId },{"serList.serId" : true});
-      if(empSer != null){
-        let empSerList = empSer.serList.map(({serId }) => serId)
-        const servicesToBeAdded = await ServiceModel.find({_id : {$nin : empSerList}})
-        const existingServices = await ServiceModel.find({_id : {$in : empSerList}})
+      const empSer = await EmpSerModel.findOne({ empId: req.body._id }, { "serList.serId": true });
+      if (empSer != null) {
+        let empSerList = empSer.serList.map(({ serId }) => serId)
+        const servicesToBeAdded = await ServiceModel.find({ _id: { $nin: empSerList } })
+        const existingServices = await ServiceModel.find({ _id: { $in: empSerList } })
         responseAck.existingSer = existingServices;
         responseAck.nonExistingSer = servicesToBeAdded;
-      } else{
-        const servicesToBeAdded = await ServiceModel.find({isActive : true})
+      } else {
+        const servicesToBeAdded = await ServiceModel.find({ isActive: true })
         responseAck.nonExistingSer = servicesToBeAdded;
         responseAck.existingSer = [];
       }
-      
+
       res.status(200).json(responseAck);
     }
     catch (err) {

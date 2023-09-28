@@ -1,4 +1,3 @@
-
 import Sidebar from "../Sidebar";
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
@@ -191,7 +190,7 @@ const EmpSer = () => {
     };
     useEffect(() => {
 
-        axios.post(`http://localhost:5000/service/getService`)
+        axios.post('http://localhost:5000/service/getService')
             .then((response) => {
                 console.log(response.data);
                 setService(response.data);
@@ -212,7 +211,7 @@ const EmpSer = () => {
 
     useEffect(() => {
 
-        axios.post(`http://localhost:5000/Employee/getEmployee`)
+        axios.post('http://localhost:5000/Employee/getEmployee')
             .then((response) => {
 
                 empdatachange(response.data);
