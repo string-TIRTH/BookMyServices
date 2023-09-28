@@ -1,7 +1,7 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FaShoppingCart } from 'react-icons/fa';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -11,6 +11,7 @@ const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userData,setUserData] = useState('')
     const [address,setAddress] = useState('')
+    const [cartActive,setCartActive] = useState(false)
     useEffect(() => {
         //Runs only on the first render
         if (localStorage.getItem('role') != null) {
@@ -20,8 +21,13 @@ const NavBar = () => {
             };
             axios.post(`http://localhost:5000/customer/getCustomerById`, data)
             .then((response)=>{
-                // console.log(response.data[0].address[0].city)
+                // console.log(response.data[0].cart.serList )
                 setUserData(response.data[0])
+                if(response.data[0].cart.serList == ''){
+                    setCartActive(false)
+                }else{
+                    setCartActive(true)
+                }
                 setAddress(response.data[0].address[0])
             });
         }
@@ -97,26 +103,21 @@ const NavBar = () => {
                 <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
                 <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>
             </div>
-
-            <div className="d-flex flex-shrink-0 align-items-center justify-content-center bg-white" style={{ width: "45px", height: "50px;", marginRight: "10px", borderRadius: "20px", border: "2px solidblack" }}>
-                <div style={cartIconStyle}>
-
-                    <Link to="/Customer/Cart/" style={linkStyle}>
-                        <FontAwesomeIcon icon={faShoppingCart} style={iconStyle} />
-                        Cart
-                    </Link>
-
-
-                </div>
-
-            </div>
-
-
-            {/* ---- */}
         </div>
     </nav>
             </div >
-
+            
+            {cartActive
+                                ? <Link to={"/Customer/Cart/"}>
+                                <FaShoppingCart size={50} color="blue" item= '10' style={{
+                                    position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #e8630a',
+                                    borderRadius: '10px',
+                                    padding: '8px',
+                                    boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                                }} cartActive = {false}/>
+                            </Link>
+                                : <></>
+            }
         </>
     );
 }

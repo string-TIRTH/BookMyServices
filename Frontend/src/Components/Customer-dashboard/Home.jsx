@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 // import Carousels from './Carousels';
 import NavBar from '../NavBar';
+import { FaShoppingCart } from 'react-icons/fa';
 import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
 import img1 from './img/service-2.jpg';
@@ -14,7 +15,7 @@ import img7 from './img/team-2.jpg'
 import img8 from './img/team-3.jpg'
 import img9 from './img/team-4.jpg'
 import Card from 'react-bootstrap/Card';
-
+// import Span from '@babel/core'
 // import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,8 +32,8 @@ import Navbar from '../NavBar';
 
 const Home = () => {
     const [user, setuser] = useState([{}])
+    const [cartActive,setCartActive] = useState(false)
     useEffect(() => {
-
         axios.post(`http://localhost:5000/service/getService`)
             .then((response) => {
                 // Set the fetched customer data in the state
@@ -40,6 +41,7 @@ const Home = () => {
                 setuser(response.data);
                 // console.log(response.data.address[0])
                 // empdatachange(response.data);
+                
             })
             .catch((error) => {
                 // Handle any errors here
@@ -437,8 +439,6 @@ const Home = () => {
                     </div>
                 </div>
                
-
-
 
         </>
     )

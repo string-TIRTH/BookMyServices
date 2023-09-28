@@ -1,5 +1,5 @@
 const EmpSerModel = require('../models/EmployeeServiceModel');
-
+const ServiceModel = require('../models/ServiceModel');
 module.exports = {
   getAllEmpSers: async (req, res) => {
     try {
@@ -83,11 +83,26 @@ module.exports = {
   },
   getEmpSerByEmpId: async (req, res) => {
     try {
-      const empSer = await EmpSerModel.find({ empId: req.body.empId });
-      res.status(200).json(empSer);
+      const responseAck = {
+
+      };
+      const empSer = await EmpSerModel.findOne({ empId: req.body.empId },{"serList.serId" : true});
+      if(empSer != null){
+        let empSerList = empSer.serList.map(({serId }) => serId)
+        const servicesToBeAdded = await ServiceModel.find({_id : {$nin : empSerList}})
+        const existingServices = await ServiceModel.find({_id : {$in : empSerList}})
+        responseAck.existingSer = existingServices;
+        responseAck.nonExistingSer = servicesToBeAdded;
+      } else{
+        const servicesToBeAdded = await ServiceModel.find({isActive : true})
+        responseAck.nonExistingSer = servicesToBeAdded;
+        responseAck.existingSer = [];
+      }
+      
+      res.status(200).json(responseAck);
     }
     catch (err) {
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json(err);
     }
   },
   getEmpSerBySerId: async (req, res) => {

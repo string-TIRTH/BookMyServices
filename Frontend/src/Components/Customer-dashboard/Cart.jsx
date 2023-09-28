@@ -26,6 +26,7 @@ const Cart = () => {
     const [open, setOpen] = useState(false);
     const [Item, setItem] = useState([]);
     const [user, setUser] = useState({});
+    const [isCartEmpty, setIsCartEmpty] = useState(false);
     // console.log(count)
 
     const handleClickOpen = (item) => {
@@ -49,6 +50,11 @@ const Cart = () => {
 
         axios.post("http://localhost:5000/Customer/Cart", { custId: customerId })
             .then((response) => {
+                if (response.data.cart.serList == '') {
+                    setIsCartEmpty(false)
+                } else {
+                    setIsCartEmpty(true)
+                }
                 cartData = response.data.cart.serList;
                 console.log(cartData)
                 fetchServiceDetails(cartData);
@@ -208,7 +214,7 @@ const Cart = () => {
     return (
         <div >
             <NavBar></NavBar>
-            <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
+            {/* <div className='container mt-5 d-flex justify-content-center align-items-center' style={{ marginTop: "10px" }}>
                 <Button
                     style={{ width: "400px" }}
                     variant="contained"
@@ -220,110 +226,114 @@ const Cart = () => {
                 >
                     Add More Services
                 </Button>
-            </div>
+            </div> */}
 
-            <div className="container-fluid">
-                <div className='col-md-12'> 
-                        {cartItems.length === 0 ? (
-                            <h1 style={{ textAlign: 'center' }}>Cart is Empty</h1>
-                        ) : (
-                            cartItems.map((item, index) => (
-                                <div className='row mt-2'>
-                                <div className='col-md-6'>
-                                <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-                                    <div className='row'>
-                                        <div className="col-md-12" style={{ padding: 20, color: 'white' }} onClick={() => handleClickOpen(item.serviceDetails)}>
-                                            <h5 className="card-title" style={{ marginRight: "20%", marginLeft: "20%", textAlign: "center", backgroundColor: 'white', color: 'black', borderRadius: 20, fontSize: 30 }}> {item.serviceDetails.name}</h5>
+            <div className="container-fluid" style={{ backgroundColor: 'blue' }}>
+                {/* <div className='col-md-11' style={{margin :'20'}}>  */}
+
+                <div className='col-md-12'>
+                    {cartItems.length === 0 ? (
+                        <h1 style={{ textAlign: 'center' }}>Cart is Empty</h1>
+                    ) : (
+                        cartItems.map((item, index) => (
+                            <div className='row mt-2'>
+                                <div className='col-md-8'>
+                                    <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
+                                        <div className='row'>
+                                            <div className="col-md-12" style={{ padding: 20, color: 'white' }} onClick={() => handleClickOpen(item.serviceDetails)}>
+                                                <h5 className="card-title" style={{ marginRight: "20%", marginLeft: "20%", textAlign: "center", backgroundColor: 'white', color: 'black', borderRadius: 20, fontSize: 30 }}> {item.serviceDetails.name}</h5>
+                                            </div>
                                         </div>
-                                    </div>
-        
+
                                         <div className='row'>
                                             <div className="col-md-6">
-                                                <img className="rounded" src={item.serviceDetails.url} alt={item.serviceDetails.name} style={{ width: "100%", textAlign: "center", paddingLeft:20}} />
+                                                <img className="rounded" src={item.serviceDetails.url} alt={item.serviceDetails.name} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
                                             </div>
-                                           
-                                        
-                                   
-                                        <div className='col-md-6'>
-                                        
-                                            
-                                            <p style={{textAlign:'left',paddingLeft:'0'}}>Price : ₹{item.serviceDetails.price}</p>
 
-                                            
-                                        
-                                        <div className='row'>
-                                            
 
-                                                <p> Want on: {item.date} at: {item.time}</p> 
-                                            
+
+                                            <div className='col-md-6'>
+
+
+                                                <p style={{ textAlign: 'left', paddingLeft: '0' }}>Price : ₹{item.serviceDetails.price}</p>
+
+
+
+                                                <div className='row'>
+
+
+                                                    <p> Want on: {item.date} at: {item.time}</p>
+
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    </div>
-                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
-                                        <button className="btn btn-danger" style={{ width: 50 }} onClick={() => HandleRemove(item)}> <BsTrash /></button>
-                                    </div>
-                                    <div className="col-md-6" style={{ margin: 10 }}>
+                                        <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+                                            <button className="btn btn-danger" style={{ width: 50 }} onClick={() => HandleRemove(item)}> <BsTrash /></button>
+                                        </div>
+                                        <div className="col-md-6" style={{ margin: 10 }}>
 
 
-                                        <div className="row">
-                                            <div className="col-md-8">
-                                                <Dialog open={open} onClose={handleClose} >
-                                                    <DialogTitle>Item Details</DialogTitle>
-                                                    <DialogContent>
-                                                        <DialogContentText>
-                                                            <div className='container d-flex'>
-                                                                <img src={Item.url} alt={Item.name} className="img-fluid" style={{ width: "50%" }} />
-                                                                <div style={{ marginLeft: "20px" }}>
-                                                                    <h5><strong>Name:</strong> {Item.name}</h5>
-                                                                    <h5><strong>Price:</strong>  ₹{Item.price}</h5>
-                                                                    <h5><strong>Description:</strong>  {Item.desc}</h5>
-                                                                    <h5><strong>Time for Service:</strong>  {Item.time} </h5>
-                                   
+                                            <div className="row">
+                                                <div className="col-md-8">
+                                                    <Dialog open={open} onClose={handleClose} >
+                                                        <DialogTitle>Item Details</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText>
+                                                                <div className='container d-flex'>
+                                                                    <img src={Item.url} alt={Item.name} className="img-fluid" style={{ width: "50%" }} />
+                                                                    <div style={{ marginLeft: "20px" }}>
+                                                                        <h5><strong>Name:</strong> {Item.name}</h5>
+                                                                        <h5><strong>Price:</strong>  ₹{Item.price}</h5>
+                                                                        <h5><strong>Description:</strong>  {Item.desc}</h5>
+                                                                        <h5><strong>Time for Service:</strong>  {Item.time} </h5>
+
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </DialogContentText>
+                                                            </DialogContentText>
 
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={handleClose} style={{ backgroundColor: "blue", color: "black" }}>
-                                                            Close
-                                                        </Button>
-                                                    </DialogActions>
-                                                </Dialog>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleClose} style={{ backgroundColor: "blue", color: "black" }}>
+                                                                Close
+                                                            </Button>
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
-                                </div>
-
-                            ))
-                        )}
-
-                    </div>
-                    </div>
-            <div className="col-md-12 align-content-right ">
-                    <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "120px" }} >
-                        <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
-                            <div className="card-body">
-                                <h5 className="card-title">Total Price</h5>
-                                <p className="card-text">₹{calculateTotalPrice()}</p>
-                                <Button
-                                    style={{ width: "100px" }}
-                                    variant="contained"
-                                    color="warning"
-                                    onClick={handleOpenOrderDialog}
-
-
-                                >
-                                    Place Order
-                                </Button>
-
                             </div>
+
+                        ))
+                    )}
+
+                </div>
+            </div>
+            {isCartEmpty ?
+            <div className="col-md-12 align-content-right ">
+                <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "120px" }} >
+                    <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
+                        <div className="card-body">
+                            <h5 className="card-title">Total Price</h5>
+                            <p className="card-text">₹{calculateTotalPrice()}</p>
+                            <Button
+                                style={{ width: "100px" }}
+                                variant="contained"
+                                color="warning"
+                                onClick={handleOpenOrderDialog}
+
+
+                            >
+                                Place Order
+                            </Button>
+
                         </div>
                     </div>
                 </div>
+            </div>
+            :<></>}
             <Dialog open={orderDialogOpen} onClose={handleCloseOrderDialog}>
                 <DialogTitle>Place Order</DialogTitle>
                 <DialogContent>
@@ -395,6 +405,7 @@ const Cart = () => {
 
 
         </div>
+        // </div>
     );
 };
 
