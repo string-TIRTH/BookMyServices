@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 // import Carousels from './Carousels';
 import { FaShoppingCart } from 'react-icons/fa';
-import { MDBContainer, MDBRow, MDBCol, MDBBtnGroup } from 'mdb-react-ui-kit';
+
 import NavBar from '../NavBar';
 import * as React from "react";
 // import React, { useState } from 'react';
@@ -17,8 +17,6 @@ import axios from 'axios';
 // import { Carousel } from 'react-carousel-minimal';
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css';
 const CustAddser = () => {
     const [open, setOpen] = useState(false);
@@ -494,10 +492,10 @@ const CustAddser = () => {
 
             <Link to={"/Customer/Cart/"}>
                 <FaShoppingCart size={50} color="blue" style={{
-                    position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #e8630a',
+                    position: 'fixed', bottom: '20px', right: '10px', cursor: 'pointer', border: '1px solid #e8630a',
                     borderRadius: '10px',
                     padding: '8px',
-                    boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                    boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "30px"
                 }} />
             </Link>
 
