@@ -237,9 +237,7 @@ const EmpSer = () => {
                             <h2>Employee Listing</h2>
                         </div>
                         <div className="card-body" >
-                            <div className="divbtn">
-                                <Link to="/Admin/AddEmployee" className="btn btn-success">Add New (+)</Link>
-                            </div>
+                           
                             <table className="table table-bordered">
                                 <thead className="bg-dark text-white">
                                     <tr>
