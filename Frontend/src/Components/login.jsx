@@ -4,8 +4,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import md5 from "md5"
 import Swal from 'sweetalert2'
-// import Home from '../Components/Home'
-// Import the CSS file
 
 const Login = () => {
   const id = localStorage.getItem('id')

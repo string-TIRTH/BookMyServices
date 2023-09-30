@@ -6,12 +6,20 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from './img/BMS_LOGO.png';
+import Swal from 'sweetalert2'
 // import logo from '/src/public/logo/BMS_LOGO';
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userData,setUserData] = useState('')
     const [address,setAddress] = useState('')
     const [cartActive,setCartActive] = useState(false)
+      const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+ 
     useEffect(() => {
         //Runs only on the first render
         if (localStorage.getItem('role') != null) {
@@ -32,7 +40,18 @@ const NavBar = () => {
             });
         }
     }, []);
-    function logout(){
+    const logout = () =>{
+        
+        Swal.fire({
+            title: 'Logout Successfully',
+            icon: 'success',
+            text: "",
+            confirmButtonText: 'Okay'
+        }).then(() => {
+           
+           window.location.href="/"
+
+        })
         localStorage.clear()
     };
     const linkStyle = {
@@ -73,11 +92,44 @@ const NavBar = () => {
                         </>
                         : <></>
                     }
-                        <div className="h-100 d-inline-flex align-items-center">
+                        <div className="h-100 d-inline-flex align-items-center" style={{marginRight:"64px"}}>
 
                             {!isLoggedIn
                                 ? <Link to="/login" className="btn btn-sm-square bg-white text-danger me-1">Login</Link>
-                                : <Link to="/login" className="btn btn-sm-square bg-white text-danger me-1" onClick={logout}>Logout</Link>
+                                : 
+                                <div className="d-inline-flex align-items-center" >
+                                  <div className="dropdown">
+                                    <button
+                                      className="btn btn-primary rounded-circle dropdown-toggle"
+                                      type="button"
+                                      id="dropdownMenuButton"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded={dropdownOpen}
+                                      onClick={toggleDropdown}
+                                    >
+                                     
+                                      <i className="fas fa-user"></i>
+                                    </button>
+                                    <ul className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`} aria-labelledby="dropdownMenuButton">
+                                      <li>
+                                      <Link to ={"/Customer/Profile/" + localStorage.getItem('id')} className="dropdown-item">
+                                          Profile
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to ={"/Customer/CustEditProfile/"+ localStorage.getItem('id')} className="dropdown-item" >
+                                          Edit Profile
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <button className="dropdown-item" onClick={logout}>
+                                          Logout
+                                        </button>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                           
                             }
                             
 

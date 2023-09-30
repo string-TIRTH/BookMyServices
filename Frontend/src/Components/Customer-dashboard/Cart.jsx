@@ -342,7 +342,7 @@ const Cart = () => {
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="House Number"
-                                name="houseNo"
+                                name="house_no"
                                 // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
                                 value={address.house_no}
                                 onChange={handleChange}
@@ -351,7 +351,7 @@ const Cart = () => {
                             />
                             <TextField
                                 label="Society"
-                                name="society"
+                                name="society_name"
                                 value={address.society_name}
                                 onChange={handleChange}
                                 fullWidth
