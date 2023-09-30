@@ -27,9 +27,9 @@ const Services = () => {
 
 
 
-    const Removefunction = (id) => {
+    const Removefunction = (item) => {
         const data = {
-            serId: id
+            _id: item._id
         };
         if (window.confirm('Do you want to inActive the Service?')) {
             axios.post(`http://localhost:5000/service/InactiveService`, data)
@@ -58,29 +58,26 @@ const Services = () => {
     }
     const Activefunction = (id) => {
         const data = {
-            serId: id
+            _id: id._id
         };
         if (window.confirm('Do you want to Active the Service?')) {
             axios.post(`http://localhost:5000/service/ActiveService`, data)
                 .then((response) => {
-                    // Set the fetched customer data in the state
-                    // setCustomers(response.data);
+                
                     console.log(response.data)
                     //   Fetc();
                     axios.post(`http://localhost:5000/service/getService`)
                         .then((response) => {
-                            // Set the fetched customer data in the state
-                            // setCustomers(response.data);
-                            // console.log(response.data)
+                     
                             empdatachange(response.data);
                         })
                         .catch((error) => {
-                            // Handle any errors here
+                      
                             console.error('Error fetching Service data:', error);
                         });
                 })
                 .catch((error) => {
-                    // Handle any errors here
+                   
                     console.error('Error fetching Service data:', error);
                 });
         }
@@ -177,8 +174,8 @@ const Services = () => {
 
 
                                                         <Link to={'/Admin/DetailServices/' + item._id} className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</Link>
-                                                        {!item.isActive && <a onClick={() => { Activefunction(item._id) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>Active</a>}
-                                                        {item.isActive && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>InActive</a>}
+                                                        {!item.isActive && <a onClick={() => { Activefunction(item) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>Active</a>}
+                                                        {item.isActive && <a onClick={() => { Removefunction(item) }} className="btn btn-danger" style={{ marginLeft: "5px" }}>InActive</a>}
                                                     </td>
                                                 </tr>
                                             )

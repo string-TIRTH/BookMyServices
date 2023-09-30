@@ -1,6 +1,6 @@
 import Sidebar from "../Sidebar";
 import { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
@@ -372,7 +372,7 @@ const EmpSer = () => {
             </Dialog>
 {/* --- */}
 <Dialog open={opendet} onClose={handleClosedet}>
-                <DialogTitle>Delete Service</DialogTitle>
+                <DialogTitle>Details Service</DialogTitle>
                 <DialogContent>
                     {employeeServicesdet &&
                         employeeServicesdet?.existingSer?.length === 0 ? (
