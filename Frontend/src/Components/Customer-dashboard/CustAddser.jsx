@@ -20,15 +20,45 @@ import Swal from "sweetalert2"
 import '@fortawesome/fontawesome-free/css/all.css';
 const CustAddser = () => {
     const [open, setOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
     const [next6Days, setNext6Days] = useState([]);
     const [SerId, SetSerId] = useState('');
-    const [cartActive,setCartActive] = useState(false);
-    
+    const [cartActive, setCartActive] = useState(false);
+    const [message, HideMessage] = useState(false);
+    const handleHideMessage=()=>{
+        HideMessage(true);
+    }
+    useEffect(() => {
+
+        //Runs only on the first render
+        if (localStorage.getItem('role') != null) {
+            setIsLoggedIn(true);
+            const data = {
+                _id: localStorage.getItem('id')
+            };
+            axios.post(`http://localhost:5000/customer/getCustomerById`, data)
+                .then((response) => {
+
+                    if (response?.data[0]?.cart?.serList == '') {
+                        setCartActive(false)
+
+                    } else {
+                        setCartActive(true)
+                    }
+
+                });
+
+        }
+    }, []);
+
     const handleClickOpen = (item) => {
+
         SetSerId(item)
-        setOpen(true);
+        setOpen(true)
+
+
     };
 
     const handleClose = () => {
@@ -86,12 +116,12 @@ const CustAddser = () => {
                             confirmButtonText: 'Add More Services',
                             cancelButtonText: 'Go To Cart',
                             cancelButtonColor: '#0000FF'
-                          }).then((result) => {
+                        }).then((result) => {
                             if (!result.isConfirmed) {
                                 window.location.href = '/Customer/Cart'
                             }
-                          })
-                        
+                        })
+
 
                     })
             }
@@ -126,12 +156,12 @@ const CustAddser = () => {
     // Initialize the date buttons
     useState(() => {
         const data = {
-            _id:localStorage.getItem('id')
+            _id: localStorage.getItem('id')
         };
         axios.post(`http://localhost:5000/customer/getCustomerById`, data)
             .then((response) => {
                 // console.log(response.data[0].cart.serList )
-                if (response.data[0].cart.serList == '') {
+                if (response?.data[0]?.cart?.serList == '') {
                     setCartActive(false)
                 } else {
                     setCartActive(true)
@@ -267,11 +297,11 @@ const CustAddser = () => {
                             confirmButtonText: 'Add More Services',
                             cancelButtonText: 'Go To Cart',
                             cancelButtonColor: '#0000FF'
-                          }).then((result) => {
+                        }).then((result) => {
                             if (!result.isConfirmed) {
                                 window.location.href = '/Customer/Cart'
                             }
-                          })
+                        })
 
                     })
             }
@@ -403,112 +433,145 @@ const CustAddser = () => {
     };
     return (
         <>
-        <div style={{ background: "#D4E6F1"}}>
-            <NavBar></NavBar>
-
-            <div>
-      <div className="d-flex">
-        <div className="left-container">
-          {user &&
-            user
-              .filter((item) => item.isActive)
-              .map((item) => (
-                <div
-                  key={item._id}
-                  className="card mb-3"
-                  style={{
-                    maxWidth: '600px',
-                    margin: '10px',
-                    paddingLeft:'10px',
-                    marginLeft:"20px",
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    border: '2px solid black',
-                    borderRadius: '10px',
-                    backgroundColor: "#f8f8ff"
-                    
-                    //   item.name === 'AC Repair'
-                    //     ? '#fcff82'
-                    //     : item.name === 'Massage'
-                    //     ? '#ff5d9e'
-                    //     : item.name === 'Hair Salon For Man' || item.name === 'Painting'
-                    //     ? '#f5c7f7'
-                    //     : '#a393eb',
-
-                  }}
-                >
-                  <div className="row g-0">
-                    <div className="col-md-4">
-                      <img
-                        src={item.url}
-                        alt="Product"
-                        className="card-img"
+            <div style={{ background: "#D4E6F1" }}>
+                <NavBar></NavBar>
+                {!isLoggedIn && !message && (
+                    <div
                         style={{
-                            marginTop:"10px",
-                            marginBottom:"10px",
-                          height: '180px',
-                          borderRadius: '50px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '40px', // Adjust the height as needed
+                            backgroundColor: '#f8f8ff', // Set your desired background color
+                            color: 'red', // Set your desired text color
+                            fontSize: '18px', // Set your desired font size
                         }}
-                      />
+                    >
+                        If you want to add a service to your cart, please log in.
+                        <button
+            onClick={handleHideMessage}
+            style={{
+                
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'inherit',
+              fontSize: '20px',
+              position: 'absolute',
+              right:"10px"
+            }}
+          >
+            &#x2716; {/* Unicode for the "X" character */}
+          </button>
                     </div>
-                    <div className="col-md-6">
-                      <div className="card-body">
-                        <h3 className="card-title">
-                          {item.name === 'Appliances Repairing' ? 'Repairing' : item.name}
-                        </h3>
-                        <p className="card-text">Product Price: ₹{item.price}</p>
-                        <div className="container">
-                          <Link to={`/Home/DetailsServices/${item._id}`}>
-                            <button className="btn btn-primary" style={{ width: '120px', marginRight: '10px' }}>
-                              Read More
-                            </button>
-                          </Link>
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => handleClickOpen(item._id)}
-                            style={{ width: '220px',marginRight:"0px" }}
-                          >
-                            Add to Cart
-                          </button>
+                )}
+                <div>
+                    <div className="d-flex">
+                        <div className="left-container">
+                            {user &&
+                                user
+                                    .filter((item) => item.isActive)
+                                    .map((item) => (
+                                        <div
+                                            key={item._id}
+                                            className="card mb-3"
+                                            style={{
+                                                maxWidth: '600px',
+                                                margin: '10px',
+                                                paddingLeft: '10px',
+                                                marginLeft: "20px",
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                                border: '1px solid black',
+                                                borderRadius: '10px',
+                                                backgroundColor: "#f8f8ff"
+
+                                                //   item.name === 'AC Repair'
+                                                //     ? '#fcff82'
+                                                //     : item.name === 'Massage'
+                                                //     ? '#ff5d9e'
+                                                //     : item.name === 'Hair Salon For Man' || item.name === 'Painting'
+                                                //     ? '#f5c7f7'
+                                                //     : '#a393eb',
+
+                                            }}
+                                        >
+                                            <div className="row g-0">
+                                                <div className="col-md-4">
+                                                    <img
+                                                        src={item.url}
+                                                        alt="Product"
+                                                        className="card-img"
+                                                        style={{
+                                                            marginTop: "10px",
+                                                            marginBottom: "10px",
+                                                            height: '180px',
+                                                            borderRadius: '50px',
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="card-body">
+                                                        <h3 className="card-title">
+                                                            {item.name === 'Appliances Repairing' ? 'Repairing' : item.name}
+                                                        </h3>
+                                                        <p className="card-text">Product Price: ₹{item.price}</p>
+                                                        <div className="container">
+                                                            <Link to={`/Home/DetailsServices/${item._id}`}>
+                                                                <button className="btn btn-primary" style={{ width: '120px', marginRight: '10px' }}>
+                                                                    Read More
+                                                                </button>
+                                                            </Link>
+                                                            <button
+
+
+                                                                className="btn btn-danger"
+                                                                onClick={() => handleClickOpen(item._id)}
+                                                                style={{ width: '220px', marginRight: "0px" }}
+                                                                disabled={!isLoggedIn}
+
+                                                            >
+                                                                Add to Cart
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                         </div>
-                      </div>
+
+                        <div className="right-container">
+                            <div style={{ marginLeft: "50px", marginTop: "20px" }}>
+                                <iframe
+                                    style={{ borderRadius: "20px" }}
+                                    width="600px"
+                                    height="400"
+                                    src="https://www.youtube.com/embed/BENmAwUev0Q"
+                                    frameborder="0"
+                                    allowfullscreen
+                                    title="YouTube Video"
+                                ></iframe>
+                            </div>
+                            <div style={{ marginLeft: "50px", marginTop: "20px" }}>
+                                <iframe
+                                    style={{ borderRadius: "20px" }}
+                                    width="600px"
+                                    height="400"
+                                    src="https://www.youtube.com/embed/IJCEpbIHTa8"
+                                    frameborder="0"
+                                    allowfullscreen
+                                    title="YouTube Video"
+                                ></iframe>
+                            </div>
+                        </div>
+
                     </div>
-                  </div>
                 </div>
-              ))}
-        </div>
-        
-        <div className="right-container">
-          <div style={{ marginLeft: "50px",marginTop:"20px"}}>
-            <iframe
-              style={{borderRadius:"20px"}}
-              width="600px"
-              height="400"
-              src="https://www.youtube.com/embed/BENmAwUev0Q"
-              frameborder="0"
-              allowfullscreen
-              title="YouTube Video"
-            ></iframe>
-          </div>
-          <div style={{ marginLeft: "50px" ,marginTop:"20px" }}>
-            <iframe
-              style={{borderRadius:"20px"}}
-              width="600px"
-              height="400"
-              src="https://www.youtube.com/embed/IJCEpbIHTa8"
-              frameborder="0"
-              allowfullscreen
-              title="YouTube Video"
-            ></iframe>
-          </div>
-        </div>
-       
-      </div>
-    </div>
 
 
 
-            {/* <Link to={"/Customer/Cart/"}>
+                {/* <Link to={"/Customer/Cart/"}>
                 <FaShoppingCart size={50} color="blue" style={{
                     position: 'fixed', bottom: '20px', right: '10px', cursor: 'pointer', border: '1px solid #e8630a',
                     borderRadius: '10px',
@@ -517,74 +580,74 @@ const CustAddser = () => {
                 }} />
             </Link> */}
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Select Date and Time Slot</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        <div>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>Select Date and Time Slot</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
                             <div>
-                                <h5>Select Date:</h5>
+                                <div>
+                                    <h5>Select Date:</h5>
 
-                                <div className="row">
+                                    <div className="row">
 
-                                    {next6Days.map((day, index) => (
-                                        <div className="col-md-2" key={index}>
-                                            <button
+                                        {next6Days.map((day, index) => (
+                                            <div className="col-md-2" key={index}>
+                                                <button
 
-                                                key={day}
-                                                className={`btn btn-sm ${day.isSame(selectedDate, 'day') ? 'btn-primary' : 'btn-success'
-                                                    }`}
-                                                onClick={() => handleDateChange(day)}
-                                                style={{ width: "65px", height: "50px", borderRadius: "14px" }}
-                                            >
-                                                {day.format('MMM DD')}
-                                            </button>
-                                        </div>
-                                    ))}
+                                                    key={day}
+                                                    className={`btn btn-sm ${day.isSame(selectedDate, 'day') ? 'btn-primary' : 'btn-success'
+                                                        }`}
+                                                    onClick={() => handleDateChange(day)}
+                                                    style={{ width: "65px", height: "50px", borderRadius: "14px" }}
+                                                >
+                                                    {day.format('MMM DD')}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <h5 style={{ marginTop: "10px" }}>Select Time Slot:</h5>
+                                    <select
+                                        id="timeSlotSelect"
+                                        className="form-select"
+                                        value={selectedTimeSlot}
+                                        onChange={handleTimeSlotChange}
+                                    >
+                                        <option value="">Select a time slot</option>
+                                        {timeSlots.map((slot) => (
+                                            <option key={slot} value={slot}>
+                                                {slot}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
-                            <div>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleConfirm} variant="contained" color="warning">
+                            Confirm
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-                                <h5 style={{ marginTop: "10px" }}>Select Time Slot:</h5>
-                                <select
-                                    id="timeSlotSelect"
-                                    className="form-select"
-                                    value={selectedTimeSlot}
-                                    onChange={handleTimeSlotChange}
-                                >
-                                    <option value="">Select a time slot</option>
-                                    {timeSlots.map((slot) => (
-                                        <option key={slot} value={slot}>
-                                            {slot}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleConfirm} variant="contained" color="warning">
-                        Confirm
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            {cartActive
-                ? <Link to={"/Customer/Cart/"}>
-                    <FaShoppingCart size={50} color="#89cff0"  item='10' style={{
-                        position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
-                        borderRadius: '10px',
-                        padding: '8px',
-                        backgroundColor : '#faebd7',
-                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
-                    }} cartActive={false}  />
-                </Link>
-                : <></>
-            }
+                {cartActive && isLoggedIn
+                    ? <Link to={"/Customer/Cart/"}>
+                        <FaShoppingCart size={50} color="#89cff0" item='10' style={{
+                            position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
+                            borderRadius: '10px',
+                            padding: '8px',
+                            backgroundColor: '#faebd7',
+                            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                        }} cartActive={false} />
+                    </Link>
+                    : <></>
+                }
             </div>
         </>
     );
