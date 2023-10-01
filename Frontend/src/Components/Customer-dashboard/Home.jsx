@@ -34,14 +34,40 @@ import { Container, backdropClasses } from '@mui/material';
 const Home = () => {
     const [user, setuser] = useState([{}])
     const [cartActive, setCartActive] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    useEffect(() => {
+       
+        //Runs only on the first render
+        if (localStorage.getItem('role') != null) {
+            setIsLoggedIn(true);
+            const data = {
+                _id: localStorage.getItem('id')
+            };
+            axios.post(`http://localhost:5000/customer/getCustomerById`, data)
+                .then((response) => {
+                    // console.log(response.data[0].cart.serList )
+                    
+                    if (response?.data[0]?.cart?.serList == '') {
+                        setCartActive(false)
+                      
+                    } else {
+                        setCartActive(true)
+                    }
+                    
+                });
+               
+        }
+    }, []);
+  
     useEffect(() => {
         const data = {
             _id:localStorage.getItem('id')
         };
         axios.post(`http://localhost:5000/customer/getCustomerById`, data)
             .then((response) => {
+                console.log(cartActive)
                 // console.log(response.data[0].cart.serList )
-                if (response.data[0].cart.serList == '') {
+                if (response?.data[0]?.cart?.serList == '') {
                     setCartActive(false)
                 } else {
                     setCartActive(true)
@@ -452,7 +478,7 @@ const Home = () => {
 
                 </div>
             </div>
-            {cartActive
+            {isLoggedIn && cartActive
                 ? <Link to={"/Customer/Cart/"}>
                     <FaShoppingCart size={50} color="blue" item='10' style={{
                         position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #e8630a',

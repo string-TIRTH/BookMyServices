@@ -115,7 +115,7 @@ const CustEditProfile = () => {
                     <div className="col-md-16 offset-md-3" style={{ width: "500px" }}>
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="card-title text-center">Edit Address</h5>
+                                <h5 className="card-title text-center">Edit Profile</h5>
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <TextField

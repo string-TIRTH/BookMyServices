@@ -7,20 +7,22 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from './img/BMS_LOGO.png';
 import Swal from 'sweetalert2'
+import Home from './Customer-dashboard/Home';
 // import logo from '/src/public/logo/BMS_LOGO';
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userData,setUserData] = useState('')
-    const [address,setAddress] = useState('')
-    const [cartActive,setCartActive] = useState(false)
-      const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [userData, setUserData] = useState('')
+    const [address, setAddress] = useState('')
+    const [cartActive, setCartActive] = useState(false)
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
 
- 
+
     useEffect(() => {
+       
         //Runs only on the first render
         if (localStorage.getItem('role') != null) {
             setIsLoggedIn(true);
@@ -31,17 +33,21 @@ const NavBar = () => {
                 .then((response) => {
                     // console.log(response.data[0].cart.serList )
                     setUserData(response.data[0])
-                    if (response.data[0].cart.serList == '') {
+                    if (response?.data[0]?.cart?.serList == '') {
                         setCartActive(false)
+                      
                     } else {
                         setCartActive(true)
                     }
                     setAddress(response.data[0].address[0])
                 });
+               
         }
     }, []);
-    const logout = () =>{
-        
+    
+    const logout = () => {
+
+ 
         Swal.fire({
             title: 'Logout Successfully',
             icon: 'success',
@@ -49,7 +55,9 @@ const NavBar = () => {
             confirmButtonText: 'Okay'
         }).then(() => {
            
-           window.location.href="/"
+           
+
+            window.location.href = "/"
 
         })
         localStorage.clear()
@@ -95,8 +103,12 @@ const NavBar = () => {
                         <div className="h-100 d-inline-flex align-items-center" style={{marginRight:"64px"}}>
 
                             {!isLoggedIn
-                                ? <Link to="/login" className="btn btn-sm-square bg-white text-danger me-1">Login</Link>
-                                : 
+                                ?
+                                
+                                <Link to="/login" className="btn btn-sm-square bg-white text-danger me-1">Login</Link>
+                                // </div>
+                               
+                                :
                                 <div className="d-inline-flex align-items-center" >
                                   <div className="dropdown">
                                     <button

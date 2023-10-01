@@ -19,7 +19,7 @@ module.exports = {
     const email = req.body.email;
     const password = req.body.password
     const customer = await Customer.findOne({"email": email},{password:true});
-    console.log(customer)
+    // console.log(customer)
     if(customer != '' && customer != null){
     if(customer.password == password){
       console.log("success")
@@ -262,6 +262,7 @@ module.exports = {
     }
   },
   cart : async (req, res) =>{
+    // console.log(req.body)
     const custId = req.body.custId;
     try{
       const customer = await Customer.findById(custId);
