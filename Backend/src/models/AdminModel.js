@@ -57,6 +57,10 @@ const AdminSchema = new mongoose.Schema({
   address : {
      type : [AddressSchema]
   },
+  role : {
+      type : String,
+      default : "admin"
+  },
   status : {
      type : String,
      default : "Not Verified"

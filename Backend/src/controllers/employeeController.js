@@ -1,7 +1,7 @@
 // Example employeeController.js
 
 const Employee = require('../models/EmployeeModel');
-
+const emailSender = require('../Helper/emailHelper')
 module.exports = {
   getAllEmployees: async (req, res) => {
     try {
@@ -25,18 +25,56 @@ module.exports = {
   createEmployee: async (req, res) => {
     
     try {
-    const employee = new Employee({
-        fname : req.body.fname,
-        lname : req.body.lname,
-        email : req.body.email,
-        password : req.body.password,
-        contact_no : req.body.contact_no,
-        address : req.body.address
-    });
+      const fname = req.body.fname;
+      const lname = req.body.lname;
+      const email = req.body.email;
+      let password = "";
+      for(let i=0;i<3;i++){
+        password += fname[Math.floor(Math.random() * fname.length)];
+        password += email[Math.floor(Math.random() * email.length)];
+        password += lname[Math.floor(Math.random() * lname.length)];
+      }
+      const speCharList = "!@#$%^&*()~_+=";
+      password += speCharList[Math.floor(Math.random() * 13)];
+      
+
+      const employee = new Employee({
+          fname : fname,
+          lname : lname,
+          email : email,
+          password : password,
+          contact_no : req.body.contact_no,
+          address : req.body.address
+      });
       const newEmployee = await employee.save();
+      emailSender({email:email,password:password})
       res.status(201).json(newEmployee);
     } catch (error) {
       res.status(400).json({ error: 'Bad request' });
+    }
+  },
+  test4: async (req, res) => {
+    
+    try {
+      const fname = req.body.fname;
+      const lname = req.body.lname;
+      const email = req.body.email;
+      let password = "";
+      for(let i=0;i<3;i++){
+        password += fname[Math.floor(Math.random() * fname.length)];
+        password += email[Math.floor(Math.random() * email.length)];
+        password += lname[Math.floor(Math.random() * lname.length)];
+      }
+      const speCharList = "!@#$%^&*()~_+=";
+      password += speCharList[Math.floor(Math.random() * 13)];
+      console.log(password)
+      
+      emailSender({email:email,password:password})
+
+      res.status(201).json('ok');
+    } catch (error) {
+      console.log(error);
+      res.status(400).json(error);
     }
   },
 

@@ -1,9 +1,12 @@
 const express = require("express");
 const AdminModel = require("../models/AdminModel");
+const adminController = require("../controllers/adminController");
 const router = express.Router();
 
 
-router.post("/createAdmin", async (req, res) => {
+router.post("/createAdmin", adminController.createAdmin);
+/**
+ * async (req, res) => {
 
     try {
         const admin = new AdminModel({
@@ -23,9 +26,11 @@ router.post("/createAdmin", async (req, res) => {
         });
     }
 }
-);
-
-router.post("/getAdmin", async (req, res) => {
+ */
+router.post("/validateAdmin", adminController.validateAdmin);
+router.post("/getAdmin",adminController.getAllAdmins);
+/**
+ *  async (req, res) => {
 
     try {
         const admin = await AdminModel.find({});
@@ -36,12 +41,15 @@ router.post("/getAdmin", async (req, res) => {
             message: err
         });
     }
-});
-
-router.post("/getAdminById", async (req, res) => {
+}
+ */
+router.post("/getAdminById", adminController.getAdminById);
+router.post("/getAdminByEmail", adminController.getAdminByEmail);
+/**
+ * async (req, res) => {
 
     try {
-        const admin = await AdminModel.find({_id:req.body.custId});
+        const admin = await AdminModel.find({_id:req.body.empId});
         res.json(admin);
     }
     catch (err) {
@@ -49,9 +57,11 @@ router.post("/getAdminById", async (req, res) => {
             message: err
         });
     }
-});
-
-router.post("/updateAdmin", async (req, res) => {
+}
+ */
+router.post("/updateAdmin",adminController.updateAdmin);
+/**
+ *  async (req, res) => {
 
     const id  = req.body.id;
     const  {fname,lname,email,password,contact_no}  = req.body;
@@ -63,9 +73,17 @@ router.post("/updateAdmin", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
+}
+ */
 
-router.post("/deleteAdmin", async (req, res) => {
+router.post("/deleteAdmin",adminController.deleteAdmin);
+router.post("/activeAdmin", adminController.activeAdmin);
+router.post("/getActiveAdmin", adminController.getActiveCustomer);
+router.post("/getInActiveAdmin", adminController.getInActiveCustomer);
+
+
+/**
+ *  async (req, res) => {
 
     const id  = req.body.id;
     try {
@@ -75,9 +93,8 @@ router.post("/deleteAdmin", async (req, res) => {
         console.error(error);
         res.status(500).send(error);
     }
-});
-
-
+}
+ */
 
 
 module.exports = router

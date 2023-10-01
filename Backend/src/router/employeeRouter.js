@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.post("/createEmployee", employeeController.createEmployee);
+router.post("/test4", employeeController.test4);
 /**
  * async (req, res) => {
 
