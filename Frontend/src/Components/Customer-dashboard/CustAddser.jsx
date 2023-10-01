@@ -24,6 +24,8 @@ const CustAddser = () => {
     const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
     const [next6Days, setNext6Days] = useState([]);
     const [SerId, SetSerId] = useState('');
+    const [cartActive,setCartActive] = useState(false);
+    
     const handleClickOpen = (item) => {
         SetSerId(item)
         setOpen(true);
@@ -123,6 +125,18 @@ const CustAddser = () => {
 
     // Initialize the date buttons
     useState(() => {
+        const data = {
+            _id:localStorage.getItem('id')
+        };
+        axios.post(`http://localhost:5000/customer/getCustomerById`, data)
+            .then((response) => {
+                // console.log(response.data[0].cart.serList )
+                if (response.data[0].cart.serList == '') {
+                    setCartActive(false)
+                } else {
+                    setCartActive(true)
+                }
+            });
         generateNext6Days();
     }, []);
 
@@ -389,6 +403,7 @@ const CustAddser = () => {
     };
     return (
         <>
+        <div style={{ background: "#D4E6F1"}}>
             <NavBar></NavBar>
 
             <div>
@@ -404,19 +419,22 @@ const CustAddser = () => {
                   style={{
                     maxWidth: '600px',
                     margin: '10px',
+                    paddingLeft:'10px',
                     marginLeft:"20px",
                     flexDirection: 'row',
                     justifyContent: 'center',
                     border: '2px solid black',
                     borderRadius: '10px',
-                    backgroundColor:
-                      item.name === 'AC Repair'
-                        ? '#fcff82'
-                        : item.name === 'Massage'
-                        ? '#ff5d9e'
-                        : item.name === 'Hair Salon For Man' || item.name === 'Painting'
-                        ? '#f5c7f7'
-                        : '#a393eb',
+                    backgroundColor: "#f8f8ff"
+                    
+                    //   item.name === 'AC Repair'
+                    //     ? '#fcff82'
+                    //     : item.name === 'Massage'
+                    //     ? '#ff5d9e'
+                    //     : item.name === 'Hair Salon For Man' || item.name === 'Painting'
+                    //     ? '#f5c7f7'
+                    //     : '#a393eb',
+
                   }}
                 >
                   <div className="row g-0">
@@ -461,7 +479,7 @@ const CustAddser = () => {
         </div>
         
         <div className="right-container">
-          <div style={{ marginLeft: "50px" }}>
+          <div style={{ marginLeft: "50px",marginTop:"20px"}}>
             <iframe
               style={{borderRadius:"20px"}}
               width="600px"
@@ -472,7 +490,7 @@ const CustAddser = () => {
               title="YouTube Video"
             ></iframe>
           </div>
-          <div style={{ marginLeft: "50px" ,marginTop:"70px" }}>
+          <div style={{ marginLeft: "50px" ,marginTop:"20px" }}>
             <iframe
               style={{borderRadius:"20px"}}
               width="600px"
@@ -490,14 +508,14 @@ const CustAddser = () => {
 
 
 
-            <Link to={"/Customer/Cart/"}>
+            {/* <Link to={"/Customer/Cart/"}>
                 <FaShoppingCart size={50} color="blue" style={{
                     position: 'fixed', bottom: '20px', right: '10px', cursor: 'pointer', border: '1px solid #e8630a',
                     borderRadius: '10px',
                     padding: '8px',
                     boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "30px"
                 }} />
-            </Link>
+            </Link> */}
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Select Date and Time Slot</DialogTitle>
@@ -555,7 +573,19 @@ const CustAddser = () => {
                 </DialogActions>
             </Dialog>
 
-
+            {cartActive
+                ? <Link to={"/Customer/Cart/"}>
+                    <FaShoppingCart size={50} color="#89cff0"  item='10' style={{
+                        position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
+                        borderRadius: '10px',
+                        padding: '8px',
+                        backgroundColor : '#faebd7',
+                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                    }} cartActive={false}  />
+                </Link>
+                : <></>
+            }
+            </div>
         </>
     );
 }

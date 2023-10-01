@@ -22,15 +22,15 @@ module.exports = {
     }
   },
   getAddOnBySerId: async (req, res) => {
-    const addOnSerId = req.body._id;
-    // console.log(req.body)
+    const addOnSerId = req.body.serId;
+    console.log(req.body)
 
     try {
-      const addOns = await AddOnModel.findById(addOnSerId);
-    
-      res.status(200).json(addOns);
+      const addOns = await AddOnModel.findOne({serId:addOnSerId});
+      res.status(200).json({"addOns" : addOns.addOnList});
     } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+      console.log(error)
+      res.status(500).json( error);
     }
   },
   addAddOns: async(req,res)=>{

@@ -12,6 +12,7 @@ const About = () => {
 
     return (
         <>
+        <div style={{ background: "#D4E6F1"}}>
               <NavBar></NavBar>
 
             <div className="d-flex justify-content-center align-items-center" style={{ marginTop: "100px",  }}>
@@ -132,7 +133,7 @@ const About = () => {
                 </div>
             </div>
             <br></br>
-          
+            </div>
         </>
     );
 }

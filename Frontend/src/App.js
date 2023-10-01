@@ -30,7 +30,7 @@ import Cart from './Components/Customer-dashboard/Cart';
 import Sample from './Components/Customer-dashboard/Sample';
 import Sample2 from './Components/Customer-dashboard/Sample2';
 import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
-import AddEmpSer from './Components/Admin-dashboard/EmpSer/AddEmpSer';
+import AddOn from './Components/Admin-dashboard/AddOn/AddOn';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
@@ -59,7 +59,7 @@ function App() {
           <Route path="/Admin/EditServices/:id" element={<EditServices />} />
           <Route path="/Admin/DetailServices/:id" element={<DetailServices />} />
           <Route path="/Admin/EmpSer/" element={<EmpSer />} />
-          <Route path="/Admin/AddEmpSer/:id" element={<AddEmpSer />} />
+          <Route path="/Admin/AddOn/" element={<AddOn />} />
 
 
           <Route path="/" element={<Home></Home>} />

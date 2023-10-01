@@ -28,12 +28,25 @@ import md5 from 'md5'
 
 import '@fortawesome/fontawesome-free/css/all.css';
 import Navbar from '../NavBar';
+import { backdropClasses } from '@mui/material';
 // import { useState } from 'react';
 
 const Home = () => {
     const [user, setuser] = useState([{}])
-    const [cartActive,setCartActive] = useState(false)
+    const [cartActive, setCartActive] = useState(false)
     useEffect(() => {
+        const data = {
+            _id:localStorage.getItem('id')
+        };
+        axios.post(`http://localhost:5000/customer/getCustomerById`, data)
+            .then((response) => {
+                // console.log(response.data[0].cart.serList )
+                if (response.data[0].cart.serList == '') {
+                    setCartActive(false)
+                } else {
+                    setCartActive(true)
+                }
+            });
         axios.post(`http://localhost:5000/service/getService`)
             .then((response) => {
                 // Set the fetched customer data in the state
@@ -41,7 +54,7 @@ const Home = () => {
                 setuser(response.data);
                 // console.log(response.data.address[0])
                 // empdatachange(response.data);
-                
+
             })
             .catch((error) => {
                 // Handle any errors here
@@ -118,16 +131,16 @@ const Home = () => {
 
     return (
         <>
-
+            <div style={{ background: "#D4E6F1"}}>
             <NavBar></NavBar>
-
+          
             {/* topbar start */}
-            
-            {/* Carousel*/}
-            <div style={{ textAlign: "center" }}>
+
+            {/* Carousel */}
+             <div style={{ textAlign: "center"}}>
                 {/* <h2>React Carousel Minimal</h2>
                 <p>Easy to use, responsive and customizable carousel component for React Projects.</p> */}
-                <div style={{
+                <div style={{ 
                     padding: "0 20px"
                 }}>
                     <Carousel
@@ -155,8 +168,8 @@ const Home = () => {
                             margin: "10px auto",
                         }}
                     />
-                </div>
-            </div>
+                </div> 
+            </div> 
 
 
             {/* services*/}
@@ -399,7 +412,7 @@ const Home = () => {
             </div>
             {/* foooter */}
 
-            <div className='container' style={{maxWidth:"100%"}}>
+            <div className='container' style={{ maxWidth: "100%" }}>
                 <div className="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn  " data-wow-delay="0.1s">
                     <div className="container py-5 ">
                         <div className="row g-5">
@@ -409,14 +422,14 @@ const Home = () => {
                                 <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>+012 345 67890</p>
                                 <p className="mb-2"><i className="fa fa-envelope me-3"></i>info@example.com</p>
                                 <div className="d-flex pt-3">
-                                    <a className="btn btn-outline-light btn-social" style={{marginRight:"10px"}} href=""><i className="fab fa-twitter"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{marginRight:"10px"}} href=""><i className="fab fa-facebook-f"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{marginRight:"10px"}}href=""><i className="fab fa-youtube"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{marginRight:"10px"}}href=""><i className="fab fa-linkedin-in"></i></a>
+                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-twitter"></i></a>
+                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-facebook-f"></i></a>
+                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-youtube"></i></a>
+                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            
-                            <div className="col-lg-3 col-md-6" style={{marginLeft:"150px"}}>
+
+                            <div className="col-lg-3 col-md-6" style={{ marginLeft: "150px" }}>
                                 <h4 className="text-light mb-4">Opening Hours</h4>
                                 <h6 className="text-light">Monday - Friday:</h6>
                                 <p className="mb-4">09.00 AM - 09.00 PM</p>
@@ -424,22 +437,32 @@ const Home = () => {
                                 <p className="mb-0">09.00 AM - 12.00 PM</p>
                             </div>
 
-                            <div className="col-lg-3 col-md-6" style={{marginLeft:"120px"}}>
+                            <div className="col-lg-3 col-md-6" style={{ marginLeft: "120px" }}>
                                 <h4 className="text-light mb-4">Newsletter</h4>
                                 <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                                 <div className="position-relative mx-auto" style={{ maxWidth: "2000px" }}>
                                     <input className="" type="text" placeholder="Your email" /><br>
                                     </br>
-                                    <button type="button" style={{marginTop:"10px"}}>SignUp</button>
+                                    <button type="button" style={{ marginTop: "10px" }}>SignUp</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
-                    </div>
-                </div>
-               
 
+                </div>
+            </div>
+            {cartActive
+                ? <Link to={"/Customer/Cart/"}>
+                    <FaShoppingCart size={50} color="blue" item='10' style={{
+                        position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #e8630a',
+                        borderRadius: '10px',
+                        padding: '8px',
+                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                    }} cartActive={false} />
+                </Link>
+                : <></>
+            }
+            </div>
         </>
     )
 }
