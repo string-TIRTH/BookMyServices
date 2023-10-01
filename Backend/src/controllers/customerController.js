@@ -266,8 +266,8 @@ module.exports = {
     const custId = req.body.custId;
     try{
       const customer = await Customer.findById(custId);
-      if(customer.cart.serList == [] ||customer.cart.serList == "" ){
-        res.send("cart is empty");
+      if(customer.cart.serList == [] || customer.cart.serList ==  null ){
+        res.send({message:false});
         // customer.cart.serList.push(serRecord)
       }else{
         res.send(customer);

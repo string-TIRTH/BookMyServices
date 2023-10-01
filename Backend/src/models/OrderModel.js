@@ -91,7 +91,7 @@ const OrderSchema = new mongoose.Schema({
       default : "Cash"
     },
     amount:{
-        type : String,
+        type : Number,
         default : 0
     },
     status:{

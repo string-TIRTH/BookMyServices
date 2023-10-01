@@ -7,13 +7,13 @@ const EmpSerModel = require("../models/EmployeeServiceModel");
 const emailSender = require("../Helper/otpHelper")
 const { default: mongoose } = require("mongoose");
 const CustomerModel = require('../models/CustomerModel');
+const { response } = require('express');
 module.exports = {
     checkAvailability: async (req, res) => {
         try {
             const serId = req.body.serId;
-            const date = req.body.service_date
-            const time = req.body.service_startTime
-
+            const date = req.body.date
+            const time = req.body.time
             const empIdList = await EmpSerModel.distinct("empId", { "serList.serId": serId }, { empId: true });
             console.log(empIdList)
             serTimeList = [];
@@ -29,7 +29,7 @@ module.exports = {
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-            // console.log(serTimeList)
+            console.log(serTimeList)
             let orderList = []
             let foundEmpId = null;
             let empFound = false;
@@ -54,6 +54,7 @@ module.exports = {
                     message : false
                 }
             }
+            console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -154,6 +155,7 @@ module.exports = {
             }
             else if (i < serList.length) {
                 // console.log("employee not found")
+                const result = await OrderModel.deleteMany({orderId:orderId});
                 responseAck.serviceAssign = i;
                 responseAck.status = "ok"
                 responseAck.code = 1; // some employee assigned
@@ -206,10 +208,31 @@ module.exports = {
     getOrderByCustId: async (req, res) => {
 
         try {
-            const order = await OrderModel.find({ custId: req.body.custId });
-            res.json(order);
+
+            const custId = req.body.custId;    
+            const data = await OrderModel.aggregate(
+                [
+                    {$match:{custId:new mongoose.Types.ObjectId(custId)}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    // { $project: { _id: 1 , total:1,orderId:1,service_name:1} }
+                    // { $project: { _id: 1 , total:1,orderId:1,service_name:1} }
+
+                ],
+            )
+                console.log(data)
+            // const order = await OrderModel.find({ custId: req.body.custId });
+            res.json(data);
         }
         catch (err) {
+            console.log(err)
             res.json({
                 message: err
             });

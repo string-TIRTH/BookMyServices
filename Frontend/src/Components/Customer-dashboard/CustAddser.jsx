@@ -27,7 +27,7 @@ const CustAddser = () => {
     const [SerId, SetSerId] = useState('');
     const [cartActive, setCartActive] = useState(false);
     const [message, HideMessage] = useState(false);
-    const handleHideMessage=()=>{
+    const handleHideMessage = () => {
         HideMessage(true);
     }
     useEffect(() => {
@@ -103,27 +103,42 @@ const CustAddser = () => {
             }
             try {
 
-                axios.post(`http://localhost:5000/customer/AddService`, data)
+                axios.post(`http://localhost:5000/order/checkAvailability`, data)
                     .then((response) => {
+                        console.log(response)
+                        if (response.data.message === false) {
+                            Swal.fire({
+                                title: 'workers are not available of given date & time try different date and time',
+                                text: "Change Data / Time",
+                                icon: 'warning',
+                                confirmButtonText: 'Okay'
+                            })
+                        } else {
+                            axios.post(`http://localhost:5000/customer/AddService`, data)
+                                .then((response) => {
 
-                        console.log(response.data)
-                        Swal.fire({
-                            title: 'Service Added To Cart',
-                            text: "Added",
-                            icon: 'success',
-                            showCancelButton: true,
-                            confirmButtonColor: '#0000FF',
-                            confirmButtonText: 'Add More Services',
-                            cancelButtonText: 'Go To Cart',
-                            cancelButtonColor: '#0000FF'
-                        }).then((result) => {
-                            if (!result.isConfirmed) {
-                                window.location.href = '/Customer/Cart'
-                            }
-                        })
+                                    console.log(response.data)
+                                    Swal.fire({
+                                        title: 'Service Added To Cart',
+                                        text: "Added",
+                                        icon: 'success',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#0000FF',
+                                        confirmButtonText: 'Add More Services',
+                                        cancelButtonText: 'Go To Cart',
+                                        cancelButtonColor: '#0000FF'
+                                    }).then((result) => {
+                                        if (!result.isConfirmed) {
+                                            window.location.href = '/Customer/Cart'
+                                        }
+                                    })
 
 
+                                })
+                        }
                     })
+
+
             }
             catch (error) {
 
@@ -449,20 +464,20 @@ const CustAddser = () => {
                     >
                         If you want to add a service to your cart, please log in.
                         <button
-            onClick={handleHideMessage}
-            style={{
-                
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'inherit',
-              fontSize: '20px',
-              position: 'absolute',
-              right:"10px"
-            }}
-          >
-            &#x2716; {/* Unicode for the "X" character */}
-          </button>
+                            onClick={handleHideMessage}
+                            style={{
+
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: 'inherit',
+                                fontSize: '20px',
+                                position: 'absolute',
+                                right: "10px"
+                            }}
+                        >
+                            &#x2716; {/* Unicode for the "X" character */}
+                        </button>
                     </div>
                 )}
                 <div>

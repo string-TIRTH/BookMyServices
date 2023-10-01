@@ -50,10 +50,11 @@ const Cart = () => {
 
         axios.post("http://localhost:5000/Customer/Cart", { custId: customerId })
             .then((response) => {
-                if (response.data.cart.serList == '') {
-                    setIsCartEmpty(false)
-                } else {
+                console.log(response.data)
+                if (response.data.message === false) {
                     setIsCartEmpty(true)
+                } else {
+                    setIsCartEmpty(false)
                 }
                 cartData = response.data.cart.serList;
                 console.log(cartData)
@@ -182,6 +183,7 @@ const Cart = () => {
             console.log(address)
             const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
             if (response) {
+                setIsCartEmpty(true);
                 handleCloseOrderDialog();
                 // setCartItems(null);
                 cartItems.length = 0;
@@ -192,6 +194,7 @@ const Cart = () => {
                     cartItems.map((item, index) => (item) => {
                         text += "\n" + item.serviceDetails.name;
                     });
+                    console.log(text)
                     Swal.fire({
                         title: 'Order Placed Successfully',
                         icon: 'success',
@@ -202,7 +205,20 @@ const Cart = () => {
                             custId: id._id
                         }
                         axios.post("http://localhost:5000/customer/removeCart", data);
+                        setIsCartEmpty(false);
                     })
+                }else{
+                    Swal.fire({
+                        title: 'workers are not available... for some services',
+                        icon: 'warning',
+                        text: "try to order one by one",
+                        confirmButtonText: 'Okay'
+                    })
+                    const data = {
+                        custId: id._id
+                    }
+                    axios.post("http://localhost:5000/customer/removeCart", data);
+                    
                 }
             }
 
@@ -301,7 +317,7 @@ const Cart = () => {
                                 ))
                             )}
 
-{isCartEmpty ?
+{!isCartEmpty ?
                         <div className="col-md-12 align-content-right" style={{}}>
                             <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "10px" }} >
                                 <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
@@ -336,7 +352,7 @@ const Cart = () => {
                                 <form onSubmit={handleSubmit}>
                                     <TextField
                                         label="House Number"
-                                        name="houseNo"
+                                        name="house_no"
                                         // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
                                         value={address.house_no}
                                         onChange={handleChange}
@@ -345,7 +361,7 @@ const Cart = () => {
                                     />
                                     <TextField
                                         label="Society"
-                                        name="society"
+                                        name="society_name"
                                         value={address.society_name}
                                         onChange={handleChange}
                                         fullWidth
