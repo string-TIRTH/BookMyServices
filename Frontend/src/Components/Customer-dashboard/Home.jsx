@@ -28,7 +28,7 @@ import md5 from 'md5'
 
 import '@fortawesome/fontawesome-free/css/all.css';
 import Navbar from '../NavBar';
-import { backdropClasses } from '@mui/material';
+import { Container, backdropClasses } from '@mui/material';
 // import { useState } from 'react';
 
 const Home = () => {
@@ -137,7 +137,8 @@ const Home = () => {
             {/* topbar start */}
 
             {/* Carousel */}
-             <div style={{ textAlign: "center"}}>
+            <div className='container-fluid' style={{padding:'2px'}}>
+             <div style={{ textAlign: "center"}} >
                 {/* <h2>React Carousel Minimal</h2>
                 <p>Easy to use, responsive and customizable carousel component for React Projects.</p> */}
                 <div style={{ 
@@ -462,6 +463,7 @@ const Home = () => {
                 </Link>
                 : <></>
             }
+            </div>
             </div>
         </>
     )
