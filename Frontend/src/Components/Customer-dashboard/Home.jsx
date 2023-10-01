@@ -45,9 +45,9 @@ const Home = () => {
             };
             axios.post(`http://localhost:5000/customer/getCustomerById`, data)
                 .then((response) => {
-                    // console.log(response.data[0].cart.serList )
+                    console.log(response.data[0].cart.serList )
                     
-                    if (response?.data[0]?.cart?.serList == '') {
+                    if (response?.data[0].cart.serList == '' || response?.data[0].cart.serList == null) {
                         setCartActive(false)
                       
                     } else {
