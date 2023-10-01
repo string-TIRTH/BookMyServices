@@ -34,6 +34,8 @@ import AddOn from './Components/Admin-dashboard/AddOn/AddOn';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
+import CustProfile from './Components/Customer-dashboard/CustProfile';
+import CustEditProfile from './Components/Customer-dashboard/CustEditProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -73,6 +75,8 @@ function App() {
           <Route path="/Customer/Cart" element={<Cart />} />
           <Route path="/Customer/Sample" element={<Sample />} />
           <Route path="/Customer/Sample2" element={<Sample2 />} />
+          <Route path="/Customer/Profile/:id" element={<CustProfile />} />
+          <Route path="/Customer/CustEditProfile/:id" element={<CustEditProfile />} />
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}

@@ -16,26 +16,18 @@ const DetailCustomer =()=>{
    
         axios.post(`http://localhost:5000/customer/getCustomerById`,data)
           .then((response) => {
-            // Set the fetched customer data in the state
-            // setCustomers(response.data);
+       
             console.log(response.data)
                 setuser(response.data);
         
-            // console.log(response.data.address[0])
-            // empdatachange(response.data);
+        
           })
           .catch((error) => {
-            // Handle any errors here
+        
             console.error('Error fetching customer data:', error);
           });
       }, []);
-      // if(user[0].address !== undefined ){
-      // const add =user[0].address[0]
-      
-      
-      // const mess = "donot exist";
-      // console.log(user[0]?.address?.length)
-      // console.log(user[0].address && user[0].address.length >0 ? "hello" : "not hello");
+
       
     return(
         <>
