@@ -47,11 +47,11 @@ const Home = () => {
                 .then((response) => {
                     
                     
-                    if (response?.data[0]?.cart?.serList == '') {
+                    if (response?.data[0]?.cart?.serList == '' || response?.data[0]?.cart?.serList == null) {
                         setCartActive(false)
                       
                     } else {
-                        setCartActive(true)
+                        setCartActive(true) 
                     }
                     
                 });

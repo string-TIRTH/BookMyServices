@@ -7,13 +7,13 @@ const EmpSerModel = require("../models/EmployeeServiceModel");
 const emailSender = require("../Helper/otpHelper")
 const { default: mongoose } = require("mongoose");
 const CustomerModel = require('../models/CustomerModel');
+const { response } = require('express');
 module.exports = {
     checkAvailability: async (req, res) => {
         try {
             const serId = req.body.serId;
-            const date = req.body.service_date
-            const time = req.body.service_startTime
-
+            const date = req.body.date
+            const time = req.body.time
             const empIdList = await EmpSerModel.distinct("empId", { "serList.serId": serId }, { empId: true });
             console.log(empIdList)
             serTimeList = [];
@@ -29,7 +29,7 @@ module.exports = {
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-            // console.log(serTimeList)
+            console.log(serTimeList)
             let orderList = []
             let foundEmpId = null;
             let empFound = false;
@@ -54,6 +54,7 @@ module.exports = {
                     message : false
                 }
             }
+            console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -121,6 +122,8 @@ module.exports = {
                         price = serRes.price - req.body.discount;
                     }
                     let service_endTime = st.add(serRes.time, 'minute').format('HH:mm:ss');
+                    console.log("Start Time : "+startTime)
+                    console.log("End Time : "+service_endTime)
                     var order = new OrderModel({
                         custId: req.body.custId,
                         serId: ser.serId,
@@ -154,6 +157,7 @@ module.exports = {
             }
             else if (i < serList.length) {
                 // console.log("employee not found")
+                const result = await OrderModel.deleteMany({orderId:orderId});
                 responseAck.serviceAssign = i;
                 responseAck.status = "ok"
                 responseAck.code = 1; // some employee assigned
@@ -206,10 +210,105 @@ module.exports = {
     getOrderByCustId: async (req, res) => {
 
         try {
-            const order = await OrderModel.find({ custId: req.body.custId });
-            res.json(order);
+
+            const custId = req.body.custId;    
+            const completedOrders = await OrderModel.aggregate(
+                [
+                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: {$not : {$eq : "assigned"}}}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "employees",
+                        localField: "empId",
+                        foreignField: "_id",
+                        as: "employeeDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "employeeDetails.fname":1,
+                        "employeeDetails.lname":1,
+                        "employeeDetails.contact_no":1,
+                        "employeeDetails.rating":1,
+                       
+                    } }
+
+                ],
+            )
+            const pendingOrders = await OrderModel.aggregate(
+                [
+                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: "assigned"}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "employees",
+                        localField: "empId",
+                        foreignField: "_id",
+                        as: "employeeDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "employeeDetails.fname":1,
+                        "employeeDetails.lname":1,
+                        "employeeDetails.contact_no":1,
+                        "employeeDetails.rating":1,
+                       
+                    } }
+
+                ],
+            )
+            console.log(completedOrders)
+            res.json({completedOrders:completedOrders,pendingOrders:pendingOrders});
         }
         catch (err) {
+            console.log(err)
             res.json({
                 message: err
             });

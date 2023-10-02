@@ -58,14 +58,6 @@ const OrderSchema = new mongoose.Schema({
       type : Number, 
       default : 1,
       },
-    endTime :{
-      type : String, 
-      default : moment().format("hh:mm:ss")
-    },
-    isActive : {
-      type : Boolean,
-      default : true
-    },
     booking_datetime:{
       type : String,
       default : moment().format("YYYY-MM-DD hh:mm:ss")
@@ -91,7 +83,7 @@ const OrderSchema = new mongoose.Schema({
       default : "Cash"
     },
     amount:{
-        type : String,
+        type : Number,
         default : 0
     },
     status:{
