@@ -78,7 +78,9 @@ module.exports = {
             let temp = [];
             const serDate = req.body.service_date;
             let i = 0;
-            let orderId = new mongoose.Types.ObjectId();
+            // let orderId = new mongoose.Types.ObjectId();
+            let orderId = moment().unix();
+            orderId *=2;
             for (let ser of serList) {
                 let empIdList = await EmpSerModel.distinct("empId", { "serList.serId": ser.serId }, { empId: true });
                 serTimeList = [];
@@ -122,8 +124,6 @@ module.exports = {
                         price = serRes.price - req.body.discount;
                     }
                     let service_endTime = st.add(serRes.time, 'minute').format('HH:mm:ss');
-                    console.log("Start Time : "+startTime)
-                    console.log("End Time : "+service_endTime)
                     var order = new OrderModel({
                         custId: req.body.custId,
                         serId: ser.serId,
@@ -177,8 +177,8 @@ module.exports = {
     },
     test: async (req, res) => {
         try {
-            console.log(distance())
-            res.send("OK");
+            console.log(moment().unix());
+            res.send("he;;pw");
         }
         catch (err) {
             res.send(err);
@@ -317,8 +317,101 @@ module.exports = {
     getOrderByEmpId: async (req, res) => {
 
         try {
-            const order = await OrderModel.find({ empId: req.body.empId });
-            res.json(order);
+            const custId = req.body.empId;    
+            const completedOrders = await OrderModel.aggregate(
+                [
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: {$not : {$eq : "assigned"}}}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "customers",
+                        localField: "custId",
+                        foreignField: "_id",
+                        as: "customerDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "customerDetails.fname":1,
+                        "customerDetails.lname":1,
+                        "customerDetails.contact_no":1,
+                        "customerDetails.rating":1,
+                        "customerDetails.address":1                 
+                    } }
+
+                ],
+            )
+            const pendingOrders = await OrderModel.aggregate(
+                [
+                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: "assigned"}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "employees",
+                        localField: "empId",
+                        foreignField: "_id",
+                        as: "employeeDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "employeeDetails.fname":1,
+                        "employeeDetails.lname":1,
+                        "employeeDetails.contact_no":1,
+                        "employeeDetails.rating":1,
+                       
+                    } }
+
+                ],
+            )
+            console.log(completedOrders)
+            res.json({completedOrders:completedOrders,pendingOrders:pendingOrders});
         }
         catch (err) {
             res.json({

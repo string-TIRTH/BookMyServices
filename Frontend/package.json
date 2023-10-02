@@ -7,13 +7,9 @@
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-<<<<<<< HEAD
     "@mui/icons-material": "^5.14.11",
-=======
     "@geoapify/geocoder-autocomplete": "^2.0.1",
     "@geoapify/react-geocoder-autocomplete": "^2.0.0",
-    "@mui/icons-material": "^5.14.9",
->>>>>>> 891c9351673b846157b760cbc256c142dd4b3d34
     "@mui/lab": "^5.0.0-alpha.144",
     "@mui/material": "^5.14.11",
     "@react-leaflet/core": "^2.1.0",

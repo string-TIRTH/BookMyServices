@@ -12,18 +12,19 @@ router.post("/getOrderByCustId", orderController.getOrderByCustId);
 router.post("/getOrderByEmpId", orderController.getOrderByEmpId);
 router.post("/updateOrder", orderController.updateOrder);
 router.post("/deleteOrder", orderController.deleteOrder);
+router.post("/test", orderController.test);
 
-router.post("/test", async (req, res) => {
+// router.post("/test", async (req, res) => {
 
-    try {
-        let orderId = new mongoose.Types.ObjectId();
-        res.json(orderId);
-    }
-    catch (err) {
-        res.json({
-            message: err
-        });
-    }
-});
+//     try {
+//         let orderId = new mongoose.Types.ObjectId();
+//         res.json(orderId);
+//     }
+//     catch (err) {
+//         res.json({
+//             message: err
+//         });
+//     }
+// });
 
 module.exports = router
