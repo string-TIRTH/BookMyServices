@@ -38,6 +38,7 @@ import CustProfile from './Components/Customer-dashboard/CustProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CustEditProfile from './Components/Customer-dashboard/CustEditProfile';
 import CustOrder from './Components/Customer-dashboard/CustOrder';
+// import Contact from './Components/Customer-dashboard/';
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
           <Route path="/Customer/Profile/:id" element={<CustProfile />} />
           <Route path="/Customer/CustEditProfile/:id" element={<CustEditProfile />} />
           <Route path="/Customer/CustOrder/" element={<CustOrder />} />
+          {/* <Route path="/Customer/Contact/" element={<Contact />} /> */}
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}

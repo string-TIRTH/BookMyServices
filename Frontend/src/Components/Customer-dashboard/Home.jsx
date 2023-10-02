@@ -80,7 +80,6 @@ const Home = () => {
                 setuser(response.data);
                 // console.log(response.data.address[0])
                 // empdatachange(response.data);
-
             })
             .catch((error) => {
                 // Handle any errors here

@@ -1,25 +1,66 @@
 import NavBar from "../NavBar";
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { BsTrash } from 'react-icons/bs';
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+// import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+// import Dialog from '@mui/material/Dialog';
+// import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { FaShoppingCart } from 'react-icons/fa';
 const CustOrder = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [cartActive, setCartActive] = useState(false)
-
+    const [Complete, setComplete] = useState([]);
+    const [pending, setPending] = useState([]);
+    // const [cartItems, set] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [opencomp, setOpencomp] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
-
+    const [pItem, setpItem] = useState({});
+    // var date, time; 
     const handleClose = () => {
         setIsOpen(false);
     };
+    const handleOrderDetails = (item) => {
+        // console.log(item)
+        setpItem(item)
+
+        setOpen(true);
+    }
+    const handleC = () => {
+        setpItem({})
+        setOpen(false)
+    }
+    const handlecompOrderDetails = (item) => {
+        // console.log(item)
+        setpItem(item)
+
+        setOpencomp(true);
+    }
+    const handleCcomp = () => {
+        setpItem({})
+        setOpencomp(false)
+    }
+
+
+
 
     const handleLogin = () => {
-        window.location.href="/Login"
+        window.location.href = "/Login"
     };
+    const dialogStyles = {
+        maxWidth: '1000px', // Set the maximum width as per your requirements
+    };
+
     useEffect(() => {
 
 
@@ -42,6 +83,24 @@ const CustOrder = () => {
 
         }
     }, []);
+
+    const data = {
+        custId: localStorage.getItem('id')
+    }
+    useEffect(() => {
+        axios.post(`http://localhost:5000/order/getOrderByCustId/`, data)
+            .then((response) => {
+                console.log(response.data)
+                setPending(response.data.pendingOrders)
+                setComplete(response.data.completedOrders)
+
+            })
+
+
+
+    }, []);
+
+
     return (
 
         <>
@@ -56,7 +115,7 @@ const CustOrder = () => {
                     />
                     <Dialog open={isOpen} onClose={handleClose}>
                         <div style={{ padding: '16px' }}>
-                            <Typography variant="h5" component="div" gutterBottom>  
+                            <Typography variant="h5" component="div" gutterBottom>
                                 Orders are only visible after logging in
                             </Typography>
                             <Typography variant="body1" component="div">
@@ -76,11 +135,270 @@ const CustOrder = () => {
             )}
 
             {isLoggedIn && (
-                <div>
-              
-                   
-                   
+
+
+
+
+
+                <div className="container-fluid" style={{ backgroundColor: '#D4E6F1' }}>
+                    <div className='col-md-12 justify-content-center' style={{ padding: 20 }}>
+
+
+                        <div className="container-fluid" style={{ backgroundColor: '#FFFFF0' }}>
+                            {/* <div className='col-md-11' style={{margin :'20'}}>  */}
+
+                            <div className='col-md-12' style={{ padding: 20 }}>
+                                {pending.length === 0 && Complete.length === 0 ? (
+                                    <h1 style={{ textAlign: 'center' }}>Never Makes Order</h1>
+                                ) : (
+                                    <>
+                                        {pending.length === 0 ? <h1 style={{ textAlign: 'center' }}>No Pending Order</h1> :
+                                            pending.length !== 0 && (
+                                                <>
+                                                    <h1 style={{ textAlign: 'center' }}>Pending Orders</h1>
+
+
+
+                                                    {pending.map((item, index) => (
+
+                                                        <div className='row mt-2'>
+
+
+                                                            <div className='col-md-8'>
+                                                                <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
+                                                                    <div className='row' style={{ marginTop: 20 }}>
+                                                                        <div className="col-md-6">
+                                                                            <img className="rounded" src={item?.serviceDetails[0]?.url} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                                        </div>
+
+
+
+                                                                        <div className='col-md-6' style={{ textAlign: 'left' }}>
+
+
+                                                                            <h6 className="card-title"><strong>Order Id: </strong>{item.orderId}</h6>
+                                                                            <h6 className="card-title"> <strong>Service Name: </strong>{item?.serviceDetails[0]?.name}</h6>
+
+                                                                            <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
+
+                                                                            <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
+                                                                            <h6><strong>
+                                                                                Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
+                                                                            </h6>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+                                                                        < Button onClick={() => handleOrderDetails(item)} style={{
+                                                                            marginRight: "50px", backgroundColor: '#007bff', 
+                                                                            color: 'white', 
+                                                                            padding: '10px 20px', 
+                                                                            borderRadius: '5px',
+                                                                            border: 'none', 
+                                                                            cursor: 'pointer', 
+                                                                            fontSize: '16px'
+                                                                        }} variant="contained" color="warning">Order Details</Button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }} > <BsTrash /></button>
+                                                                    </div>
+                                                                    <div className="col-md-6" style={{ margin: 10 }}>
+
+
+                                                                        <div className="row">
+                                                                            <div className="col-md-8">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    ))}
+                                                    <Dialog open={open} onClose={handleC} PaperProps={{ style: dialogStyles }} >
+                                                        <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
+                                                        <DialogContent>
+                                                            <p><strong>Order Id :</strong> {pItem.orderId}</p>
+                                                            <DialogContentText>
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <img className="rounded" src={pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                                </div>
+                                                                <br></br>
+
+                                                                <h6><strong>Service name :</strong> {pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.name : ""}</h6>
+                                                                <h6><strong>Total amount :</strong> ₹{pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.price : ""}</h6>
+                                                                <h6><strong>Booked at :</strong>{pItem.booking_datetime}</h6>
+                                                                <h6><strong>Service date :</strong>{pItem.service_date}</h6>
+                                                                <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
+                                                                <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
+                                                                <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
+
+                                                                <p>
+                                                                    <strong>
+                                                                        <h3>Employee Details</h3></strong>
+                                                                    <h6>
+                                                                        <strong>Employee Name:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.fname : ""} {pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.lname : ""} </h6>
+                                                                    <h6>  <strong>Contact Number.:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.contact_no : ""}</h6>
+
+                                                                </p>
+                                                            </DialogContentText>
+
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleC} style={{
+                                                                            marginRight: "50px", backgroundColor: '#f96d00', 
+                                                                            color: '#f2f2f2', 
+                                                                            padding: '10px 20px', 
+                                                                            borderRadius: '5px',
+                                                                            border: 'none', 
+                                                                            cursor: 'pointer', 
+                                                                            fontSize: '16px'
+                                                                        }}>
+                                                                Close
+                                                            </Button>
+
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </>
+
+
+                                            )}
+                                        {Complete?.length === 0 ? <h1 style={{ textAlign: 'center' }}>No Completed Order</h1> :
+
+
+                                            Complete?.length !== 0 && (
+                                                <>
+                                                    <h1 style={{ textAlign: 'center' }}>Complete Orders</h1>
+
+
+
+                                                    {pending.map((item, index) => (
+
+                                                        <div className='row mt-2'>
+
+
+                                                            <div className='col-md-8'>
+                                                                <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
+                                                                    <div className='row' style={{ marginTop: 20 }}>
+                                                                        <div className="col-md-6">
+                                                                            <img className="rounded" src={item?.serviceDetails[0]?.url} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                                        </div>
+
+
+
+                                                                        <div className='col-md-6' style={{ textAlign: 'left' }}>
+
+
+                                                                            <h6 className="card-title"><strong>Order Id: </strong>{item.orderId}</h6>
+                                                                            <h6 className="card-title"> <strong>Service Name: </strong>{item?.serviceDetails[0]?.name}</h6>
+
+                                                                            <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
+
+                                                                            <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
+                                                                            <h6><strong>
+                                                                                Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
+                                                                            </h6>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+                                                                        < Button onClick={() => handlecompOrderDetails(item)} style={{
+                                                                            marginRight: "50px", backgroundColor: '#007bff', 
+                                                                            color: '#f2f2f2', 
+                                                                            padding: '10px 20px', 
+                                                                            borderRadius: '5px',
+                                                                            border: 'none', 
+                                                                            cursor: 'pointer', 
+                                                                            fontSize: '16px'
+                                                                        }}variant="contained" color="warning">Order Details</Button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }} > <BsTrash /></button>
+                                                                    </div>
+                                                                    <div className="col-md-6" style={{ margin: 10 }}>
+
+
+                                                                        <div className="row">
+                                                                            <div className="col-md-8">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    ))}
+                                                    <Dialog open={opencomp} onClose={handleCcomp} PaperProps={{ style: dialogStyles }} >
+                                                        <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
+                                                        <DialogContent>
+                                                            <p><strong>Order Id :</strong> {pItem.orderId}</p>
+                                                            <DialogContentText>
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <img className="rounded" src={pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                                </div>
+                                                                <br></br>
+
+                                                                <h6><strong>Service name :</strong> {pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.name : ""}</h6>
+                                                                <h6><strong>Total amount :</strong> ₹{pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.price : ""}</h6>
+                                                                <h6><strong>Booked at :</strong>{pItem.booking_datetime}</h6>
+                                                                <h6><strong>Service date :</strong>{pItem.service_date}</h6>
+                                                                <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
+                                                                <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
+                                                                <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
+
+                                                                <p>
+                                                                    <strong>
+                                                                        <h3>Employee Details</h3></strong>
+                                                                    <h6>
+                                                                        <strong>Employee Name:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.fname : ""} {pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.lname : ""} </h6>
+                                                                    <h6>  <strong>Contact Number.:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.contact_no : ""}</h6>
+
+                                                                </p>
+                                                            </DialogContentText>
+
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleCcomp} style={{
+                                                                            marginRight: "50px", backgroundColor: '#f96d00', 
+                                                                            color: 'white', 
+                                                                            padding: '10px 20px', 
+                                                                            borderRadius: '5px',
+                                                                            border: 'none', 
+                                                                            cursor: 'pointer', 
+                                                                            fontSize: '16px'
+                                                                        }}>
+                                                                Close
+                                                            </Button>
+
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </>
+                                            )}
+                                    </>
+
+
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    {cartActive && isLoggedIn
+                    ? <Link to={"/Customer/Cart/"}>
+                        <FaShoppingCart size={50} color="#89cff0" item='10' style={{
+                            position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
+                            borderRadius: '10px',
+                            padding: '8px',
+                            backgroundColor: '#faebd7',
+                            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                        }} cartActive={false} />
+                    </Link>
+                    : <></>
+                }
+
                 </div>
+
+
+
+
             )}
 
         </>
