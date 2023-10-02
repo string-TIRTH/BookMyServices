@@ -91,13 +91,12 @@ const CustOrder = () => {
         axios.post(`http://localhost:5000/order/getOrderByCustId/`, data)
             .then((response) => {
                 console.log(response.data)
+                console.log(response.data.pendingOrders)
+                console.log(response.data.completedOrders)
                 setPending(response.data.pendingOrders)
                 setComplete(response.data.completedOrders)
-
             })
-
-
-
+            
     }, []);
 
 
@@ -149,13 +148,13 @@ const CustOrder = () => {
 
                             <div className='col-md-12' style={{ padding: 20 }}>
                                 {pending.length === 0 && Complete.length === 0 ? (
-                                    <h1 style={{ textAlign: 'center' }}>Never Makes Order</h1>
+                                    <h1 style={{ textAlign: 'center' }}>To see something you have to do something... : ) <br></br> you have never placed an order : /</h1>
                                 ) : (
                                     <>
-                                        {pending.length === 0 ? <h1 style={{ textAlign: 'center' }}>No Pending Order</h1> :
+                                        {pending.length === 0 ? <h1 style={{ textAlign: 'center' }}></h1> :
                                             pending.length !== 0 && (
                                                 <>
-                                                    <h1 style={{ textAlign: 'center' }}>Pending Orders</h1>
+                                                    <h1 style={{ textAlign: 'center' }}></h1>
 
 
 
@@ -182,6 +181,7 @@ const CustOrder = () => {
                                                                             <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
 
                                                                             <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
+                                                                            <h6><strong> Status: </strong><span className="text-warning">Not Completed</span>  </h6>
                                                                             <h6><strong>
                                                                                 Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
                                                                             </h6>
@@ -232,7 +232,7 @@ const CustOrder = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-
+                                                                <h6><strong> Status: </strong><span className="text-warning">Not Completed</span>  </h6>
                                                                 <p>
                                                                     <strong>
                                                                         <h3>Employee Details</h3></strong>
@@ -263,16 +263,16 @@ const CustOrder = () => {
 
 
                                             )}
-                                        {Complete?.length === 0 ? <h1 style={{ textAlign: 'center' }}>No Completed Order</h1> :
+                                        {Complete?.length === 0 ? <h1 style={{ textAlign: 'center' }}></h1> :
 
 
                                             Complete?.length !== 0 && (
                                                 <>
-                                                    <h1 style={{ textAlign: 'center' }}>Complete Orders</h1>
+                                                    {/* <h1 style={{ textAlign: 'center' }}></h1> */}
 
 
 
-                                                    {pending.map((item, index) => (
+                                                    {Complete.map((item, index) => (
 
                                                         <div className='row mt-2'>
 
@@ -295,6 +295,11 @@ const CustOrder = () => {
                                                                             <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
 
                                                                             <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
+                                                                            {item.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
+                                                                            :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
+                                                                
+                                                                            }
+                                                                
                                                                             <h6><strong>
                                                                                 Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
                                                                             </h6>
@@ -345,6 +350,11 @@ const CustOrder = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
+                                                                
+                                                                {pItem.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
+                                                                            :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
+                                                                
+                                                                            }
 
                                                                 <p>
                                                                     <strong>

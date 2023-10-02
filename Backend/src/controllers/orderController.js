@@ -35,7 +35,7 @@ module.exports = {
             let empFound = false;
             for (let eid of empIdList) {
                 console.log(eid)
-                const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList } })
+                const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList },isActive : true })
                 console.log(availOrderList)
                 if (availOrderList != null && availOrderList != "") {
                     orderList.push(availOrderList)
@@ -102,7 +102,7 @@ module.exports = {
                 let foundEmpId = null;
                 let empFound = false;
                 for (let eid of empIdList) {
-                    const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: ser.date, service_startTime: { $in: serTimeList } })
+                    const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: ser.date, service_startTime: { $in: serTimeList },isActive : true })
                     // console.log(availOrderList)
                     if (availOrderList != null && availOrderList != "") {
                         orderList.push(availOrderList)
@@ -419,6 +419,19 @@ module.exports = {
             });
         }
     },
+    cancelOrder: async (req, res) => {
+
+        const id = req.body.id;
+        try {
+            status = "cancelled";
+            isActive = false;
+            const order = await OrderModel.findByIdAndUpdate(id, { status ,isActive});
+            res.send(order);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    },
     updateOrder: async (req, res) => {
 
         const id = req.body.id;
@@ -432,6 +445,7 @@ module.exports = {
             res.status(500).send(error);
         }
     },
+    
     sendOTP: async (req, res) => {
 
         const id = req.body.orderId;

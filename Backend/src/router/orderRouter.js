@@ -13,6 +13,7 @@ router.post("/getOrderByEmpId", orderController.getOrderByEmpId);
 router.post("/updateOrder", orderController.updateOrder);
 router.post("/deleteOrder", orderController.deleteOrder);
 router.post("/test", orderController.test);
+router.post("/cancelOrder", orderController.cancelOrder);
 
 // router.post("/test", async (req, res) => {
 
