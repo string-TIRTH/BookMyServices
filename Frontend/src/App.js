@@ -38,6 +38,7 @@ import CustProfile from './Components/Customer-dashboard/CustProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CustEditProfile from './Components/Customer-dashboard/CustEditProfile';
 import CustOrder from './Components/Customer-dashboard/CustOrder';
+// import Contact from './Components/Customer-dashboard/';
 
 function App() {
   return (
