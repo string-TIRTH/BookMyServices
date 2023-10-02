@@ -1,12 +1,12 @@
 
 import './App.css';
 // import Admin from './Components/Admin-dashboard/Admin'
-import Login from './Components/Login';
+import Login from './Components/login';
 import Signup from './Components/Signup';
 import Home from './Components/Customer-dashboard/Home'
 // import Sidebar from './Components/Admin-dashboard/Sidebar';
 import Dashboard from './Components/Admin-dashboard/Dashboard';
-
+import Places from './Components/Customer-dashboard/Place';
 import Customer from './Components/Admin-dashboard/Customer/Customer';
 import AddCustomer from './Components/Admin-dashboard/Customer/AddCustomer';
 import EditCustomer from './Components/Admin-dashboard/Customer/EditCustomer';
@@ -79,6 +79,7 @@ function App() {
           <Route path="/Customer/Profile/:id" element={<CustProfile />} />
           <Route path="/Customer/CustEditProfile/:id" element={<CustEditProfile />} />
           <Route path="/Customer/CustOrder/" element={<CustOrder />} />
+          <Route path="/Customer/Place/" element={<Places />} />
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}
