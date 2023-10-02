@@ -65,14 +65,7 @@ const CustOrder = () => {
                             icon: 'warning',
                             confirmButtonText: 'Got It'
                         }).then(()=>{
-                        axios.post(`http://localhost:5000/order/getOrderByCustId/`, data)
-                        .then((response) => {
-                            console.log(response.data)
-                            console.log(response.data.pendingOrders)
-                            console.log(response.data.completedOrders)
-                            setPending(response.data.pendingOrders)
-                            setComplete(response.data.completedOrders)
-                        })
+                            window.location.href = '/Customer/CustOrder'
                     })
                     } else {
                         Swal.fire({
@@ -151,7 +144,7 @@ const CustOrder = () => {
                 setComplete(response.data.completedOrders)
             })
             
-    }, [pending,Complete]);
+    },[]);
 
 
     return (
