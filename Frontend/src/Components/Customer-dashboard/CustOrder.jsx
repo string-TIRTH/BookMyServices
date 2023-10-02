@@ -228,7 +228,7 @@ const CustOrder = () => {
                                                                             <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
 
                                                                             <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
-                                                                            <h6><strong> Status: </strong><span className="text-warning">Not Completed</span>  </h6>
+                                                                            <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
                                                                             <h6><strong>
                                                                                 Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
                                                                             </h6>
@@ -279,7 +279,7 @@ const CustOrder = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                                <h6><strong> Status: </strong><span className="text-warning">Not Completed</span>  </h6>
+                                                                <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
                                                                 <p>
                                                                     <strong>
                                                                         <h3>Employee Details</h3></strong>
