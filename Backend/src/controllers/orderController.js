@@ -426,7 +426,7 @@ module.exports = {
             status = "cancelled";
             isActive = false;
             const order = await OrderModel.findByIdAndUpdate(id, { status ,isActive});
-            res.send(order);
+            res.json({"message" : true});
         } catch (error) {
             console.error(error);
             res.status(500).send(error);

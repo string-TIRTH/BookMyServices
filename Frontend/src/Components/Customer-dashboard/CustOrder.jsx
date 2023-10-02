@@ -40,6 +40,52 @@ const CustOrder = () => {
         setpItem({})
         setOpen(false)
     }
+    const handleCancelOrder = (item) => {
+        Swal.fire({
+            title: 'Are you sure... you really want to cancel order',
+            text: "If it's possible don't cancel it our workers really work hard to serve your service",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonColor: '#57FF00',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: '#FF4F00',
+            allowOutsideClick : false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const data = {
+                    id : item._id
+                };
+                axios.post(`http://localhost:5000/order/cancelOrder`, data)
+                .then((response) => {
+                    if (response.data.message === true) {
+                        Swal.fire({
+                            title: 'Your Order Has Been Cancelled!',
+                            text: 'Next Time Please Place Order According To Your Needs And Time',
+                            icon: 'warning',
+                            confirmButtonText: 'Got It'
+                        })
+                    } else {
+                        Swal.fire({
+                            title: 'Something Went Wrong!',
+                            text: 'Please Try Again Later',
+                            icon: 'question',
+                            confirmButtonText: 'Got It!'
+                          })
+                    }
+
+                });
+            }else{
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Thanks For Not Cancelling Your Order',
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+            }
+        })
+    }
     const handlecompOrderDetails = (item) => {
         // console.log(item)
         setpItem(item)
@@ -83,7 +129,6 @@ const CustOrder = () => {
 
         }
     }, []);
-
     const data = {
         custId: localStorage.getItem('id')
     }
@@ -199,7 +244,7 @@ const CustOrder = () => {
                                                                             cursor: 'pointer', 
                                                                             fontSize: '16px'
                                                                         }} variant="contained" color="warning">Order Details</Button>
-                                                                        <button className="btn btn-danger" style={{ width: 50, }} > <BsTrash /></button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }} onClick={()=> handleCancelOrder(item)} > <BsTrash /></button>
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
