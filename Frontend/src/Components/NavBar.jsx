@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from './img/BMS_LOGO.png';
 import Swal from 'sweetalert2'
-import Home from './Customer-dashboard/Home';
+
 // import logo from '/src/public/logo/BMS_LOGO';
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -157,6 +157,7 @@ const NavBar = () => {
                             <Link to="/" className="nav-item nav-link ">Home</Link>
                             <Link to="/Customer/About" className="nav-item nav-link">About</Link>
                             <Link to="/Customer/AddServices/" className="nav-item nav-link">Services</Link>
+                            <Link to="/Customer/CustOrder" className="nav-item nav-link">Order</Link>
                             <Link to="/Customer/Contact" className="nav-item nav-link">Contact</Link>
                         </div>
                     </div>

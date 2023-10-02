@@ -45,7 +45,7 @@ const Home = () => {
             };
             axios.post(`http://localhost:5000/customer/getCustomerById`, data)
                 .then((response) => {
-                    // console.log(response.data[0].cart.serList )
+                    
                     
                     if (response?.data[0]?.cart?.serList == '') {
                         setCartActive(false)
@@ -66,7 +66,7 @@ const Home = () => {
         axios.post(`http://localhost:5000/customer/getCustomerById`, data)
             .then((response) => {
                 console.log(cartActive)
-                // console.log(response.data[0].cart.serList )
+              
                 if (response?.data[0]?.cart?.serList == '') {
                     setCartActive(false)
                 } else {
@@ -211,7 +211,7 @@ const Home = () => {
                             </div>
                             <div className="d-flex align-items-center justify-content-between p-4" style={{ backgroundColor: "#8bffff" }}>
                                 <h5 className="text-truncate me-3 mb-0">Residential Plumbing</h5>
-                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to=""><i className="fa fa-arrow-right"></i></Link>
+                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to="/Customer/AddSErvices/"><i className="fa fa-arrow-right"></i></Link>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 service-item-top wow fadeInUp" data-wow-delay="0.3s">
@@ -220,7 +220,7 @@ const Home = () => {
                             </div>
                             <div className="d-flex align-items-center justify-content-between p-4" style={{ backgroundColor: "#afc5ff" }}>
                                 <h5 className="text-truncate me-3 mb-0">Commercial Plumbing</h5>
-                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to=""><i className="fa fa-arrow-right"></i></Link>
+                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to="/Customer/AddSErvices/"><i className="fa fa-arrow-right"></i></Link>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 service-item-top wow fadeInUp" data-wow-delay="0.5s">
@@ -229,7 +229,7 @@ const Home = () => {
                             </div>
                             <div className="d-flex align-items-center justify-content-between  p-4" style={{ backgroundColor: "#cca8e9" }}>
                                 <h5 className="text-truncate me-3 mb-0">Emergency Servicing</h5>
-                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to=""><i className="fa fa-arrow-right"></i></Link>
+                                <Link className="btn btn-square btn-outline-primary border-2 border-black flex-shrink-0" to="/Customer/AddSErvices"><i className="fa fa-arrow-right"></i></Link>
                             </div>
                         </div>
                     </div>
