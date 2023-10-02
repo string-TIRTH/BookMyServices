@@ -5,10 +5,10 @@ import Swal from 'sweetalert2'
 import { useEffect, useState } from "react";
 const CustEditProfile = () => {
 
-    const data ={
-       _id :  localStorage.getItem('id')
+    const data = {
+        _id: localStorage.getItem('id')
     }
-    const [user,setuser] = useState({})
+    const [user, setuser] = useState({})
     useEffect(() => {
         try {
             axios.post("http://localhost:5000/Customer/getCustomerById", data)
@@ -27,15 +27,14 @@ const CustEditProfile = () => {
         } catch (error) {
             console.error('Error fetching customer data:', error);
         }
-    }, []); 
+    }, []);
     const [formData, setFormData] = useState({
         fname: user.fname || '',
         lname: user?.lname || '',
         email: user?.email || '',
         password: user.password || '',
         contact_no: user.contact_no || '',
-      
-        
+
     });
     const [address, setAddress] = useState({
         house_no: "",
@@ -50,41 +49,41 @@ const CustEditProfile = () => {
         setAddress({ ...address, [name]: value });
     };
 
-     
-    const handleSubmit = async(e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const add={
-            house_no:address.house_no,
-            society_name:address.society_name,
-            landmark:address.landmark,
-            city:address.city,
-            pincode:address.pincode,
+        const add = {
+            house_no: address.house_no,
+            society_name: address.society_name,
+            landmark: address.landmark,
+            city: address.city,
+            pincode: address.pincode,
         }
-        const data1 ={
-            _id:localStorage.getItem('id'),
-            fname:formData.fname,
-            lname :formData.lname,
-            email:formData.email,
-            password:formData.password,
-            contact_no:formData.contact_no,
-          address:add
+        const data1 = {
+            _id: localStorage.getItem('id'),
+            fname: formData.fname,
+            lname: formData.lname,
+            email: formData.email,
+            password: formData.password,
+            contact_no: formData.contact_no,
+            address: add
         }
-        // console.log(data)
+
         try {
 
             axios.post("http://localhost:5000/customer/updateCustomer", data1)
                 .then((response) => {
-                console.log(response.data);
-                Swal.fire({
-                    title: 'Updated Successfully',
-                    icon: 'success',
-                    text: "",
-                    confirmButtonText: 'Okay'
-                }).then(() => {
-                   
-                   window.location.href="/Customer/Profile/"+localStorage.getItem('id')
+                    console.log(response.data);
+                    Swal.fire({
+                        title: 'Updated Successfully',
+                        icon: 'success',
+                        text: "",
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
 
-                })
+                        window.location.href = "/Customer/Profile/" + localStorage.getItem('id')
+
+                    })
 
 
 
@@ -94,9 +93,9 @@ const CustEditProfile = () => {
             console.log(error)
 
         }
-     
+
     }
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -105,7 +104,7 @@ const CustEditProfile = () => {
         }));
     };
 
-   
+
 
 
     return (
@@ -173,46 +172,46 @@ const CustEditProfile = () => {
                                         />
                                     </div>
                                     <TextField
-                                label="House Number"
-                                name="house_no"
-                                // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
-                                value={address.house_no}
-                                onChange={handleAddChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Society"
-                                name="society_name"
-                                value={address.society_name}
-                                onChange={handleAddChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Landmark"
-                                name="landmark"
-                                value={address.landmark}
-                                onChange={handleAddChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <TextField
-                                label="City"
-                                name="city"
-                                value={address.city}
-                                onChange={handleAddChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Pincode"
-                                name="pincode"
-                                value={address.pincode}
-                                onChange={handleAddChange}
-                                fullWidth
-                                margin="normal"
-                            />
+                                        label="House Number"
+                                        name="house_no"
+                                        // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
+                                        value={address.house_no}
+                                        onChange={handleAddChange}
+                                        fullWidth
+                                        margin="normal"
+                                    />
+                                    <TextField
+                                        label="Society"
+                                        name="society_name"
+                                        value={address.society_name}
+                                        onChange={handleAddChange}
+                                        fullWidth
+                                        margin="normal"
+                                    />
+                                    <TextField
+                                        label="Landmark"
+                                        name="landmark"
+                                        value={address.landmark}
+                                        onChange={handleAddChange}
+                                        fullWidth
+                                        margin="normal"
+                                    />
+                                    <TextField
+                                        label="City"
+                                        name="city"
+                                        value={address.city}
+                                        onChange={handleAddChange}
+                                        fullWidth
+                                        margin="normal"
+                                    />
+                                    <TextField
+                                        label="Pincode"
+                                        name="pincode"
+                                        value={address.pincode}
+                                        onChange={handleAddChange}
+                                        fullWidth
+                                        margin="normal"
+                                    />
 
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-primary">
