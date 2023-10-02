@@ -30,36 +30,30 @@ const AddOn = () => {
         setOpen(false);
     };
 
-    
-
-
-    
-
-
-
-
-
     const [serData, serDataChange] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
 
     const HandleOpenRem = (item) => {
-      
+
         setSelectAddOn(item)
         setOpenrem(true);
         try {
             console.log(item)
-            axios.post("http://localhost:5000/addOn/getAddOnBySerId",{serId : item._id})
+            const data = {
+                serId: item._id
+            };
+
+            axios.post("http://localhost:5000/addOn/getAddOnBySerId", data)
                 .then((response) => {
                     console.log(response.data.addOns);
-                    setAddOnRemove(response.data.addOns);
-
-
-
+                    if (response.data.message != false) {
+                        setAddOnRemove(response.data.addOns);
+                    }
                 })
         }
         catch (error) {
-
+            console.log(error)
         }
     }
 
@@ -67,27 +61,28 @@ const AddOn = () => {
         setSelectAddOn('')
         setOpenrem(false);
     };
-    const HandleDelete =(item) =>{
+    const HandleDelete = (item) => {
         handleCloserem()
-        const datarem={
-            addOnId:selectAddOn._id,
-            serId:item._id
+        const datarem = {
+            addOnId: item._id,
+            serId: selectAddOn._id
         }
+        console.log(selectAddOn)
         try {
 
-            axios.post("http://localhost:5000/addOn/getAddOnBySerId", datarem)
+            axios.post("http://localhost:5000/addOn/removeAddOn", datarem)
                 .then((response) => {
-                    
-            
-                Swal.fire({
-                    title: 'Deleted Successfully',
-                    icon: 'success',
-                    text: "",
-                    confirmButtonText: 'Okay'
-                }).then(() => {
-                   
-                   window.location.href="/admin/EmpSer"
-                })
+
+
+                    Swal.fire({
+                        title: 'Deleted Successfully',
+                        icon: 'success',
+                        text: "",
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+
+                        window.location.href = "/admin/addOn"
+                    })
 
 
 
@@ -122,7 +117,7 @@ const AddOn = () => {
 
 
 
-    
+
 
 
 
@@ -155,7 +150,7 @@ const AddOn = () => {
                             <h2>Employee Listing</h2>
                         </div>
                         <div className="card-body" >
-                           
+
                             <table className="table table-bordered">
                                 <thead className="bg-dark text-white">
                                     <tr>
@@ -176,16 +171,16 @@ const AddOn = () => {
                                             .map((item, index) => (
                                                 <tr key={item._id}>
                                                     <td >{page * rowsPerPage + index + 1}</td>
-                                                    <td style={{textAlign: "left" }}>{item.name}</td>
-                                                    <td style={{textAlign: "left" }}>{item.price}</td>
-                                                    <td style={{textAlign: "left" }}>{item.time}</td>
+                                                    <td style={{ textAlign: "left" }}>{item.name}</td>
+                                                    <td style={{ textAlign: "left" }}>{item.price}</td>
+                                                    <td style={{ textAlign: "left" }}>{item.time}</td>
 
 
 
                                                     <td ><button className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
-                                                    <button onClick={() => HandleOpenRem(item)} className="btn btn-danger" style={{ marginLeft: "5px" }}>Remove Accessories</button>
-                                                    <button  className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
-                                                       
+                                                        <button onClick={() => HandleOpenRem(item)} className="btn btn-danger" style={{ marginLeft: "5px" }}>Remove Accessories</button>
+                                                        <button className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
+
                                                         {/* { item.status === 'active'  && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>InActive</a>} */}
                                                     </td>
                                                 </tr>
@@ -216,25 +211,34 @@ const AddOn = () => {
                 <DialogTitle>Delete Service</DialogTitle>
                 <DialogContent>
                     {addOnRemove &&
-                        addOnRemove?.existingSer?.length === 0 ? (
-                        <h1>It has No Services</h1>
+                        addOnRemove?.length === 0 ? (
+                        <h1>No add-On Items Found</h1>
                     ) : (
-                        addOnRemove?.existingSer?.map((item) => (
-                            <div class="container mt-5" key={item._id}>
+                        addOnRemove?.map((item) => (
+                            <div class="container mt-2" key={item._id}>
                                 <div className="card">
                                     <div className="row">
-                                        <div className="col-md-4">
-                                            {/* <img src={item.url} className="img-fluid" alt={item.name} /> */}
-                                        </div>
-                                        <div className="col-md-8">
-                                            <h2 className="card-title mt-2">{item.name}</h2>
+                                        <div className="col-md-12">
+
                                             <div className="container">
-                                                
-                                            <h3>₹{item.price}</h3>
-                                            <button  onClick={()=> HandleDelete(item)} className = "bg-info"style={{backgroundColor:"",marginLeft:"100px",width:"90px" }}>Delete</button>
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        <div className="col-md-12">
+                                                            <h6 className="card-title mt-4 mb-4" >Name : {item.name}</h6>
+                                                        </div>
+                                                            <div className="col-md-12">
+                                                                <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
+                                                            </div>
+                                                            <div className="container">
+
+                                                                <button onClick={() => HandleDelete(item)} className="bg-info" style={{ backgroundColor: "", marginTop: "20px", marginBottom: "20px", marginLeft: "100px", width: "100px" }}>Delete</button>
+                                                            </div>
+                                                        </div>
+
+                                                </div>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -242,14 +246,14 @@ const AddOn = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                  
+
                     <Button onClick={handleCloserem} color="primary">
                         Close
                     </Button>
                 </DialogActions>
             </Dialog>
-{/* --- */}
-<Dialog open={opendet}>
+            {/* --- */}
+            <Dialog open={opendet}>
                 <DialogTitle>Delete Service</DialogTitle>
                 <DialogContent>
                     {employeeServicesdet &&
@@ -266,12 +270,12 @@ const AddOn = () => {
                                         <div className="col-md-8">
                                             <h2 className="card-title mt-2">{item.name}</h2>
                                             <div className="container">
-                                                
-                                            <h3>₹{item.price}</h3>
-                                     
+
+                                                <h3>₹{item.price}</h3>
+
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -279,8 +283,8 @@ const AddOn = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                  
-                    <Button  color="primary">
+
+                    <Button color="primary">
                         Close
                     </Button>
                 </DialogActions>

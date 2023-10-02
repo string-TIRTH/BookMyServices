@@ -45,8 +45,8 @@ const Sidebar = ({children}) => {
             icon:<FaShoppingBag/>
         },
         {
-            path:"/Admin/productList",
-            name:"Product List",
+            path:"/Admin/addOn",
+            name:"Add-Ons",
             icon:<FaThList/>
         }
     ]

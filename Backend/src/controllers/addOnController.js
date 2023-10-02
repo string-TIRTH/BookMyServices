@@ -26,58 +26,89 @@ module.exports = {
     console.log(req.body)
 
     try {
-      const addOns = await AddOnModel.findOne({serId:addOnSerId});
-      res.status(200).json({"addOns" : addOns.addOnList});
+      const addOns = await AddOnModel.findOne({ serId: addOnSerId });
+      if (addOns != null) {
+        res.status(200).json({ "addOns": addOns.addOnList });
+      } else{
+        res.status(200).json({ "message" : false });
+      }
     } catch (error) {
       console.log(error)
-      res.status(500).json( error);
+      res.status(500).json(error);
     }
   },
-  addAddOns: async(req,res)=>{
-    const serId  = req.body.serId;
+  removeAddOn:async (req, res) => {
+    const serId = req.body.serId;
+    addOnId = req.body.addOnId;
+    console.log(addOnId)
+    try{
+      const addOn = await AddOnModel.findOne({"serId" : serId});
+      console.log(addOn)
+      const addOnList = addOn.addOnList;
+      
+      console.log(addOnList)
+      for (let i = 0; i < addOnList.length; i++) {
+        if (addOnList[i]._id.toString() === addOnId) {
+          addOnList.splice(i, 1);
+          break; // Exit the loop after removing one item.
+        }
+      }
+      addOn.addOnList = addOnList;
+      
+      console.log(addOn);
+      const newAddOn = await AddOnModel.findByIdAndUpdate(addOn._id,addOn);
+      console.log(newAddOn);
+      res.send("ok");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
+  addAddOns: async (req, res) => {
+    const serId = req.body.serId;
     const name = req.body.name;
     const price = req.body.price;
     const desc = req.body.desc;
     const addOnRecord = {
-        "name":name,
-        "price":price,
-        "desc":desc
+      "name": name,
+      "price": price,
+      "desc": desc
     }
     try {
-        ser = await ServiceModel.findById(serId);
-        let ResposeAck = {
-            message : false
-        };
-        console.log(ser)
-        if(ser != null){
-            addOn = await AddOnModel.findOne({"serId":serId},{addOnList:true,_id:true})
-            if(addOn != null && addOn != ""){
-                const _id = addOn._id;
-                console.log(addOn.addOnList)
-            
-                const items = addOn.addOnList;
-                console.log(items+"here")
-                items.push(addOnRecord);
-                addOn.addAddList = items;
-                newAddOn = await AddOnModel.findByIdAndUpdate(_id,addOn);
+      ser = await ServiceModel.findById(serId);
+      let ResposeAck = {
+        message: false
+      };
+      console.log(ser)
+      if (ser != null) {
+        addOn = await AddOnModel.findOne({ "serId": serId }, { addOnList: true, _id: true })
+        if (addOn != null && addOn != "") {
+          const _id = addOn._id;
+          console.log(addOn.addOnList)
 
-            }else{
-                const addOn = new AddOnModel({
-                    serId:serId,
-                    addOnList : addOnRecord
-                });
-                newAddOn = await addOn.save();
-            }
-            ResposeAck = {
-                message : true
-            }
-        }else{
-            console.log("not found")
+          const items = addOn.addOnList;
+          console.log(items + "here")
+          items.push(addOnRecord);
+          addOn.addAddList = items;
+          newAddOn = await AddOnModel.findByIdAndUpdate(_id, addOn);
+
+        } else {
+          const addOn = new AddOnModel({
+            serId: serId,
+            addOnList: addOnRecord
+          });
+          newAddOn = await addOn.save();
         }
-        res.json(ResposeAck)
-    }catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        ResposeAck = {
+          message: true
+        }
+      } else {
+        console.log("not found")
+      }
+      res.json(ResposeAck)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
     }
   }
 };
