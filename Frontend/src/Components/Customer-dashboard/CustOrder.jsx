@@ -64,7 +64,16 @@ const CustOrder = () => {
                             text: 'Next Time Please Place Order According To Your Needs And Time',
                             icon: 'warning',
                             confirmButtonText: 'Got It'
+                        }).then(()=>{
+                        axios.post(`http://localhost:5000/order/getOrderByCustId/`, data)
+                        .then((response) => {
+                            console.log(response.data)
+                            console.log(response.data.pendingOrders)
+                            console.log(response.data.completedOrders)
+                            setPending(response.data.pendingOrders)
+                            setComplete(response.data.completedOrders)
                         })
+                    })
                     } else {
                         Swal.fire({
                             title: 'Something Went Wrong!',
@@ -142,7 +151,7 @@ const CustOrder = () => {
                 setComplete(response.data.completedOrders)
             })
             
-    }, []);
+    }, [pending,Complete]);
 
 
     return (
