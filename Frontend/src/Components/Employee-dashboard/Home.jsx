@@ -7,7 +7,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const Home = ()=>{
-    const [today, setToday] = useState(0);
+  const [today, setToday] = useState(0);
   const [upcoming, setUpcoming] = useState(0);
   const[completed,setCompleted] =useState(0)
   const[avgRating,setAvgRating] =useState(0)
