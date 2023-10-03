@@ -1,7 +1,10 @@
 // Example employeeController.js
 
 const Employee = require('../models/EmployeeModel');
-const emailSender = require('../Helper/emailHelper')
+const OrderModel = require('../models/OrderModel');
+const emailSender = require('../Helper/emailHelper');
+const moment = require('moment-timezone')
+moment().tz("Asia/Kolkata").format();
 module.exports = {
   getAllEmployees: async (req, res) => {
     try {
@@ -108,6 +111,60 @@ module.exports = {
     } catch (error) {
       console.log(error)
       res.status(500).json({ mess: false });
+    }
+  },
+  getTodaySchedules : async (req, res) => {
+    const empId  = req.body.empId;
+    // const status = req.body.status
+    // console.log(req.body); 
+    const date = moment().format('YYYY-MM-DD')
+    console.log(date)
+    try {
+        const order = await OrderModel.find({empId:empId,service_date:date,status:'assigned'});
+        
+        console.log(order)
+        res.send(order);
+    }catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+  },
+  getUpcomingSchedules : async (req, res) => {
+    const empId  = req.body.empId;
+    // const status = req.body.status
+    // console.log(req.body); 
+    const date = moment().format('YYYY-MM-DD')
+    console.log(date)
+    try {
+        const order = await OrderModel.find({empId:empId,service_date:{$nin :date},status:'assigned'});
+        
+        console.log(order)
+        res.send(order);
+    }catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+  },
+  completed : async (req, res) => {
+    const empId  = req.body.empId;
+    try {
+        const order = await OrderModel.find({empId:empId,status:'completed'});
+        res.send(order);
+    }catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+  },
+  avgRating : async (req, res) => {
+    const empId  = req.body.empId;
+    try {
+        const order = await Employee.findById(empId,{rating:true});
+        if(order.rating === 'Not Rated')
+        order.rating = '-';
+        res.send(order);
+    }catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
     }
   },
   updateEmployee: async(req,res)=>{

@@ -67,7 +67,7 @@ const EmployeeSchema = new mongoose.Schema({
   },
   rating : {
     type : String,
-    default : "Not Rated"
+    default : "4"
   },
 })
 

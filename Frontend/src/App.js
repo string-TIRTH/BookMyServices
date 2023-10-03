@@ -31,6 +31,7 @@ import Sample from './Components/Customer-dashboard/Sample';
 import Sample2 from './Components/Customer-dashboard/Sample2';
 import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
 import AddOn from './Components/Admin-dashboard/AddOn/AddOn';
+import EmpDashBoard from './Components/Employee-dashboard/Dashboard';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
@@ -84,6 +85,8 @@ function App() {
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}
+          <Route path="/Employee/" element={<EmpDashBoard />} />
+          
         </Routes>
 
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../Admin-dashboard/Sidebar.css'
+import './Dashboard'
 import {
     FaTh,
     FaBars,
@@ -20,39 +20,41 @@ const Sidebar = ({children}) => {
     const toggle = () => setIsOpen (!isOpen);
     const menuItem=[
         {
-            path:"/Admin/",
+            path:"/Employee",
             name:"Home",
             icon:<FaTh/>
         },
         {
-            path:"/Admin/Customer",
-            name:"Customer",
+            path:"/Employee/today",
+            name:"Present Schedules",
             icon:<FaUserAlt/>
         },
+        
         {
-            path:"/Admin/Employee",
-            name:"Employee",
-            icon:<FaIdCard/>
+            path:"/Employee/upcoming",
+            name:"Up Coming Schedules",
+            icon:<FaShoppingBag/>
         },
+        
         {
-            path:"/Admin/Services",
-            name:"Services",
+            path:"/Employee/history",
+            name:"History",
             icon:<FaServer/>
         },
         {
-            path:"/Admin/EmpSer",
-            name:"EmpServices",
-            icon:<FaShoppingBag/>
+            path:"/Employee/feedback",
+            name:"Feedbacks",
+            icon:<FaServer/>
         },
         {
-            path:"/Admin/addOn",
-            name:"Add-Ons",
+            path:"/Employee/logout",
+            name:"Logout",
             icon:<FaThList/>
         }
     ]
     return (
         <>
-           <div style={{width: isOpen ? "250px" : "50px"}} className="sidebar">
+           <div style={{width: isOpen ? "300px" : "50px"}} className="sidebar">
                <div className="top_section">
                    <h1 style={{display: isOpen ? "block" : "none"}} className="logo">DashBoard</h1>
                    <div style={{marginLeft: isOpen ? "50px" : "0px"}} className="bars">
