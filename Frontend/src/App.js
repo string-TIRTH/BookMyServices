@@ -1,7 +1,7 @@
 
 import './App.css';
 // import Admin from './Components/Admin-dashboard/Admin'
-import Login from './Components/Login';
+import Login from './Components/login';
 import Signup from './Components/Signup';
 import Home from './Components/Customer-dashboard/Home'
 // import Sidebar from './Components/Admin-dashboard/Sidebar';
