@@ -9,6 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
+import Card from 'react-bootstrap/Card';
 
 
 
@@ -21,8 +22,9 @@ const AddOn = () => {
 
     const [open, setOpen] = useState(false);
     const [openrem, setOpenrem] = useState(false);
+
     const [openadd, setOpenadd] = useState(false);
-    const [opendet, setOpendet] = useState(false);
+
     const [SelectEmp, setEmp] = useState({})
     const [selectAddOn, setSelectAddOn] = useState({})
     const [SelectAdd, setSelectAdd] = useState({});
@@ -30,10 +32,11 @@ const AddOn = () => {
     const [services, setService] = useState([]);
 
     const [addOnRemove, setAddOnRemove] = useState([]);
+    const [addOnDetails, setAddOnDetails] = useState([]);
     const [employeeServicesdet, setEmployeeServicesdet] = useState([]);
 
-
-
+    const [item, setitem] = useState([])
+    const [opendet, setdet] = useState(false);
 
 
 
@@ -72,12 +75,12 @@ const AddOn = () => {
         desc: '',
         image: null, // To store the selected image file
     });
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-    
+
     const handleImageChange = (e) => {
         const imageFile = e.target.files[0];
         setFormData({ ...formData, image: imageFile });
@@ -145,6 +148,34 @@ const AddOn = () => {
         }
 
     }
+    const HandleOpendet = (item) => {
+        setitem(item)
+        setdet(true)
+        try {
+            // console.log(item)
+            const data = {
+                serId: item._id
+            };
+
+            axios.post("http://localhost:5000/addOn/getAddOnBySerId", data)
+                .then((response) => {
+                    console.log(response.data.addOns);
+                    if (response.data.message != false) {
+                        setAddOnDetails(response.data.addOns);
+                    }
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+
+
+    }
+    const HandleClosedet = () => {
+        setitem({});
+        setdet(false)
+    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -169,13 +200,13 @@ const AddOn = () => {
 
         HandleCloseAdd();
         const data = new FormData();
-        data.append('serId',SelectAdd._id)
+        data.append('serId', SelectAdd._id)
         data.append('name', formData.name);
         data.append('price', formData.price);
-   
+
         data.append('desc', formData.desc);
         data.append('image', formData.image);
-      
+
         console.log(data)
         try {
 
@@ -274,7 +305,7 @@ const AddOn = () => {
 
                                                     <td ><button onClick={() => HandleOpenAdd(item)} className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
                                                         <button onClick={() => HandleOpenRem(item)} className="btn btn-danger" style={{ marginLeft: "5px" }}>Remove Accessories</button>
-                                                        <button className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
+                                                        <button onClick={() => HandleOpendet(item)} className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
 
 
                                                     </td>
@@ -310,21 +341,22 @@ const AddOn = () => {
                         <h1>No add-On Items Found</h1>
                     ) : (
                         addOnRemove?.map((item) => (
-                            <div class="container mt-2" key={item._id}>
+                            <div class="container mt-2" style={{width:"290px"}} key={item._id}>
+                                
                                 <div className="card">
                                     <div className="row">
                                         <div className="col-md-12">
 
-                                            <div className="container">
+                                            <div className="container-fluid">
                                                 <div className="row">
                                                     <div className="col-md-12">
-                                                    <div className="col-md-12">
-                                                            <h6 className="card-title mt-4 mb-4" >Name : {item.url}</h6>
+                                                        <div className="col-md-6">
+                                                            <img src={item.url} style={{width:'50%'}}/>
                                                         </div>
-                                                        <div className="col-md-12">
+                                                        <div className="col-md-6">
                                                             <h6 className="card-title mt-4 mb-4" >Name : {item.name}</h6>
                                                         </div>
-                                                        <div className="col-md-12">
+                                                        <div className="col-md-6">
                                                             <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
                                                         </div>
                                                         <div className="container">
@@ -351,26 +383,37 @@ const AddOn = () => {
                 </DialogActions>
             </Dialog>
             {/* --- */}
-            <Dialog open={opendet}>
-                <DialogTitle>Delete Service</DialogTitle>
+
+
+            <Dialog open={opendet} onClose={HandleClosedet}>
+                <DialogTitle>Details addon items</DialogTitle>
                 <DialogContent>
-                    {employeeServicesdet &&
-                        employeeServicesdet?.existingSer?.length === 0 ? (
-                        <h1>It has No Services</h1>
+                    {addOnDetails &&
+                        addOnDetails?.length === 0 ? (
+                        <h1>No add-On Items Found</h1>
                     ) : (
-                        employeeServicesdet?.existingSer?.map((item) => (
-                            <div class="container mt-5" key={item._id}>
+                        addOnDetails?.map((item) => (
+                            <div class="container mt-2" style={{width:"290px"}} key={item._id}>
                                 <div className="card">
                                     <div className="row">
-                                        <div className="col-md-4">
-                                            <img src={item.url} className="img-fluid" alt={item.name} />
-                                        </div>
-                                        <div className="col-md-8">
-                                            <h2 className="card-title mt-2">{item.name}</h2>
+                                        <div className="col-md-12">
+
                                             <div className="container">
+                                                <div className="row" style={{width:"200px"}}>
+                                                    <div className="col-md-12">
+                                                    <div className="col-md-6">
+                                                            <img src={item.url} style={{width:'90%'}}/>
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <h6 className="card-title mt-3 mb-3" >Name : {item.name}</h6>
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
+                                                        </div>
 
-                                                <h3>₹{item.price}</h3>
+                                                    </div>
 
+                                                </div>
                                             </div>
                                         </div>
 
@@ -382,7 +425,7 @@ const AddOn = () => {
                 </DialogContent>
                 <DialogActions>
 
-                    <Button color="primary">
+                    <Button onClick={HandleClosedet} color="primary">
                         Close
                     </Button>
                 </DialogActions>
