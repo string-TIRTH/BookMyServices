@@ -66,8 +66,8 @@ const EmployeeSchema = new mongoose.Schema({
      default : "Not Verified"
   },
   rating : {
-    type : String,
-    default : "4"
+    type : Number,
+    default : "-1"
   },
 })
 

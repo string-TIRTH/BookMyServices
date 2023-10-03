@@ -13,9 +13,9 @@ const ServiceSchema = new mongoose.Schema({
      type : String,
      required : true,
   },
-  avgRating :{
-     type : String,
-     default : "Not Rated"
+  rating :{
+     type : Number,
+     default : -1
   }, 
   desc :{
      type : String,

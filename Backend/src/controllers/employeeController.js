@@ -159,7 +159,7 @@ module.exports = {
     const empId  = req.body.empId;
     try {
         const order = await Employee.findById(empId,{rating:true});
-        if(order.rating === 'Not Rated')
+        if(order.rating == "-1")
         order.rating = '-';
         res.send(order);
     }catch (error) {

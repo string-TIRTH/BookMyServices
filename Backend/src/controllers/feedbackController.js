@@ -1,21 +1,49 @@
 const FeedbackModel = require("../models/FeedbackModel");
+const EmployeeModel = require("../models/EmployeeModel");
+const ServiceModel = require("../models/ServiceModel");
 module.exports = {
     createFeedback : async (req, res) => {
-
         try {
+            const custId =req.body.custId;
+            const empId =req.body.empId;
+            const serId =req.body.serId;
+            const serRating =req.body.serRating;
+            const empRating =req.body.empRating;
             const feedback = new FeedbackModel({
-                custId: req.body.custId,
-                empId: req.body.empId,
+                custId: custId,
+                empId: empId,
                 orderId: req.body.orderId,
-                serId: req.body.serId,
-                serRating: req.body.serRating,
-                empRating: req.body.empRating,
+                serId: serId,
+                serRating: serRating,
+                empRating: empRating,
                 feed_text: req.body.feed_text,
             });
             const newFeedback = await feedback.save();
+            if(empRating != 0){
+                const employee = await EmployeeModel.findById(empId,{rating:true});
+                if(employee.rating == '-1' || employee.rating == 'Not Rated'){
+                    employee.rating = parseInt(empRating);
+                }else{
+                    const rating = parseInt(empRating) + parseInt(employee.rating);
+                    employee.rating = rating/2;
+                }
+                const newEmployee = await EmployeeModel.findByIdAndUpdate(empId,employee);
+            }
+           
+            if(serRating != 0){
+                const service = await ServiceModel.findById(serId,{rating:true});
+                if(service.rating == '-1'){
+                    service.rating = parseInt(serRating);
+                }else{
+                    const rating =parseInt(serRating) + parseInt(service.rating);
+                    service.rating = rating/2;
+                }
+                const newService= await ServiceModel.findByIdAndUpdate(serId,service);
+            }
             res.json(newFeedback);
         }
         catch (err) {
+            console.log(err)
             res.json({
                 message: err
             });
