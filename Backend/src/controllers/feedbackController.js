@@ -4,12 +4,13 @@ module.exports = {
 
         try {
             const feedback = new FeedbackModel({
-                fname : req.body.empI,
-                lname : req.body.lname,
-                email : req.body.email,
-                password : req.body.password,
-                contact_no : req.body.contact_no,
-                address : req.body.address
+                custId: req.body.custId,
+                empId: req.body.empId,
+                orderId: req.body.orderId,
+                serId: req.body.serId,
+                serRating: req.body.serRating,
+                empRating: req.body.empRating,
+                feed_text: req.body.feed_text,
             });
             const newFeedback = await feedback.save();
             res.json(newFeedback);

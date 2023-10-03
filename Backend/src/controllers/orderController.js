@@ -332,10 +332,10 @@ module.exports = {
                       },
                     },
                     {$lookup: {
-                        from: "employees",
-                        localField: "empId",
+                        from: "customers",
+                        localField: "custId",
                         foreignField: "_id",
-                        as: "employeeDetails",
+                        as: "customerDetails",
                       },
                     },
                     { $project: { 
@@ -356,10 +356,10 @@ module.exports = {
                         "serviceDetails.avgRating":1,
                         "serviceDetails.url":1,
                         "serviceDetails.url":1,
-                        "employeeDetails.fname":1,
-                        "employeeDetails.lname":1,
-                        "employeeDetails.contact_no":1,
-                        "employeeDetails.rating":1,
+                        "customerDetails.fname":1,
+                        "customerDetails.lname":1,
+                        "customerDetails.contact_no":1,
+                        "customerDetails.address":1,
                        
                     } }
 
@@ -367,6 +367,128 @@ module.exports = {
             )
             console.log(pendingOrders)
             res.json({pendingOrders:pendingOrders});
+        }
+        catch (err) {
+            console.log(err)
+            res.send(
+                err
+            );
+        }
+    },
+    getOrderUpcomingByEmpId: async (req, res) => {
+        try {
+            const empId = req.body.empId;    
+            const date = moment().format('YYYY-MM-DD');
+            console.log(date)
+            const upcomingOrders = await OrderModel.aggregate(
+                [
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),service_date: {$not : {$eq : date}},status: "assigned"}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "customers",
+                        localField: "custId",
+                        foreignField: "_id",
+                        as: "customerDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "customerDetails.fname":1,
+                        "customerDetails.lname":1,
+                        "customerDetails.contact_no":1,
+                        "customerDetails.address":1,
+                       
+                    } }
+
+                ],
+            )
+            // console.log(upcomingOrders)
+            res.json({upcomingOrders:upcomingOrders});
+        }
+        catch (err) {
+            console.log(err)
+            res.send(
+                err
+            );
+        }
+    },
+    getHistoryByEmpId: async (req, res) => {
+        try {
+            const empId = req.body.empId;    
+            // const date = moment().format('YYYY-MM-DD');
+            // console.log(date)
+            const history = await OrderModel.aggregate(
+                [
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: {$not : {$eq : "assigned"}}}},
+                    {$sort: { service_date: -1 }},
+                    
+                    {$lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                      },
+                    },
+                    {$lookup: {
+                        from: "customers",
+                        localField: "custId",
+                        foreignField: "_id",
+                        as: "customerDetails",
+                      },
+                    },
+                    { $project: { 
+                        _id: 1,
+                        orderId:1,
+                        serId:1,
+                        empId:1,
+                        custId:1,
+                        status:1,
+                        amount:1,
+                        service_startTime:1,
+                        service_endTime:1,
+                        service_date:1,
+                        payment_mode:1,
+                        booking_datetime:1,
+                        "serviceDetails.name":1,
+                        "serviceDetails.price":1,
+                        "serviceDetails.avgRating":1,
+                        "serviceDetails.url":1,
+                        "serviceDetails.url":1,
+                        "customerDetails.fname":1,
+                        "customerDetails.lname":1,
+                        "customerDetails.contact_no":1,
+                        "customerDetails.address":1,
+                       
+                    } }
+
+                ],
+            )
+            console.log(history)
+            res.json({"history":history});
         }
         catch (err) {
             console.log(err)

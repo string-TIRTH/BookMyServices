@@ -11,6 +11,8 @@ router.post("/getOrderById", orderController.getOrderById);
 router.post("/getOrderByCustId", orderController.getOrderByCustId);
 // router.post("/getOrderByEmpId", orderController.getOrderByEmpId);
 router.post("/getOrderTodayByEmpId", orderController.getOrderTodayByEmpId);
+router.post("/getOrderUpcomingByEmpId", orderController.getOrderUpcomingByEmpId);
+router.post("/getHistoryByEmpId", orderController.getHistoryByEmpId);
 router.post("/updateOrder", orderController.updateOrder);
 router.post("/deleteOrder", orderController.deleteOrder);
 router.post("/test", orderController.test);
