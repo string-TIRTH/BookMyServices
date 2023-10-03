@@ -443,7 +443,7 @@ module.exports = {
             // console.log(date)
             const history = await OrderModel.aggregate(
                 [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: {$not : {$eq : "assigned"}}}},
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: "completed"}},
                     {$sort: { service_date: -1 }},
                     
                     {$lookup: {
