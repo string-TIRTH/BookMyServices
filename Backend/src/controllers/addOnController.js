@@ -1,6 +1,7 @@
 const AddOnModel = require('../models/AddOnModel');
 const ServiceModel = require('../models/ServiceModel');
-
+const moment = require("moment-timezone")
+const uploadImage = require("../Helper/imageUploader.js")
 module.exports = {
   getAllItems: async (req, res) => {
     try {
@@ -74,6 +75,28 @@ module.exports = {
       "price": price,
       "desc": desc
     }
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+  }
+  const imageUrl = ""
+  const imageId = ""
+  const image = req.files.image;
+  const id = moment.utc().unix()
+  let ext = image.name;
+  ext = ext.substring(ext.indexOf(".") + 1);
+  image.name = id + "." + ext;
+  folderPath = "AddOns";
+  // console.log(image.name)
+  // Move the uploaded file to a specific location (e.g., 'uploads/')
+  image.mv('src/assets/uploads/' + image.name, async (err) => {
+      if (err) {
+          return res.status(500).send(err);
+      }
+      const result = await uploadImage(id,folderPath,image.name);
+      addOnRecord.url = result.secure_url;
+      console.log(result)
+      addOnRecord.imageId = result.public_id;
+  });
     try {
       ser = await ServiceModel.findById(serId);
       let ResposeAck = {

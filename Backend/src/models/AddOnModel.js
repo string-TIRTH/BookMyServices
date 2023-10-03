@@ -9,16 +9,24 @@ const AddOnSchema = new mongoose.Schema({
     addOnList : [
         {
                 name : {
-                    type : "String",
+                    type : String,
                     default :"Not Specified"
                 },
                 desc : {
-                    type :  "String",
+                    type :  String,
                     default : "Default Desc"
                 },
                 price : {
-                    type : "String",
+                    type : String,
                     default : "0"
+                },
+                url : {
+                    type:String,
+                    default : "no image"
+                },
+                imageId : {
+                    type:String,
+                    default : "no image"
                 },
                 isActive : {
                     type: Boolean,
