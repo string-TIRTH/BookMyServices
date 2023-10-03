@@ -10,37 +10,93 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
 
+
+
+import DialogContentText from '@mui/material/DialogContentText';
+import TextField from "@mui/material/TextField";
+
 const rowsPerPageOptions = [4, 5, 7];
 
 const AddOn = () => {
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [previewImageURL, setPreviewImageURL] = useState(null);
     const [open, setOpen] = useState(false);
     const [openrem, setOpenrem] = useState(false);
+    const [openadd, setOpenadd] = useState(false);
     const [opendet, setOpendet] = useState(false);
     const [SelectEmp, setEmp] = useState({})
     const [selectAddOn, setSelectAddOn] = useState({})
- 
+    const [SelectAdd, setSelectAdd] = useState({});
     //   const services = [ /* Your list of services goes here */ ];
     const [services, setService] = useState([]);
 
     const [addOnRemove, setAddOnRemove] = useState([]);
     const [employeeServicesdet, setEmployeeServicesdet] = useState([]);
 
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+
+        // Check if a file was selected
+        if (file) {
+            setSelectedImage(file);
+
+
+            const imageURL = URL.createObjectURL(file);
+            setPreviewImageURL(imageURL);
+        }
+    };
 
 
 
 
-    
+
     const handleClose = () => {
-        setEmp('')  
+        setEmp('')
         setOpen(false);
     };
 
     const [serData, serDataChange] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
-    const HandleOpenAdd =(item)=>{
+
+
+
+    const HandleOpenAdd = (item) => {
+        setSelectAdd(item);
+
+        setOpenadd(true);
+
+
 
     }
+    const HandleCloseAdd = () => {
+
+        setSelectedImage(null)
+        setPreviewImageURL(null)
+        setSelectAdd({});
+        setOpenadd(false);
+    }
+    const handleSubmit = () => {
+
+    }
+    const [FormData, setFormdata] = useState({
+        name: "",
+        price: "",
+        desc: "",
+
+
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        // Update the state with the new value
+        setFormdata({
+            ...FormData,
+            [name]: value,
+        });
+    };
+
+
+
 
     const HandleOpenRem = (item) => {
 
@@ -122,6 +178,45 @@ const AddOn = () => {
                 console.error('Error fetching customer data:', error);
             });
     }, []);
+    const HandleSubmitAdd = () => {
+      
+        const data = {
+            serId: SelectAdd,
+            name: FormData.name,
+            price: FormData.price,
+            desc: FormData.desc,
+            image: selectedImage
+
+
+        }
+        console.log(data)
+        try {
+
+            axios.post("http://localhost:5000/addOn/addAddOns", data)
+                .then((response) => {
+
+
+                    Swal.fire({
+                        title: 'Added Successfully',
+                        icon: 'success',
+                        text: "",
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+
+                        window.location.href = "/admin/addOn"
+                    })
+
+
+
+                })
+        }
+        catch (error) {
+            console.log(error)
+
+        }
+
+
+    }
 
 
 
@@ -185,11 +280,11 @@ const AddOn = () => {
 
 
 
-                                                    <td ><button   className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
+                                                    <td ><button onClick={() => HandleOpenAdd(item)} className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
                                                         <button onClick={() => HandleOpenRem(item)} className="btn btn-danger" style={{ marginLeft: "5px" }}>Remove Accessories</button>
                                                         <button className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
 
-                                                        {/* { item.status === 'active'  && <a onClick={() => { Removefunction(item._id) }} className="btn btn-danger"style={{marginLeft:"5px"}}>InActive</a>} */}
+
                                                     </td>
                                                 </tr>
                                             )
@@ -234,14 +329,14 @@ const AddOn = () => {
                                                         <div className="col-md-12">
                                                             <h6 className="card-title mt-4 mb-4" >Name : {item.name}</h6>
                                                         </div>
-                                                            <div className="col-md-12">
-                                                                <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
-                                                            </div>
-                                                            <div className="container">
-
-                                                                <button onClick={() => HandleDelete(item)} className="bg-info" style={{ backgroundColor: "", marginTop: "20px", marginBottom: "20px", marginLeft: "100px", width: "100px" }}>Delete</button>
-                                                            </div>
+                                                        <div className="col-md-12">
+                                                            <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
                                                         </div>
+                                                        <div className="container">
+
+                                                            <button onClick={() => HandleDelete(item)} className="bg-info" style={{ backgroundColor: "", marginTop: "20px", marginBottom: "20px", marginLeft: "100px", width: "100px" }}>Delete</button>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -298,7 +393,74 @@ const AddOn = () => {
                 </DialogActions>
             </Dialog>
             {/* ........ */}
-           
+
+
+            <Dialog open={openadd} onClose={HandleCloseAdd}>
+                <DialogTitle>Add items</DialogTitle>
+                <DialogContent>
+                    Confirm your address
+                    <DialogContentText>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Item Name"
+                                name="name"
+                                // value={user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}
+
+                                onChange={handleChange}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <TextField
+                                label="Item Price"
+                                name="price"
+
+                                onChange={handleChange}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <TextField
+                                label="Description"
+                                name="desc"
+
+                                onChange={handleChange}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <input
+                                type="file"
+                                accept="image/*" // Specify accepted file types (in this case, images)
+                                onChange={handleImageUpload} // Handle the image upload event
+                                fullWidth
+                                margin="normal"
+                            />
+                            {/* Display the image preview */}
+                            {previewImageURL && (
+                                <img
+                                    src={previewImageURL}
+                                    alt="Preview"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '10px' }}
+                                />
+                            )}
+
+
+                        </form>
+
+                    </DialogContentText>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={HandleSubmitAdd} color="primary">
+                        Submit
+                    </Button>
+                    <Button onClick={HandleCloseAdd} color="primary">
+                        Close
+                    </Button>
+
+                </DialogActions>
+            </Dialog>
+
+
+
 
 
 

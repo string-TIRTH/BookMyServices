@@ -129,7 +129,7 @@ const Dashboard = () => {
         </div>
         <div className="right-content">
           <div className="centered-form" style={{ width: "900px", height: "100%" }}>
-            <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "2px", marginRight: "0px" }}>
+            <div className="card" style={{ width: "1300px", height: "100%", marginLeft: "2px", marginRight: "0px" }}>
               <h1> Welcome,User</h1>
               <div className="container">
                 <div className="row">
