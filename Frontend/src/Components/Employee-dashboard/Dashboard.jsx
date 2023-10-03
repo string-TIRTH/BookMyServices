@@ -17,6 +17,9 @@ import {
 }from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.css';
 import './Dashboard.css';
+// import { Upcoming } from '@mui/icons-material';
+import  Upcoming from './UpComing';
+import  History from './History';
 
 const Dashboard = () => {
   const [activeHome, setActiveHome] = useState(true)
@@ -137,8 +140,8 @@ return (
               
               {activeHome && <div className='scrollable-div'><Home></Home> </div>}
               {activeToday && <div className='scrollable-div'><Today></Today> </div>}
-              {activeUpcoming && <div className='scrollable-div'>UpComing </div>}
-              {activeHistory && <div className='scrollable-div'>History </div>}
+              {activeUpcoming && <div className='scrollable-div'><Upcoming></Upcoming> </div>}
+              {activeHistory && <div className='scrollable-div'><History></History> </div>}
               {activeFeedback && <div className='scrollable-div'>Feedback </div>}
             </div>
           </div>
