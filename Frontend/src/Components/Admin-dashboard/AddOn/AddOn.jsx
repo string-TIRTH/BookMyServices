@@ -118,7 +118,7 @@ const AddOn = () => {
             addOnId: item._id,
             serId: selectAddOn._id
         }
-        // console.log(selectAddOn)
+        console.log(selectAddOn)
         try {
 
             axios.post("http://localhost:5000/addOn/removeAddOn", datarem)
@@ -318,6 +318,9 @@ const AddOn = () => {
                                             <div className="container">
                                                 <div className="row">
                                                     <div className="col-md-12">
+                                                    <div className="col-md-12">
+                                                            <h6 className="card-title mt-4 mb-4" >Name : {item.url}</h6>
+                                                        </div>
                                                         <div className="col-md-12">
                                                             <h6 className="card-title mt-4 mb-4" >Name : {item.name}</h6>
                                                         </div>
