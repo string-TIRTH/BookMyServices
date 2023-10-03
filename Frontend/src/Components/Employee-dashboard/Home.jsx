@@ -19,7 +19,7 @@ const Home = ()=>{
     axios.post(`http://localhost:5000/employee/getTodaySchedules`,data)
       .then((response) => {
         if(response.data.length != 0){
-          setToday(response.data.length);
+          setToday(response?.data?.length);
           console.log(response.data.length)  
         }else{
           setToday(0)
@@ -34,7 +34,7 @@ const Home = ()=>{
       axios.post(`http://localhost:5000/employee/getUpcomingSchedules`,data)
       .then((response) => {
 
-        setUpcoming(response.data.length);
+        setUpcoming(response?.data?.length);
         console.log(response.data.length);
         // setcount(response.data.length)
         // console.log(count);
@@ -46,7 +46,7 @@ const Home = ()=>{
       axios.post(`http://localhost:5000/employee/completed`,data)
       .then((response) => {
 
-        setCompleted(response.data.length);
+        setCompleted(response?.data?.length);
         console.log(response.data.length)
         // setcount(response.data.length)
         // console.log(count);
@@ -58,7 +58,7 @@ const Home = ()=>{
       axios.post(`http://localhost:5000/employee/avgRating`,data)
       .then((response) => {
 
-        setAvgRating(response.data.rating);
+        setAvgRating(response?.data?.rating);
         console.log(response.data.rating)
         // setcount(response.data.length)
         // console.log(count);

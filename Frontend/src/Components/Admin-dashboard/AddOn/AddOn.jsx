@@ -273,7 +273,7 @@ const AddOn = () => {
                 <div className="centered-form" style={{ width: "900px", height: "100%" }}>
                     <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "3px", marginRight: "0px" }}>
                         <div className="card-title" style={{ marginLeft: "300px" }} >
-                            <h2>Employee Listing</h2>
+                            <h2>Addon Listing</h2>
                         </div>
                         <div className="card-body" >
 
@@ -436,7 +436,7 @@ const AddOn = () => {
             <Dialog open={openadd} onClose={HandleCloseAdd}>
                 <DialogTitle>Add items</DialogTitle>
                 <DialogContent>
-                    Confirm your address
+                    
                     <DialogContentText>
                         <form onSubmit={handleSubmit}>
                             <TextField
@@ -464,7 +464,9 @@ const AddOn = () => {
                                 fullWidth
                                 margin="normal"
                             />
+                            
                             <label>Image:</label>
+                            <br></br>
                             <input
                                 type="file"
                                 name="image"
