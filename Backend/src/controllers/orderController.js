@@ -317,7 +317,7 @@ module.exports = {
     getOrderByEmpId: async (req, res) => {
 
         try {
-            const custId = req.body.empId;    
+            const empId = req.body.empId;    
             const completedOrders = await OrderModel.aggregate(
                 [
                     {$match:{empId:new mongoose.Types.ObjectId(empId),status: {$not : {$eq : "assigned"}}}},
@@ -366,7 +366,7 @@ module.exports = {
             )
             const pendingOrders = await OrderModel.aggregate(
                 [
-                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: "assigned"}},
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: "assigned"}},
                     {$sort: { service_date: -1 }},
                     
                     {$lookup: {
@@ -414,9 +414,9 @@ module.exports = {
             res.json({completedOrders:completedOrders,pendingOrders:pendingOrders});
         }
         catch (err) {
-            res.json({
-                message: err
-            });
+            res.json(
+                "err"
+            );
         }
     },
     cancelOrder: async (req, res) => {
