@@ -58,7 +58,7 @@ const Sidebar = ({children}) => {
     ]
     return (
         <>
-           <div style={{width: "300px"}} className="sidebar">
+           <div style={{width: "400px"}} className="sidebar">
                <div className="top_section">
                    <h1 style={{display:"block"}} className="logo">DashBoard</h1>
                    <div style={{marginLeft: "50px"}} className="bars">
