@@ -18,11 +18,15 @@ const Sidebar = ({children}) => {
 
     const[isOpen ,setIsOpen] = useState(true);
     const toggle = () => setIsOpen (!isOpen);
+    const printHello = ()=>{
+        console.log("kemcho")
+    }
     const menuItem=[
         {
-            path:"/Employee",
+            // path:"/Employee",
             name:"Home",
-            icon:<FaTh/>
+            icon:<FaTh/>,
+            func: printHello
         },
         {
             path:"/Employee/today",
@@ -54,19 +58,19 @@ const Sidebar = ({children}) => {
     ]
     return (
         <>
-           <div style={{width: isOpen ? "300px" : "50px"}} className="sidebar">
+           <div style={{width: "300px"}} className="sidebar">
                <div className="top_section">
-                   <h1 style={{display: isOpen ? "block" : "none"}} className="logo">DashBoard</h1>
-                   <div style={{marginLeft: isOpen ? "50px" : "0px"}} className="bars">
+                   <h1 style={{display:"block"}} className="logo">DashBoard</h1>
+                   <div style={{marginLeft: "50px"}} className="bars">
                        {/* <FaBars onClick={toggle}/> */}
                    </div>
                </div>
                {
                    menuItem.map((item, index)=>(
-                       <NavLink to={item.path} key={index} className="link" activeclassName="active">
+                       <div onClick={item.func} key={index}  className="link" >
                            <div className="icon">{item.icon}</div>
                            <div style={{display: isOpen ? "block" : "none"}} className="link_text">{item.name}</div>
-                       </NavLink>
+                           </div>
                    ))
                }
            </div>
