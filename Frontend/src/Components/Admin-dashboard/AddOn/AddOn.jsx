@@ -18,21 +18,29 @@ const AddOn = () => {
     const [opendet, setOpendet] = useState(false);
     const [SelectEmp, setEmp] = useState({})
     const [selectAddOn, setSelectAddOn] = useState({})
-    const [SelectEmpdet, setEmpdet] = useState({})
+ 
     //   const services = [ /* Your list of services goes here */ ];
     const [services, setService] = useState([]);
-    const [filteredServices, setFilteredServices] = useState([]);
-    const [employeeServices, setEmployeeServices] = useState([]);
+
     const [addOnRemove, setAddOnRemove] = useState([]);
     const [employeeServicesdet, setEmployeeServicesdet] = useState([]);
+
+
+
+
+
+    
     const handleClose = () => {
-        setEmp('')
+        setEmp('')  
         setOpen(false);
     };
 
     const [serData, serDataChange] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
+    const HandleOpenAdd =(item)=>{
+
+    }
 
     const HandleOpenRem = (item) => {
 
@@ -177,7 +185,7 @@ const AddOn = () => {
 
 
 
-                                                    <td ><button className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
+                                                    <td ><button   className="btn btn-success" style={{ marginLeft: "5px" }}>Add Accessories</button>
                                                         <button onClick={() => HandleOpenRem(item)} className="btn btn-danger" style={{ marginLeft: "5px" }}>Remove Accessories</button>
                                                         <button className="btn btn-primary" style={{ marginLeft: "5px" }}>Details</button>
 
@@ -289,7 +297,8 @@ const AddOn = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
+            {/* ........ */}
+           
 
 
 
