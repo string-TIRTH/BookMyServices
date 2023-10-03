@@ -20,7 +20,11 @@ const FeedbackSchema = new mongoose.Schema({
     type:String,
     default:null
   },
-  rating:{
+  serRating:{
+    type : String,
+    default : "Not Rated"
+  },
+  empRating:{
     type : String,
     default : "Not Rated"
   },
