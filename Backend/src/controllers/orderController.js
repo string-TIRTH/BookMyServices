@@ -314,59 +314,14 @@ module.exports = {
             });
         }
     },
-    getOrderByEmpId: async (req, res) => {
-
+    getOrderTodayByEmpId: async (req, res) => {
         try {
             const empId = req.body.empId;    
-            const completedOrders = await OrderModel.aggregate(
-                [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: {$not : {$eq : "assigned"}}}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
-                    },
-                    {$lookup: {
-                        from: "customers",
-                        localField: "custId",
-                        foreignField: "_id",
-                        as: "customerDetails",
-                      },
-                    },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "customerDetails.fname":1,
-                        "customerDetails.lname":1,
-                        "customerDetails.contact_no":1,
-                        "customerDetails.rating":1,
-                        "customerDetails.address":1                 
-                    } }
-
-                ],
-            )
+            const date = moment().format('YYYY-MM-DD');
+            console.log(date)
             const pendingOrders = await OrderModel.aggregate(
                 [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: "assigned"}},
+                    {$match:{empId:new mongoose.Types.ObjectId(empId),service_date : date,status: "assigned"}},
                     {$sort: { service_date: -1 }},
                     
                     {$lookup: {
@@ -410,12 +365,13 @@ module.exports = {
 
                 ],
             )
-            console.log(completedOrders)
-            res.json({completedOrders:completedOrders,pendingOrders:pendingOrders});
+            console.log(pendingOrders)
+            res.json({pendingOrders:pendingOrders});
         }
         catch (err) {
-            res.json(
-                "err"
+            console.log(err)
+            res.send(
+                err
             );
         }
     },
