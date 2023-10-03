@@ -137,327 +137,214 @@ const Today = () => {
         empId: localStorage.getItem('id')
     }
     useEffect(() => {
-        axios.post(`http://localhost:5000/order/getOrderByEmpId/`, data)
+        axios.post(`http://localhost:5000/order/getOrderUpcomingByEmpId`, data)
             .then((response) => {
                 console.log(response.data)
-                console.log(response.data.pendingOrders)
-                console.log(response.data.completedOrders)
-                setPending(response.data.pendingOrders)
-                setComplete(response.data.pendingOrders)
+                // console.log(response.data.pendingOrders)
+                // console.log(response.data.completedOrders)
+                setPending(response.data.upcomingOrders)
+               
             })
 
     }, []);
-    
+
 
     return (
         <>
-        {!isLoggedIn && (
-            <div style={{ width: '100%', height: '500px' }}>
+            {!isLoggedIn && (
+                <div style={{ width: '100%', height: '500px' }}>
 
-                <img
-                    src="https://www.vhv.rs/dpng/d/521-5212497_empty-cart-hd-png-download.png"
-                    alt="Full Page Image"
-                    style={{ width: '100%', height: '580px' }}
-                />
-                <Dialog open={isOpen} onClose={handleClose}>
-                    <div style={{ padding: '16px' }}>
-                        <Typography variant="h5" component="div" gutterBottom>
-                            Orders are only visible after logging in
-                        </Typography>
-                        <Typography variant="body1" component="div">
-                            Please log in to view your orders and continue shopping.
-                        </Typography>
-                    </div>
-                    <DialogActions>
-                        <Button onClick={handleLogin} variant="contained" color="primary">
-                            Login
-                        </Button>
-                        <Button onClick={handleClose} variant="outlined" color="error">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        )}
+                    <img
+                        src="https://www.vhv.rs/dpng/d/521-5212497_empty-cart-hd-png-download.png"
+                        alt="Full Page Image"
+                        style={{ width: '100%', height: '580px' }}
+                    />
+                    <Dialog open={isOpen} onClose={handleClose}>
+                        <div style={{ padding: '16px' }}>
+                            <Typography variant="h5" component="div" gutterBottom>
+                                Orders are only visible after logging in
+                            </Typography>
+                            <Typography variant="body1" component="div">
+                                Please log in to view your orders and continue shopping.
+                            </Typography>
+                        </div>
+                        <DialogActions>
+                            <Button onClick={handleLogin} variant="contained" color="primary">
+                                Login
+                            </Button>
+                            <Button onClick={handleClose} variant="outlined" color="error">
+                                Close
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            )}
 
-        {isLoggedIn && (
-
-
+            {isLoggedIn && (
 
 
 
-            <div className="container-fluid" style={{ backgroundColor: '#D4E6F1' }}>
-                <div className='col-md-12 justify-content-center' style={{ padding: 20 }}>
 
 
-                    <div className="container-fluid" style={{ backgroundColor: '#FFFFF0' }}>
-                        {/* <div className='col-md-11' style={{margin :'20'}}>  */}
-
-                        <div className='col-md-12' style={{ padding: 20 }}>
-                            {pending.length === 0 && Complete.length === 0 ? (
-                                <h1 style={{ textAlign: 'center' }}>No Schedules Yet : /</h1>
-                            ) : (
-                                <>
-                                    {pending.length === 0 ? <h1 style={{ textAlign: 'center' }}></h1> :
-                                        pending.length !== 0 && (
-                                            <>
-                                                <h1 style={{ textAlign: 'center' }}></h1>
+                <div className="container-fluid" style={{ backgroundColor: '#D4E6F1' }}>
+                    <div className='col-md-12 justify-content-center' style={{ padding: 20 }}>
 
 
+                        <div className="container-fluid" style={{ backgroundColor: '#FFFFF0' }}>
+                            {/* <div className='col-md-11' style={{margin :'20'}}>  */}
 
-                                                {pending.map((item, index) => (
+                            <div className='col-md-12' style={{ padding: 20 }}>
+                                {pending.length === 0 && Complete.length === 0 ? (
+                                    <h1 style={{ textAlign: 'center' }}>No Schedules Yet : /</h1>
+                                ) : (
+                                    <>
+                                        {pending.length === 0 ? <h1 style={{ textAlign: 'center' }}></h1> :
+                                            pending.length !== 0 && (
+                                                <>
+                                                    <h1 style={{ textAlign: 'center' }}></h1>
 
-                                                    <div className='row mt-2'>
 
 
-                                                        <div className='col-md-8'>
-                                                            <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-                                                                <div className='row' style={{ marginTop: 20 }}>
-                                                                    <div className="col-md-6">
-                                                                        <img className="rounded" src={item?.serviceDetails[0]?.url} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                    {pending.map((item, index) => (
+
+                                                        <div className='row mt-2'>
+
+
+                                                            <div className='col-md-8'>
+                                                                <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
+                                                                    <div className='row' style={{ marginTop: 20 }}>
+                                                                        <div className="col-md-6">
+                                                                            <img className="rounded" src={item?.serviceDetails[0]?.url} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                                                                        </div>
+
+
+
+                                                                        <div className='col-md-6' style={{ textAlign: 'left' }}>
+
+
+                                                                            <h6 className="card-title"><strong>Order Id: </strong>{item.orderId}</h6>
+                                                                            <h6 className="card-title"> <strong>Service Name: </strong>{item?.serviceDetails[0]?.name}</h6>
+
+                                                                            <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
+
+                                                                            <h6><strong> Status: </strong><span className="text-warning">Scheduled Today</span>  </h6>
+                                                                            <h6>
+                                                                                <strong>
+                                                                                    Customer Name: </strong>{item?.customerDetails[0]?.fname} {item?.customerDetails[0]?.lname}
+                                                                            </h6>
+
+
+                                                                        </div>
                                                                     </div>
-
-
-
-                                                                    <div className='col-md-6' style={{ textAlign: 'left' }}>
-
-
-                                                                        <h6 className="card-title"><strong>Order Id: </strong>{item.orderId}</h6>
-                                                                        <h6 className="card-title"> <strong>Service Name: </strong>{item?.serviceDetails[0]?.name}</h6>
-
-                                                                        <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
-
-                                                                        <h6><strong> Status: </strong><span className="text-warning">Scheduled Today</span>  </h6>
-                                                                        <h6><strong>
-                                                                            Customer Name: </strong>{item?.customerDetails[0]?.fname} {item?.customerDetails[0]?.lname}
-                                                                        </h6>
-
-
+                                                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+                                                                        < Button onClick={() => handleOrderDetails(item)} style={{
+                                                                            marginRight: "50px", backgroundColor: '#007bff',
+                                                                            color: 'white',
+                                                                            padding: '10px 20px',
+                                                                            borderRadius: '5px',
+                                                                            border: 'none',
+                                                                            cursor: 'pointer',
+                                                                            fontSize: '16px'
+                                                                        }} variant="contained" color="warning">Order Details</Button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }} onClick={() => handleCancelOrder(item)} > <BsTrash /></button>
                                                                     </div>
-                                                                </div>
-                                                                <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
-                                                                    < Button onClick={() => handleOrderDetails(item)} style={{
-                                                                        marginRight: "50px", backgroundColor: '#007bff', 
-                                                                        color: 'white', 
-                                                                        padding: '10px 20px', 
-                                                                        borderRadius: '5px',
-                                                                        border: 'none', 
-                                                                        cursor: 'pointer', 
-                                                                        fontSize: '16px'
-                                                                    }} variant="contained" color="warning">Order Details</Button>
-                                                                    <button className="btn btn-danger" style={{ width: 50, }} onClick={()=> handleCancelOrder(item)} > <BsTrash /></button>
-                                                                </div>
-                                                                <div className="col-md-6" style={{ margin: 10 }}>
+                                                                    <div className="col-md-6" style={{ margin: 10 }}>
 
 
-                                                                    <div className="row">
-                                                                        <div className="col-md-8">
+                                                                        <div className="row">
+                                                                            <div className="col-md-8">
 
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                ))}
-                                                <Dialog open={open} onClose={handleC} PaperProps={{ style: dialogStyles }} >
-                                                    <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
-                                                    <DialogContent>
-                                                        <p><strong>Order Id :</strong> {pItem.orderId}</p>
-                                                        <DialogContentText>
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <img className="rounded" src={pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
-                                                            </div>
-                                                            <br></br>
-
-                                                            <h6><strong>Service name :</strong> {pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.name : ""}</h6>
-                                                            <h6><strong>Total amount :</strong> ₹{pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.price : ""}</h6>
-                                                            <h6><strong>Booked at :</strong>{pItem.booking_datetime}</h6>
-                                                            <h6><strong>Service date :</strong>{pItem.service_date}</h6>
-                                                            <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
-                                                            <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
-                                                            <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                            <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
-                                                            <p>
-                                                                <strong>
-                                                                    <h3>Employee Details</h3></strong>
-                                                                <h6>
-                                                                    <strong>Employee Name:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.fname : ""} {pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.lname : ""} </h6>
-                                                                <h6>  <strong>Contact Number.:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.contact_no : ""}</h6>
-
-                                                            </p>
-                                                        </DialogContentText>
-
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={handleC} style={{
-                                                                        marginRight: "50px", backgroundColor: '#f96d00', 
-                                                                        color: '#f2f2f2', 
-                                                                        padding: '10px 20px', 
-                                                                        borderRadius: '5px',
-                                                                        border: 'none', 
-                                                                        cursor: 'pointer', 
-                                                                        fontSize: '16px'
-                                                                    }}>
-                                                            Close
-                                                        </Button>
-
-                                                    </DialogActions>
-                                                </Dialog>
-                                            </>
-
-
-                                        )}
-                                    {Complete?.length === 0 ? <h1 style={{ textAlign: 'center' }}></h1> :
-
-
-                                        Complete?.length !== 0 && (
-                                            <>
-                                                {/* <h1 style={{ textAlign: 'center' }}></h1> */}
-
-
-
-                                                {Complete.map((item, index) => (
-
-                                                    <div className='row mt-2'>
-
-
-                                                        <div className='col-md-8'>
-                                                            <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-                                                                <div className='row' style={{ marginTop: 20 }}>
-                                                                    <div className="col-md-6">
-                                                                        <img className="rounded" src={item?.serviceDetails[0]?.url} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
-                                                                    </div>
-
-
-
-                                                                    <div className='col-md-6' style={{ textAlign: 'left' }}>
-
-
-                                                                        <h6 className="card-title"><strong>Order Id: </strong>{item.orderId}</h6>
-                                                                        <h6 className="card-title"> <strong>Service Name: </strong>{item?.serviceDetails[0]?.name}</h6>
-
-                                                                        <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
-
-                                                                        <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
-                                                                        {item.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
-                                                                        :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
-                                                            
-                                                                        }
-                                                            
-                                                                        <h6><strong>
-                                                                            Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
-                                                                        </h6>
-
-
-                                                                    </div>
+                                                    ))}
+                                                    <Dialog open={open} onClose={handleC} PaperProps={{ style: dialogStyles }} >
+                                                        <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
+                                                        <DialogContent>
+                                                            <p><strong>Order Id :</strong> {pItem.orderId}</p>
+                                                            <DialogContentText>
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <img className="rounded" src={pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
                                                                 </div>
-                                                                <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
-                                                                    < Button onClick={() => handlecompOrderDetails(item)} style={{
-                                                                        marginRight: "50px", backgroundColor: '#007bff', 
-                                                                        color: '#f2f2f2', 
-                                                                        padding: '10px 20px', 
-                                                                        borderRadius: '5px',
-                                                                        border: 'none', 
-                                                                        cursor: 'pointer', 
-                                                                        fontSize: '16px'
-                                                                    }}variant="contained" color="warning">Order Details</Button>
-                                                                    <button className="btn btn-danger" style={{ width: 50, }} > <BsTrash /></button>
-                                                                </div>
-                                                                <div className="col-md-6" style={{ margin: 10 }}>
+                                                                <br></br>
+
+                                                                <h6><strong>Service name :</strong> {pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.name : ""}</h6>
+                                                                <h6><strong>Total amount :</strong> ₹{pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.price : ""}</h6>
+                                                                <h6><strong>Booked at :</strong>{pItem.booking_datetime}</h6>
+                                                                <h6><strong>Service date :</strong>{pItem.service_date}</h6>
+                                                                <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
+                                                                <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
+                                                                <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
+                                                                <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
+                                                                <p>
+                                                                    <h6>
+                                                                       
+                                                                    <h6><strong>Customer Name: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.fname : ""} {pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.lname : ""}</h6>
+                                                                          <h6> <strong>Customer contact Number: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.contact_no : ""} </h6> 
+                                                                          <h6> <strong>Customer House Number : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.house_no : "he "} </h6> 
+                                                                          <h6> <strong>Customer Society Name : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.society_name : ""} </h6> 
+                                                                          <h6> <strong>Customer Landmark : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.landmark : ""} </h6> 
+                                                                          <h6> <strong>Customer City : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.city : ""} </h6> 
+                                                                          <h6> <strong>Customer Pincode : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.pincode : ""} </h6> 
+                                                                    </h6>
 
 
-                                                                    <div className="row">
-                                                                        <div className="col-md-8">
+                                                                </p>
+                                                            </DialogContentText>
 
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleC} style={{
+                                                                marginRight: "50px", backgroundColor: '#f96d00',
+                                                                color: '#f2f2f2',
+                                                                padding: '10px 20px',
+                                                                borderRadius: '5px',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                fontSize: '16px'
+                                                            }}>
+                                                                Close
+                                                            </Button>
 
-                                                ))}
-                                                <Dialog open={opencomp} onClose={handleCcomp} PaperProps={{ style: dialogStyles }} >
-                                                    <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
-                                                    <DialogContent>
-                                                        <p><strong>Order Id :</strong> {pItem.orderId}</p>
-                                                        <DialogContentText>
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <img className="rounded" src={pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
-                                                            </div>
-                                                            <br></br>
-
-                                                            <h6><strong>Service name :</strong> {pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.name : ""}</h6>
-                                                            <h6><strong>Total amount :</strong> ₹{pItem?.serviceDetails?.length > 0 ? pItem?.serviceDetails[0]?.price : ""}</h6>
-                                                            <h6><strong>Booked at :</strong>{pItem.booking_datetime}</h6>
-                                                            <h6><strong>Service date :</strong>{pItem.service_date}</h6>
-                                                            <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
-                                                            <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
-                                                            <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                            
-                                                            {pItem.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
-                                                                        :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
-                                                            
-                                                                        }
-
-                                                            <p>
-                                                                <strong>
-                                                                    <h3>Employee Details</h3></strong>
-                                                                <h6>
-                                                                    <strong>Employee Name:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.fname : ""} {pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.lname : ""} </h6>
-                                                                <h6>  <strong>Contact Number.:</strong>{pItem?.employeeDetails?.length > 0 ? pItem?.employeeDetails[0]?.contact_no : ""}</h6>
-
-                                                            </p>
-                                                        </DialogContentText>
-
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={handleCcomp} style={{
-                                                                        marginRight: "50px", backgroundColor: '#f96d00', 
-                                                                        color: 'white', 
-                                                                        padding: '10px 20px', 
-                                                                        borderRadius: '5px',
-                                                                        border: 'none', 
-                                                                        cursor: 'pointer', 
-                                                                        fontSize: '16px'
-                                                                    }}>
-                                                            Close
-                                                        </Button>
-
-                                                    </DialogActions>
-                                                </Dialog>
-                                            </>
-                                        )}
-                                </>
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </>
 
 
-                            )}
+                                            )}
+                                       
+                                    </>
+
+
+                                )}
+                            </div>
                         </div>
                     </div>
+                    {cartActive && isLoggedIn
+                        ? <Link to={"/Customer/Cart/"}>
+                            <FaShoppingCart size={50} color="#89cff0" item='10' style={{
+                                position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
+                                borderRadius: '10px',
+                                padding: '8px',
+                                backgroundColor: '#faebd7',
+                                boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                            }} cartActive={false} />
+                        </Link>
+                        : <></>
+                    }
+
                 </div>
-                {cartActive && isLoggedIn
-                ? <Link to={"/Customer/Cart/"}>
-                    <FaShoppingCart size={50} color="#89cff0" item='10' style={{
-                        position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
-                        borderRadius: '10px',
-                        padding: '8px',
-                        backgroundColor: '#faebd7',
-                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
-                    }} cartActive={false} />
-                </Link>
-                : <></>
-            }
-
-            </div>
 
 
 
 
-        )}
+            )}
 
-    </>
+        </>
     );
 }
 
