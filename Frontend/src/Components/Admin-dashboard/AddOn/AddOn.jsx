@@ -18,8 +18,7 @@ import TextField from "@mui/material/TextField";
 const rowsPerPageOptions = [4, 5, 7];
 
 const AddOn = () => {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [previewImageURL, setPreviewImageURL] = useState(null);
+
     const [open, setOpen] = useState(false);
     const [openrem, setOpenrem] = useState(false);
     const [openadd, setOpenadd] = useState(false);
@@ -33,18 +32,7 @@ const AddOn = () => {
     const [addOnRemove, setAddOnRemove] = useState([]);
     const [employeeServicesdet, setEmployeeServicesdet] = useState([]);
 
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
 
-        // Check if a file was selected
-        if (file) {
-            setSelectedImage(file);
-
-
-            const imageURL = URL.createObjectURL(file);
-            setPreviewImageURL(imageURL);
-        }
-    };
 
 
 
@@ -71,30 +59,29 @@ const AddOn = () => {
     }
     const HandleCloseAdd = () => {
 
-        setSelectedImage(null)
-        setPreviewImageURL(null)
+
         setSelectAdd({});
         setOpenadd(false);
     }
     const handleSubmit = () => {
 
     }
-    const [FormData, setFormdata] = useState({
-        name: "",
-        price: "",
-        desc: "",
-
-
+    const [formData, setFormData] = useState({
+        name: '',
+        price: '',
+        desc: '',
+        image: null, // To store the selected image file
     });
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Update the state with the new value
-        setFormdata({
-            ...FormData,
-            [name]: value,
-        });
+        setFormData({ ...formData, [name]: value });
     };
-
+    
+    const handleImageChange = (e) => {
+        const imageFile = e.target.files[0];
+        setFormData({ ...formData, image: imageFile });
+    };
 
 
 
@@ -131,7 +118,7 @@ const AddOn = () => {
             addOnId: item._id,
             serId: selectAddOn._id
         }
-        console.log(selectAddOn)
+        // console.log(selectAddOn)
         try {
 
             axios.post("http://localhost:5000/addOn/removeAddOn", datarem)
@@ -179,20 +166,25 @@ const AddOn = () => {
             });
     }, []);
     const HandleSubmitAdd = () => {
+
+        HandleCloseAdd();
+        const data = new FormData();
+        data.append('serId',SelectAdd._id)
+        data.append('name', formData.name);
+        data.append('price', formData.price);
+   
+        data.append('desc', formData.desc);
+        data.append('image', formData.image);
       
-        const data = {
-            serId: SelectAdd,
-            name: FormData.name,
-            price: FormData.price,
-            desc: FormData.desc,
-            image: selectedImage
-
-
-        }
         console.log(data)
         try {
 
-            axios.post("http://localhost:5000/addOn/addAddOns", data)
+            axios.post("http://localhost:5000/addOn/addAddOns", data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+
+            })
                 .then((response) => {
 
 
@@ -426,21 +418,15 @@ const AddOn = () => {
                                 fullWidth
                                 margin="normal"
                             />
+                            <label>Image:</label>
                             <input
                                 type="file"
-                                accept="image/*" // Specify accepted file types (in this case, images)
-                                onChange={handleImageUpload} // Handle the image upload event
-                                fullWidth
-                                margin="normal"
+                                name="image"
+                                style={{ border: "2px solid black" }}
+                                onChange={handleImageChange}
+                                accept="image/*"
+                                required
                             />
-                            {/* Display the image preview */}
-                            {previewImageURL && (
-                                <img
-                                    src={previewImageURL}
-                                    alt="Preview"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '10px' }}
-                                />
-                            )}
 
 
                         </form>

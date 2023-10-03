@@ -24,7 +24,7 @@ module.exports = {
   },
   getAddOnBySerId: async (req, res) => {
     const addOnSerId = req.body.serId;
-    console.log(req.body)
+    // console.log(req.body)
 
     try {
       const addOns = await AddOnModel.findOne({ serId: addOnSerId });
@@ -70,6 +70,7 @@ module.exports = {
     const name = req.body.name;
     const price = req.body.price;
     const desc = req.body.desc;
+    console.log(req.body)
     const addOnRecord = {
       "name": name,
       "price": price,
