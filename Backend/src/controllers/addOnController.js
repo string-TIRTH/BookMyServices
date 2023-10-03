@@ -40,7 +40,7 @@ module.exports = {
   },
   removeAddOn:async (req, res) => {
     const serId = req.body.serId;
-    addOnId = req.body.addOnId;
+   const  addOnId = req.body.addOnId;
     console.log(addOnId)
     try{
       const addOn = await AddOnModel.findOne({"serId" : serId});
