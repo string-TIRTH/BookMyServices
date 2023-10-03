@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from './Sidebar';
 import { useEffect, useState } from "react";
-
+import img from '../img/loginBlock.png'
 import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -152,20 +152,21 @@ const Today = () => {
     return (
         <>
             {!isLoggedIn && (
-                <div style={{ width: '100%', height: '500px' }}>
+                <div style={{ justifyContent: 'center', alignItems: 'center'}}>
 
                     <img
-                        src="https://www.vhv.rs/dpng/d/521-5212497_empty-cart-hd-png-download.png"
+                        src={img}
                         alt="Full Page Image"
-                        style={{ width: '100%', height: '580px' }}
+
+                        style={{ justifyContent: 'center', alignItems: 'center' }}
                     />
                     <Dialog open={isOpen} onClose={handleClose}>
                         <div style={{ padding: '16px' }}>
                             <Typography variant="h5" component="div" gutterBottom>
-                                Orders are only visible after logging in
+                               Employee Must have to do login
                             </Typography>
                             <Typography variant="body1" component="div">
-                                Please log in to view your orders and continue shopping.
+                                Please log in to view your orders and details.
                             </Typography>
                         </div>
                         <DialogActions>

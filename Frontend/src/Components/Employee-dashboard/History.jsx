@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaShoppingCart } from 'react-icons/fa';
-
+import img from '../img/loginBlock.png'
 
 const Today = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -154,10 +154,11 @@ const Today = () => {
             {!isLoggedIn && (
                 <div style={{ width: '100%', height: '500px' }}>
 
-                    <img
-                        src="https://www.vhv.rs/dpng/d/521-5212497_empty-cart-hd-png-download.png"
+<img
+                        src={img}
                         alt="Full Page Image"
-                        style={{ width: '100%', height: '580px' }}
+
+                        style={{ justifyContent: 'center', alignItems: 'center' }}
                     />
                     <Dialog open={isOpen} onClose={handleClose}>
                         <div style={{ padding: '16px' }}>
