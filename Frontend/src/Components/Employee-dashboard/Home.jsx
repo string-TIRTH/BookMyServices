@@ -14,8 +14,8 @@ const Home = ()=>{
   // const [empdata, empdatachange] = useState([])
   useEffect(() => {
     const data = {
-      "empId": "6513b285004a356e1e543ccc"
-    }
+        "empId": localStorage.getItem('id')
+    };
     axios.post(`http://localhost:5000/employee/getTodaySchedules`,data)
       .then((response) => {
         if(response.data.length != 0){
