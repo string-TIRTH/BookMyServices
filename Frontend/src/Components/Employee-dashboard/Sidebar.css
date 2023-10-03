@@ -61,12 +61,12 @@
     transition: all 0.5s;
   }
   .link:hover{
-    background:lightskyblue;
+    background:black;
     /* color: #000; */
     transition: all 0.5s;
   }
   .active{
-    background: lightskyblue;
+    background: black;
     color: #000;
   }
   .icon, .link_text{
