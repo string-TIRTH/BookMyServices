@@ -79,8 +79,6 @@ module.exports = {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send('No files were uploaded.');
   }
-  const imageUrl = ""
-  const imageId = ""
   const image = req.files.image;
   const id = moment.utc().unix()
   let ext = image.name;
@@ -97,42 +95,43 @@ module.exports = {
       addOnRecord.url = result.secure_url;
       console.log(result)
       addOnRecord.imageId = result.public_id;
-  });
-    try {
-      ser = await ServiceModel.findById(serId);
-      let ResposeAck = {
-        message: false
-      };
-      console.log(ser)
-      if (ser != null) {
-        addOn = await AddOnModel.findOne({ "serId": serId }, { addOnList: true, _id: true })
-        if (addOn != null && addOn != "") {
-          const _id = addOn._id;
-          console.log(addOn.addOnList)
-
-          const items = addOn.addOnList;
-          console.log(items + "here")
-          items.push(addOnRecord);
-          addOn.addAddList = items;
-          newAddOn = await AddOnModel.findByIdAndUpdate(_id, addOn);
-
+      try {
+        ser = await ServiceModel.findById(serId);
+        let ResposeAck = {
+          message: false
+        };
+        console.log(ser)
+        if (ser != null) {
+          addOn = await AddOnModel.findOne({ "serId": serId }, { addOnList: true, _id: true })
+          if (addOn != null && addOn != "") {
+            const _id = addOn._id;
+            console.log(addOn.addOnList)
+  
+            const items = addOn.addOnList;
+            console.log(items + "here")
+            items.push(addOnRecord);
+            addOn.addAddList = items;
+            newAddOn = await AddOnModel.findByIdAndUpdate(_id, addOn);
+  
+          } else {
+            const addOn = new AddOnModel({
+              serId: serId,
+              addOnList: addOnRecord
+            });
+            newAddOn = await addOn.save();
+          }
+          ResposeAck = {
+            message: true
+          }
         } else {
-          const addOn = new AddOnModel({
-            serId: serId,
-            addOnList: addOnRecord
-          });
-          newAddOn = await addOn.save();
+          console.log("not found")
         }
-        ResposeAck = {
-          message: true
-        }
-      } else {
-        console.log("not found")
+        res.json(ResposeAck)
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
       }
-      res.json(ResposeAck)
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error' });
-    }
+  })
+    
   }
 };
