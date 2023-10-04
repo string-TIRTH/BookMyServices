@@ -12,6 +12,7 @@ import {
     FaIdCard
 }from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
+import { FaceRetouchingOffRounded } from '@mui/icons-material';
 
 
 const Sidebar = ({children}) => {
@@ -48,6 +49,12 @@ const Sidebar = ({children}) => {
             path:"/Admin/addOn",
             name:"Add-Ons",
             icon:<FaThList/>
+        },
+        {
+            path:"/Admin/Logout",
+            name:"Logout",
+            icon:<FaceRetouchingOffRounded/>
+            
         }
     ]
     return (
@@ -61,12 +68,16 @@ const Sidebar = ({children}) => {
                </div>
                {
                    menuItem.map((item, index)=>(
+
+                        
                        <NavLink to={item.path} key={index} className="link" activeclassName="active">
+
                            <div className="icon">{item.icon}</div>
                            <div style={{display: isOpen ? "block" : "none"}} className="link_text">{item.name}</div>
                        </NavLink>
                    ))
                }
+               
            </div>
            <main>{children}</main>
         </>
@@ -75,51 +86,6 @@ const Sidebar = ({children}) => {
 
 
 
-// const Sidebar =() =>{
-//     const menuItem=[
-//         {
-//             path:"/Dashboard",
-//             name:"",
-//             icons:<FaTh/>
-//         },
-//         {
-//             path:"/about",
-//             name:"about",
-//             icons:<FaUserAlt></FaUserAlt>
-//         },
-//         {
-//             path:"/analytics",
-//             name:"analytics",
-//             icons:<FaRegChartBar></FaRegChartBar>
-//         },
-//         {
-//             path:"/comments",
-//             name:"Comments",
-//             icons:<FaCommentAlt></FaCommentAlt>
-//         }, {
-//             path:"/product",
-//             name:"Product",
-//             icons:<FaShoppingBag></FaShoppingBag>
-//         },
-//         {
-//             path:"/productlist",
-//             name:"ProductList",
-//             icons:<FaList></FaList>
-//         },
-//     ]
-//     return (
-//         <>
-//             <div className="container">
-//                 <div className="sidebar">
-//                     <div className="top_section">
-//                         <h1 className="logo">logo</h1>
-//                         <div className="bars">
-//                             <FaBars></FaBars>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// }
+
 export default Sidebar;
+// ChatGPT

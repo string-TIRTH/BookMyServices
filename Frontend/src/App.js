@@ -19,6 +19,7 @@ import Services from './Components/Admin-dashboard/Services/Services';
 import AddServices from './Components/Admin-dashboard/Services/AddServices';
 import EditServices from './Components/Admin-dashboard/Services/EditServices';
 import DetailServices from './Components/Admin-dashboard/Services/DetailServices'
+import Logout from './Components/Admin-dashboard/Logout'
 import CustAddser from './Components/Customer-dashboard/CustAddser'
 import HomeserDetails from './Components/Customer-dashboard/HomeSerDetails'
 import CustomerCart from './Components/Customer-dashboard/CustomerCart'
@@ -64,8 +65,9 @@ function App() {
           <Route path="/Admin/AddServices" element={<AddServices />} />
           <Route path="/Admin/EditServices/:id" element={<EditServices />} />
           <Route path="/Admin/DetailServices/:id" element={<DetailServices />} />
-          <Route path="/Admin/EmpSer/" element={<EmpSer />} />
           <Route path="/Admin/AddOn/" element={<AddOn />} />
+          <Route path="/Admin/Logout/" element={<Logout />} />
+          <Route path="/Admin/EmpSer/" element={<EmpSer />} />
 
 
           <Route path="/" element={<Home></Home>} />
