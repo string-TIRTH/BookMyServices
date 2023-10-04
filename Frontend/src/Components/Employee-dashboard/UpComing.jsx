@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaShoppingCart } from 'react-icons/fa';
-
+import img from '../img/loginBlock.png'
 
 const Today = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -154,10 +154,11 @@ const Today = () => {
             {!isLoggedIn && (
                 <div style={{ width: '100%', height: '500px' }}>
 
-                    <img
-                        src="https://www.vhv.rs/dpng/d/521-5212497_empty-cart-hd-png-download.png"
+<img
+                        src={img}
                         alt="Full Page Image"
-                        style={{ width: '100%', height: '580px' }}
+
+                        style={{ justifyContent: 'center', alignItems: 'center' }}
                     />
                     <Dialog open={isOpen} onClose={handleClose}>
                         <div style={{ padding: '16px' }}>
@@ -246,7 +247,7 @@ const Today = () => {
                                                                             cursor: 'pointer',
                                                                             fontSize: '16px'
                                                                         }} variant="contained" color="warning">Order Details</Button>
-                                                                        <button className="btn btn-danger" style={{ width: 50, }} onClick={() => handleCancelOrder(item)} > <BsTrash /></button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }}  > <BsTrash /></button>
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
@@ -324,18 +325,7 @@ const Today = () => {
                             </div>
                         </div>
                     </div>
-                    {cartActive && isLoggedIn
-                        ? <Link to={"/Customer/Cart/"}>
-                            <FaShoppingCart size={50} color="#89cff0" item='10' style={{
-                                position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
-                                borderRadius: '10px',
-                                padding: '8px',
-                                backgroundColor: '#faebd7',
-                                boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
-                            }} cartActive={false} />
-                        </Link>
-                        : <></>
-                    }
+              
 
                 </div>
 

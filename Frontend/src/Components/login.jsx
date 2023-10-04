@@ -12,7 +12,7 @@ const Login = () => {
   }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('customer'); // Default to 'customer'
+  const [role, setRole] = useState('customer'); 
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -105,7 +105,10 @@ const Login = () => {
           }).then((result) => {
             /* Read more about handling dismissals below */
             
-            
+            if(role === 'employee' || role ==="Employee"){
+             
+              window.location.href='/Employee';
+            }
             if(role === 'customer'){
               window.location.href = '/';
             }else if(role === 'admin' || role === 'Admin'){
@@ -113,6 +116,7 @@ const Login = () => {
             }else if(role === 'employee' || role === 'Employee'){
               window.location.href = '/employee';
             }
+           
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
             }

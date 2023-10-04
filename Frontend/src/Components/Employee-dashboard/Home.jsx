@@ -5,13 +5,22 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.css';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import img from'../img/loginBlock.png'
 const Home = ()=>{
   const [today, setToday] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [upcoming, setUpcoming] = useState(0);
   const[completed,setCompleted] =useState(0)
   const[avgRating,setAvgRating] =useState(0)
   // const [empdata, empdatachange] = useState([])
+  const [isOpen, setIsOpen] = useState(true);
   useEffect(() => {
     const data = {
         "empId": localStorage.getItem('id')
@@ -68,8 +77,63 @@ const Home = ()=>{
         console.error('Error fetching customer data:', error);
       });
   }, []);
+  const handleLogin = () => {
+    window.location.href = "/Login"
+};
+const dialogStyles = {
+    maxWidth: '1000px', // Set the maximum width as per your requirements
+};
+  useEffect(() => {
 
+
+    if (localStorage.getItem('role') != null) {
+        setIsLoggedIn(true);
+        const data = {
+            _id: localStorage.getItem('id')
+        };
+        axios.post(`http://localhost:5000/employee/getEmployeeById`, data)
+            .then((response) => {
+
+
+            });
+
+    }
+}, []);
+const handleClose = () => {
+  setIsOpen(false);
+};
     return (
+<>
+      {!isLoggedIn && (
+        <div style={{ justifyContent: 'center', alignItems: 'center'}}>
+
+            <img
+                src={img}
+                alt="Full Page Image"
+
+                style={{ justifyContent: 'center', alignItems: 'center' }}
+            />
+            <Dialog open={isOpen} onClose={handleClose}>
+                <div style={{ padding: '16px' }}>
+                    <Typography variant="h5" component="div" gutterBottom>
+                       Employee Must have to do login
+                    </Typography>
+                    <Typography variant="body1" component="div">
+                        Please log in to view your orders and details.
+                    </Typography>
+                </div>
+                <DialogActions>
+                    <Button onClick={handleLogin} variant="contained" color="primary">
+                        Login
+                    </Button>
+                    <Button onClick={handleClose} variant="outlined" color="error">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    )}
+    {isLoggedIn &&
         <div className="right-content">
           <div className="centered-form" style={{ width: "100%", height: "100%" }}>
             <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "2px", marginRight: "0px" }}>
@@ -120,6 +184,8 @@ const Home = ()=>{
           </div>
         
         </div>
+}
+        </>
     );
 }
 export default Home;
