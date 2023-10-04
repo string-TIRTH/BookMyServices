@@ -138,11 +138,7 @@ return (
           <div className='col-md-10'>
             <div className="container-fluid" style={{ backgroundColor: "#D4E6F1", height: "99vh" }}>
               
-              {activeHome && <div className='scrollable-div'><Home></Home> </div>}
-              {activeToday && <div className='scrollable-div'><Today></Today> </div>}
-              {activeUpcoming && <div className='scrollable-div'><Upcoming></Upcoming> </div>}
-              {activeHistory && <div className='scrollable-div'><History></History> </div>}
-              {activeFeedback && <div className='scrollable-div'>Feedback </div>}
+           ṇ
             </div>
           </div>
         </div>

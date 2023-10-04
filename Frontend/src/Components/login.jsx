@@ -110,6 +110,8 @@ const Login = () => {
               window.location.href = '/';
             }else if(role === 'admin' || role === 'Admin'){
               window.location.href = '/admin';
+            }else if(role === 'employee' || role === 'Employee'){
+              window.location.href = '/employee';
             }
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
