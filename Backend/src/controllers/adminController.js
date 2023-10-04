@@ -36,6 +36,7 @@ module.exports = {
       const newAdmin = await admin.save();
       res.status(201).json(newAdmin);
     } catch (error) {
+      console.log(error)
       res.status(400).json({ error: 'Bad request' });
     }
   },

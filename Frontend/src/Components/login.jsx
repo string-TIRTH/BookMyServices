@@ -193,6 +193,7 @@ return (
         >
           <option value="Customer">Customer</option>
           <option value="Employee">Employee</option>
+          <option value="Admin">Admin</option>
         </select>
       </div>
       <button className="login-button" type="button" onClick={handleLogin}>

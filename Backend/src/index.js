@@ -14,6 +14,7 @@ const serviceRouter = require('./router/serviceRouter')
 const orderRouter = require('./router/orderRouter')
 const addOnRouter = require('./router/addOnRouter')
 const loginRouter = require('./router/loginRouter')
+const adminRouter = require('./router/adminRouter')
 const cors = require('cors'); 
  app.use(cors());
 
@@ -89,3 +90,4 @@ app.use("/service",serviceRouter)
 app.use("/order",orderRouter)
 app.use("/addOn",addOnRouter)
 app.use("/login",loginRouter)
+app.use("/admin",adminRouter)
