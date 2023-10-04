@@ -375,6 +375,66 @@ module.exports = {
             );
         }
     },
+    startService : async(req,res)=>{
+        try{
+            const orderId = req.body.orderId;
+            const order = await OrderModel.findById(orderId,{status : true,empId:true})
+            if(order == null){
+                    res.json({message : false});
+            }else{
+                if(order.status === "active"){
+                    res.send({message : false});
+                }else{
+                    order.status = 'active';
+                    await OrderModel.findByIdAndUpdate(orderId,order);
+                    res.json({message:true})
+                }
+            }
+        }catch(err){
+            console.log(err);
+            res.status(400).send("Invalid Action");
+        }
+    },
+    getServiceCompOTP :  async(req,res)=>{
+        try{
+            const orderId = req.body.orderId;
+            const order = await OrderModel.findById(orderId,{status : true,empId:true})
+            if(order == null){
+                    res.json({message : false});
+            }else{
+                if(order.status === "active"){
+                    order.status = 'completed';
+                    await OrderModel.findByIdAndUpdate(orderId,order);
+                    res.json({message:true})
+                }else{
+                    res.send({message : false});
+                }
+            }
+        }catch(err){
+            console.log(err);
+            res.status(400).send("Invalid Action");
+        }
+    },
+    endService : async(req,res)=>{
+        try{
+            const orderId = req.body.orderId;
+            const order = await OrderModel.findById(orderId,{status : true,empId:true})
+            if(order == null){
+                    res.json({message : false});
+            }else{
+                if(order.status === "active"){
+                    order.status = 'completed';
+                    await OrderModel.findByIdAndUpdate(orderId,order);
+                    res.json({message:true})
+                }else{
+                    res.send({message : false});
+                }
+            }
+        }catch(err){
+            console.log(err);
+            res.status(400).send("Invalid Action");
+        }
+    },
     getOrderUpcomingByEmpId: async (req, res) => {
         try {
             const empId = req.body.empId;    

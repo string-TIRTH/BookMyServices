@@ -143,7 +143,7 @@ const Today = () => {
                 // console.log(response.data.pendingOrders)
                 // console.log(response.data.completedOrders)
                 setPending(response.data.pendingOrders)
-                setComplete(response.data.pendingOrders)
+                // setComplete(response.data.pendingOrders)
             })
 
     }, []);

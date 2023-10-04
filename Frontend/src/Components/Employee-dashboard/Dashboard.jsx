@@ -21,7 +21,7 @@
   // import { Upcoming } from '@mui/icons-material';
   import  Upcoming from './UpComing';
   import  History from './History';
-  import Logout from './Logout';
+  import Logout from '../Logout';
 
   const Dashboard = () => {
     const [activeHome, setActiveHome] = useState(true)

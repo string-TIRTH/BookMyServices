@@ -66,6 +66,10 @@ const OrderSchema = new mongoose.Schema({
       type : String,
       default : moment().format("YYYY-MM-DD")
     },
+    otp : {
+      type : String,
+      required : false
+    },
     service_startTime:{
       type : String,
       default : moment().format("hh:mm:ss")
