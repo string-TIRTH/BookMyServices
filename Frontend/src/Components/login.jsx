@@ -113,6 +113,8 @@ const Login = () => {
               window.location.href = '/';
             }else if(role === 'admin' || role === 'Admin'){
               window.location.href = '/admin';
+            }else if(role === 'employee' || role === 'Employee'){
+              window.location.href = '/employee';
             }
            
             if (result.dismiss === Swal.DismissReason.timer) {
@@ -191,7 +193,7 @@ return (
         >
           <option value="Customer">Customer</option>
           <option value="Employee">Employee</option>
-    
+          <option value="Admin">Admin</option>
         </select>
       </div>
       <button className="login-button" type="button" onClick={handleLogin}>
