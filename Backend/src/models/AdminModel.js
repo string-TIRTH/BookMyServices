@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const AddressSchema = new mongoose.Schema({
-  address_id :{
-     type : String,
-     required : true,
-  },
   house_no :{
      type : String,
      required : true,

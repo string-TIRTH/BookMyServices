@@ -25,7 +25,7 @@ module.exports = {
         }else{
             res.json({"message":false});
         }
-    }else if(role === "admin"){
+    }else if(role === "Admin"||role === "admin"){
         const user = await Admin.findOne({"email": email},{password:true});
         if(user.password == password){
             res.json({"message":true,"id":user._id});
@@ -58,7 +58,7 @@ module.exports = {
         }else{
             res.json({"message":false});
         }
-    }else if(role === "admin"){
+    }else if(role === "Admin" ||role === "admin"){
         const user = await Admin.findOne({"email": email});
         if(user != null || user!=''){
             res.json({"message":true});
