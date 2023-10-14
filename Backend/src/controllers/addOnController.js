@@ -23,6 +23,7 @@ module.exports = {
     }
   },
   getAddOnBySerId: async (req, res) => {
+    console.log(req.body)
     const addOnSerId = req.body.serId;
     // console.log(req.body)
 
@@ -53,7 +54,7 @@ module.exports = {
           addOnList.splice(i, 1);
           break; // Exit the loop after removing one item.
         }
-      }
+      } 
       addOn.addOnList = addOnList;
       
       console.log(addOn);
