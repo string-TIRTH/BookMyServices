@@ -28,10 +28,13 @@ const Home = (props) => {
   // const [empdata, empdatachange] = useState([])
   const [isOpen, setIsOpen] = useState(true);
   const [isOpendetails, setdetails] = useState(false);
+  const [isOpenAdd, setadd] = useState(false);
   const [itemdetails, setitemdetails] = useState([]);
   const [itemComplete, setitemComplete] = useState([]);
+  const [itemAdd, setitemAdd] = useState([]);
   const [iscomp, setclosecomp] = useState(false);
   const [otpValue, setOtpValue] = useState('');
+  const [Addon, setAddon] = useState([]);
   useEffect(() => {
     const data = {
       "empId": localStorage.getItem('id')
@@ -277,6 +280,70 @@ const Home = (props) => {
 
    
    }
+   const handleAddon =(item)=>{
+    setadd(true);
+    setitemAdd(item)
+    try {
+  
+      const data = {
+        serId: item.serId
+      };
+
+      axios.post("http://localhost:5000/addOn/getAddOnBySerId", data)
+          .then((response) => {
+            console.log(response.data)
+             
+                setAddon(response.data.addOns);
+                 
+              
+          })
+  }
+  catch (error) {
+      console.log(error)
+  }
+
+   }
+   const closeadd =() =>{
+    setadd(false);
+    setitemAdd([]);
+   }
+   const handleAddonadd =(item) =>{
+    setadd(false);
+    setitemAdd([]);
+    const data ={
+
+      addonId : item._id,
+      orderId:itemAdd._id
+
+
+    }
+    try {
+  
+    
+
+      axios.post("http://localhost:5000/order/addAddons", data)
+          .then((response) => {
+            console.log(response.data)
+             
+            Swal.fire({
+              title: 'Added successfully.',
+              text: 'Added to service successfully',
+              icon: 'success',
+              confirmButtonText: 'Got It!'
+  
+            }).then(() => {
+          
+             window.location.href="/Employee/"
+            })
+                 
+              
+          })
+  }
+  catch (error) {
+      console.log(error)
+  }
+
+   }
 
 
 
@@ -395,12 +462,12 @@ const Home = (props) => {
                                 <p className="card-title"><strong>OrderId:</strong> {item.orderId}</p>
                                 <p className="card-title"><strong>Service Start at:</strong> {item.service_startTime}</p>
                                 <p className="card-title"><strong>Service end at:</strong> {item.service_endTime}</p>
-                                <p className="card-title"><strong>Status of service:</strong> In Working</p>
+                                <p className="card-title"><strong>Status of service:</strong> {item.status}</p>
                               </div>
                             </div>
                             <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
                               <button className="btn btn-primary" onClick={() => handleOrderDetails(item)} style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> order Details</button>
-                              <button className="btn btn-danger" style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> add to AddOn</button>
+                              <button className="btn btn-danger" onClick={()=>handleAddon(item)} style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> add to AddOn</button>
                               <button className="btn btn-success" onClick={() => handleCompleted(item)} style={{ width: "110px", marginRight: "10px", marginBottom: "10px" }}> Completed</button>
                             </div>
                           </div>
@@ -432,7 +499,7 @@ const Home = (props) => {
                   <h6><strong>  Service start at:</strong>{itemdetails.service_startTime}</h6>
                   <h6><strong>service ends on:</strong>{itemdetails.service_endTime}</h6>
                   <h6><strong> Payment mode:</strong>{itemdetails.payment_mode} </h6>
-                  <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
+                  <h6><strong> Status: </strong><span className="text-warning">{itemdetails.status}</span>  </h6>
 
                 </DialogContentText>
 
@@ -486,6 +553,56 @@ const Home = (props) => {
               </form>
             </div>
           </Dialog>
+{/* ---------- */}
+<Dialog open={isOpenAdd} onClose={closeadd}>
+                <DialogTitle>Addons items</DialogTitle>
+                <DialogContent>
+                    {Addon &&
+                        Addon?.length === 0 ? (
+                        <h1>No add-On Items Found</h1>
+                    ) : (
+                      Addon?.map((item) => (
+                            <div class="container mt-2" style={{width:"290px"}} key={item._id}>
+                                
+                                <div className="card">
+                                    <div className="row">
+                                        <div className="col-md-12">
+
+                                            <div className="container-fluid">
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        <div className="col-md-6">
+                                                            <img src={item.url} style={{width:'50%'}}/>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <h6 className="card-title mt-4 mb-4" >Name : {item.name}</h6>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <h6 className="card-title mt-4 mb-4"> Price : ₹{item.price}</h6>
+                                                        </div>
+                                                        <div className="container">
+
+                                                            <button className="bg-info" style={{ backgroundColor: "", marginTop: "20px", marginBottom: "20px", marginLeft: "100px", width: "100px" }} onClick={()=>handleAddonadd(item)}>Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </DialogContent>
+                <DialogActions>
+
+                    <Button onClick={closeadd} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
 
 
