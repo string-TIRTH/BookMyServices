@@ -19,6 +19,9 @@ router.post("/test", orderController.test);
 router.post("/cancelOrder", orderController.cancelOrder);
 router.post("/startService", orderController.startService);
 router.post("/endService", orderController.endService);
+router.post("/getActiveService", orderController.getactiveService);
+router.post("/activeService", orderController.activeService);
+
 
 // router.post("/test", async (req, res) => {
 

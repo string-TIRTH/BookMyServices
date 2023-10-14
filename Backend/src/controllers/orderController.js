@@ -35,7 +35,7 @@ module.exports = {
             let empFound = false;
             for (let eid of empIdList) {
                 console.log(eid)
-                const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList },isActive : true })
+                const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList }, isActive: true })
                 console.log(availOrderList)
                 if (availOrderList != null && availOrderList != "") {
                     orderList.push(availOrderList)
@@ -45,13 +45,13 @@ module.exports = {
                     break;
                 }
             }
-            if(empFound){
+            if (empFound) {
                 responseAck = {
-                    message : true
+                    message: true
                 }
-            }else{
+            } else {
                 responseAck = {
-                    message : false
+                    message: false
                 }
             }
             console.log(responseAck)
@@ -80,7 +80,7 @@ module.exports = {
             let i = 0;
             // let orderId = new mongoose.Types.ObjectId();
             let orderId = moment().unix();
-            orderId *=2;
+            orderId *= 2;
             for (let ser of serList) {
                 let empIdList = await EmpSerModel.distinct("empId", { "serList.serId": ser.serId }, { empId: true });
                 serTimeList = [];
@@ -102,7 +102,7 @@ module.exports = {
                 let foundEmpId = null;
                 let empFound = false;
                 for (let eid of empIdList) {
-                    const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: ser.date, service_startTime: { $in: serTimeList },isActive : true })
+                    const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: ser.date, service_startTime: { $in: serTimeList }, isActive: true })
                     // console.log(availOrderList)
                     if (availOrderList != null && availOrderList != "") {
                         orderList.push(availOrderList)
@@ -134,10 +134,10 @@ module.exports = {
                         service_endTime: service_endTime,
                         service_date: ser.date,
                         address: req.body.address,
-                        payment_mode: req.body.payment_mode?? "Cash",
+                        payment_mode: req.body.payment_mode ?? "Cash",
                         amount: price,
                         status: "assigned",
-                        promocode: req.body.promocode?? null,
+                        promocode: req.body.promocode ?? null,
                     });
                     // console.log(order);
                     i++;
@@ -157,7 +157,7 @@ module.exports = {
             }
             else if (i < serList.length) {
                 // console.log("employee not found")
-                const result = await OrderModel.deleteMany({orderId:orderId});
+                const result = await OrderModel.deleteMany({ orderId: orderId });
                 responseAck.serviceAssign = i;
                 responseAck.status = "ok"
                 responseAck.code = 1; // some employee assigned
@@ -211,101 +211,109 @@ module.exports = {
 
         try {
 
-            const custId = req.body.custId;    
+            const custId = req.body.custId;
             const completedOrders = await OrderModel.aggregate(
                 [
-                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: {$not : {$eq : "assigned"}}}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
+                    { $match: { custId: new mongoose.Types.ObjectId(custId), status: { $not: { $eq: "assigned" } } } },
+                    { $sort: { service_date: -1 } },
+
+                    {
+                        $lookup: {
+                            from: "services",
+                            localField: "serId",
+                            foreignField: "_id",
+                            as: "serviceDetails",
+                        },
                     },
-                    {$lookup: {
-                        from: "employees",
-                        localField: "empId",
-                        foreignField: "_id",
-                        as: "employeeDetails",
-                      },
+                    {
+                        $lookup: {
+                            from: "employees",
+                            localField: "empId",
+                            foreignField: "_id",
+                            as: "employeeDetails",
+                        },
                     },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "employeeDetails.fname":1,
-                        "employeeDetails.lname":1,
-                        "employeeDetails.contact_no":1,
-                        "employeeDetails.rating":1,
-                       
-                    } }
+                    {
+                        $project: {
+                            _id: 1,
+                            orderId: 1,
+                            serId: 1,
+                            empId: 1,
+                            custId: 1,
+                            status: 1,
+                            amount: 1,
+                            service_startTime: 1,
+                            service_endTime: 1,
+                            service_date: 1,
+                            payment_mode: 1,
+                            booking_datetime: 1,
+                            "serviceDetails.name": 1,
+                            "serviceDetails.price": 1,
+                            "serviceDetails.avgRating": 1,
+                            "serviceDetails.url": 1,
+                            "serviceDetails.url": 1,
+                            "employeeDetails.fname": 1,
+                            "employeeDetails.lname": 1,
+                            "employeeDetails.contact_no": 1,
+                            "employeeDetails.rating": 1,
+
+                        }
+                    }
 
                 ],
             )
             const pendingOrders = await OrderModel.aggregate(
                 [
-                    {$match:{custId:new mongoose.Types.ObjectId(custId),status: "assigned"}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
+                    { $match: { custId: new mongoose.Types.ObjectId(custId), status: "assigned" } },
+                    { $sort: { service_date: -1 } },
+
+                    {
+                        $lookup: {
+                            from: "services",
+                            localField: "serId",
+                            foreignField: "_id",
+                            as: "serviceDetails",
+                        },
                     },
-                    {$lookup: {
-                        from: "employees",
-                        localField: "empId",
-                        foreignField: "_id",
-                        as: "employeeDetails",
-                      },
+                    {
+                        $lookup: {
+                            from: "employees",
+                            localField: "empId",
+                            foreignField: "_id",
+                            as: "employeeDetails",
+                        },
                     },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "employeeDetails.fname":1,
-                        "employeeDetails.lname":1,
-                        "employeeDetails.contact_no":1,
-                        "employeeDetails.rating":1,
-                       
-                    } }
+                    {
+                        $project: {
+                            _id: 1,
+                            orderId: 1,
+                            serId: 1,
+                            empId: 1,
+                            custId: 1,
+                            status: 1,
+                            amount: 1,
+                            service_startTime: 1,
+                            service_endTime: 1,
+                            service_date: 1,
+                            payment_mode: 1,
+                            booking_datetime: 1,
+                            "serviceDetails.name": 1,
+                            "serviceDetails.price": 1,
+                            "serviceDetails.avgRating": 1,
+                            "serviceDetails.url": 1,
+                            "serviceDetails.url": 1,
+                            "employeeDetails.fname": 1,
+                            "employeeDetails.lname": 1,
+                            "employeeDetails.contact_no": 1,
+                            "employeeDetails.rating": 1,
+
+                        }
+                    }
 
                 ],
             )
             console.log(completedOrders)
-            res.json({completedOrders:completedOrders,pendingOrders:pendingOrders});
+            res.json({ completedOrders: completedOrders, pendingOrders: pendingOrders });
         }
         catch (err) {
             console.log(err)
@@ -316,57 +324,61 @@ module.exports = {
     },
     getOrderTodayByEmpId: async (req, res) => {
         try {
-            const empId = req.body.empId;    
+            const empId = req.body.empId;
             const date = moment().format('YYYY-MM-DD');
             console.log(date)
             const pendingOrders = await OrderModel.aggregate(
                 [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),service_date : date,status: "assigned"}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
+                    { $match: { empId: new mongoose.Types.ObjectId(empId), service_date: date, status: "assigned" } },
+                    { $sort: { service_date: -1 } },
+
+                    {
+                        $lookup: {
+                            from: "services",
+                            localField: "serId",
+                            foreignField: "_id",
+                            as: "serviceDetails",
+                        },
                     },
-                    {$lookup: {
-                        from: "customers",
-                        localField: "custId",
-                        foreignField: "_id",
-                        as: "customerDetails",
-                      },
+                    {
+                        $lookup: {
+                            from: "customers",
+                            localField: "custId",
+                            foreignField: "_id",
+                            as: "customerDetails",
+                        },
                     },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "customerDetails.fname":1,
-                        "customerDetails.lname":1,
-                        "customerDetails.contact_no":1,
-                        "customerDetails.address":1,
-                       
-                    } }
+                    {
+                        $project: {
+                            _id: 1,
+                            orderId: 1,
+                            serId: 1,
+                            empId: 1,
+                            custId: 1,
+                            status: 1,
+                            amount: 1,
+                            service_startTime: 1,
+                            service_endTime: 1,
+                            service_date: 1,
+                            payment_mode: 1,
+                            booking_datetime: 1,
+                            "serviceDetails.name": 1,
+                            "serviceDetails.price": 1,
+                            "serviceDetails.avgRating": 1,
+                            "serviceDetails.url": 1,
+                            "serviceDetails.url": 1,
+                            "customerDetails.fname": 1,
+                            "customerDetails.lname": 1,
+                            "customerDetails.contact_no": 1,
+                            "customerDetails.address": 1,
+
+                        }
+                    }
 
                 ],
             )
             console.log(pendingOrders)
-            res.json({pendingOrders:pendingOrders});
+            res.json({ pendingOrders: pendingOrders });
         }
         catch (err) {
             console.log(err)
@@ -375,119 +387,123 @@ module.exports = {
             );
         }
     },
-    startService : async(req,res)=>{
-        try{
+    startService: async (req, res) => {
+        try {
             const orderId = req.body.orderId;
-            const order = await OrderModel.findById(orderId,{status : true,empId:true})
-            if(order == null){
-                    res.json({message : false});
-            }else{
-                if(order.status === "active"){
-                    res.send({message : false});
-                }else{
+            const order = await OrderModel.findById(orderId, { status: true, empId: true })
+            if (order == null) {
+                res.json({ message: false });
+            } else {
+                if (order.status === "active") {
+                    res.send({ message: false });
+                } else {
                     order.status = 'active';
-                    await OrderModel.findByIdAndUpdate(orderId,order);
-                    res.json({message:true})
+                    await OrderModel.findByIdAndUpdate(orderId, order);
+                    res.json({ message: true })
                 }
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
-    getServiceCompOTP :  async(req,res)=>{
-        try{
+    getServiceCompOTP: async (req, res) => {
+        try {
             const orderId = req.body.orderId;
-            const order = await OrderModel.findById(orderId,{status : true,empId:true})
-            if(order == null){
-                    res.json({message : false});
-            }else{
-                if(order.status === "active"){
+            const order = await OrderModel.findById(orderId, { status: true, empId: true })
+            if (order == null) {
+                res.json({ message: false });
+            } else {
+                if (order.status === "active") {
                     order.status = 'completed';
-                    await OrderModel.findByIdAndUpdate(orderId,order);
-                    res.json({message:true})
-                }else{
-                    res.send({message : false});
+                    await OrderModel.findByIdAndUpdate(orderId, order);
+                    res.json({ message: true })
+                } else {
+                    res.send({ message: false });
                 }
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
-    endService : async(req,res)=>{
-        try{
+    endService: async (req, res) => {
+        try {
             const orderId = req.body.orderId;
-            const order = await OrderModel.findById(orderId,{status : true,empId:true})
-            if(order == null){
-                    res.json({message : false});
-            }else{
-                if(order.status === "active"){
+            const order = await OrderModel.findById(orderId, { status: true, empId: true })
+            if (order == null) {
+                res.json({ message: false });
+            } else {
+                if (order.status === "active") {
                     order.status = 'completed';
-                    await OrderModel.findByIdAndUpdate(orderId,order);
-                    res.json({message:true})
-                }else{
-                    res.send({message : false});
+                    await OrderModel.findByIdAndUpdate(orderId, order);
+                    res.json({ message: true })
+                } else {
+                    res.send({ message: false });
                 }
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
     getOrderUpcomingByEmpId: async (req, res) => {
         try {
-            const empId = req.body.empId;    
+            const empId = req.body.empId;
             const date = moment().format('YYYY-MM-DD');
             console.log(date)
             const upcomingOrders = await OrderModel.aggregate(
                 [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),service_date: {$not : {$eq : date}},status: "assigned"}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
+                    { $match: { empId: new mongoose.Types.ObjectId(empId), service_date: { $not: { $eq: date } }, status: "assigned" } },
+                    { $sort: { service_date: -1 } },
+
+                    {
+                        $lookup: {
+                            from: "services",
+                            localField: "serId",
+                            foreignField: "_id",
+                            as: "serviceDetails",
+                        },
                     },
-                    {$lookup: {
-                        from: "customers",
-                        localField: "custId",
-                        foreignField: "_id",
-                        as: "customerDetails",
-                      },
+                    {
+                        $lookup: {
+                            from: "customers",
+                            localField: "custId",
+                            foreignField: "_id",
+                            as: "customerDetails",
+                        },
                     },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "customerDetails.fname":1,
-                        "customerDetails.lname":1,
-                        "customerDetails.contact_no":1,
-                        "customerDetails.address":1,
-                       
-                    } }
+                    {
+                        $project: {
+                            _id: 1,
+                            orderId: 1,
+                            serId: 1,
+                            empId: 1,
+                            custId: 1,
+                            status: 1,
+                            amount: 1,
+                            service_startTime: 1,
+                            service_endTime: 1,
+                            service_date: 1,
+                            payment_mode: 1,
+                            booking_datetime: 1,
+                            "serviceDetails.name": 1,
+                            "serviceDetails.price": 1,
+                            "serviceDetails.avgRating": 1,
+                            "serviceDetails.url": 1,
+                            "serviceDetails.url": 1,
+                            "customerDetails.fname": 1,
+                            "customerDetails.lname": 1,
+                            "customerDetails.contact_no": 1,
+                            "customerDetails.address": 1,
+
+                        }
+                    }
 
                 ],
             )
             // console.log(upcomingOrders)
-            res.json({upcomingOrders:upcomingOrders});
+            res.json({ upcomingOrders: upcomingOrders });
         }
         catch (err) {
             console.log(err)
@@ -498,57 +514,61 @@ module.exports = {
     },
     getHistoryByEmpId: async (req, res) => {
         try {
-            const empId = req.body.empId;    
+            const empId = req.body.empId;
             // const date = moment().format('YYYY-MM-DD');
             // console.log(date)
             const history = await OrderModel.aggregate(
                 [
-                    {$match:{empId:new mongoose.Types.ObjectId(empId),status: "completed"}},
-                    {$sort: { service_date: -1 }},
-                    
-                    {$lookup: {
-                        from: "services",
-                        localField: "serId",
-                        foreignField: "_id",
-                        as: "serviceDetails",
-                      },
+                    { $match: { empId: new mongoose.Types.ObjectId(empId), status: "completed" } },
+                    { $sort: { service_date: -1 } },
+
+                    {
+                        $lookup: {
+                            from: "services",
+                            localField: "serId",
+                            foreignField: "_id",
+                            as: "serviceDetails",
+                        },
                     },
-                    {$lookup: {
-                        from: "customers",
-                        localField: "custId",
-                        foreignField: "_id",
-                        as: "customerDetails",
-                      },
+                    {
+                        $lookup: {
+                            from: "customers",
+                            localField: "custId",
+                            foreignField: "_id",
+                            as: "customerDetails",
+                        },
                     },
-                    { $project: { 
-                        _id: 1,
-                        orderId:1,
-                        serId:1,
-                        empId:1,
-                        custId:1,
-                        status:1,
-                        amount:1,
-                        service_startTime:1,
-                        service_endTime:1,
-                        service_date:1,
-                        payment_mode:1,
-                        booking_datetime:1,
-                        "serviceDetails.name":1,
-                        "serviceDetails.price":1,
-                        "serviceDetails.avgRating":1,
-                        "serviceDetails.url":1,
-                        "serviceDetails.url":1,
-                        "customerDetails.fname":1,
-                        "customerDetails.lname":1,
-                        "customerDetails.contact_no":1,
-                        "customerDetails.address":1,
-                       
-                    } }
+                    {
+                        $project: {
+                            _id: 1,
+                            orderId: 1,
+                            serId: 1,
+                            empId: 1,
+                            custId: 1,
+                            status: 1,
+                            amount: 1,
+                            service_startTime: 1,
+                            service_endTime: 1,
+                            service_date: 1,
+                            payment_mode: 1,
+                            booking_datetime: 1,
+                            "serviceDetails.name": 1,
+                            "serviceDetails.price": 1,
+                            "serviceDetails.avgRating": 1,
+                            "serviceDetails.url": 1,
+                            "serviceDetails.url": 1,
+                            "customerDetails.fname": 1,
+                            "customerDetails.lname": 1,
+                            "customerDetails.contact_no": 1,
+                            "customerDetails.address": 1,
+
+                        }
+                    }
 
                 ],
             )
             console.log(history)
-            res.json({"history":history});
+            res.json({ "history": history });
         }
         catch (err) {
             console.log(err)
@@ -563,8 +583,8 @@ module.exports = {
         try {
             status = "cancelled";
             isActive = false;
-            const order = await OrderModel.findByIdAndUpdate(id, { status ,isActive});
-            res.json({"message" : true});
+            const order = await OrderModel.findByIdAndUpdate(id, { status, isActive });
+            res.json({ "message": true });
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
@@ -583,7 +603,7 @@ module.exports = {
             res.status(500).send(error);
         }
     },
-    
+
     sendOTP: async (req, res) => {
 
         const id = req.body.orderId;
@@ -628,5 +648,51 @@ module.exports = {
             res.status(500).send(error);
         }
     },
-    // Similar functions for updating and deleting empSer...
-};
+    getactiveService: async (req, res) => {
+        try {
+            // Retrieve active orders
+            const order = await OrderModel.find({ isActive: true });
+
+            // Perform aggregation to get service details
+            const details = await OrderModel.aggregate([
+                {
+                    $match: { isActive: true } // Add any additional match conditions if needed
+                },
+                {
+                    $lookup: {
+                        from: "services",
+                        localField: "serId",
+                        foreignField: "_id",
+                        as: "serviceDetails",
+                    }
+                }
+            ]);
+
+            // Send a single JSON response with both order and history data
+            res.json( details );
+        } catch (err) {
+            res.json({
+                message: err
+            });
+        }
+    },
+        activeService: async (req, res) => {
+            const orderId = req.body.orderId;
+            try {
+                const order = await OrderModel.findOneAndUpdate({ orderId },
+                    { isActive: true },
+                    { new: true }
+                );
+
+                if (!order) {
+                    return res.status(404).json({ message: 'Order not found' });
+                }
+                res.json(order)
+            } catch (err) {
+                console.error(err);
+                res.status(500).json({ message: 'An error occurred while activating the order' });
+            }
+
+        }
+        // Similar functions for updating and deleting empSer...
+    };

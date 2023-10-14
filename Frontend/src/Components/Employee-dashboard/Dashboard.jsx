@@ -1,4 +1,4 @@
-  import React from 'react'
+  import React, { createContext } from 'react'
   // import Sidebar from './Sidebar';
   import { useEffect, useState } from "react";
   import Home from './Home'
@@ -22,6 +22,7 @@
   import  Upcoming from './UpComing';
   import  History from './History';
   import Logout from '../Logout';
+  export const AppContext =createContext();
 
   const Dashboard = () => {
     const [activeHome, setActiveHome] = useState(true)
@@ -30,6 +31,7 @@
     const [activeHistory, setActiveHistory] = useState(false)
     const [activeFeedback, setActiveFeedback] = useState(false)
     const [activeLogout, setActiveLogout] = useState(false)
+
 
     const handleHome = ()=>{
       setActiveHome(true)
@@ -156,8 +158,8 @@
             <div className='col-md-10'>
               <div className="container-fluid" style={{ backgroundColor: "#D4E6F1", height: "99vh" }}>
                 
-                {activeHome && <div className='scrollable-div'><Home></Home> </div>}
-                {activeToday && <div className='scrollable-div'><Today></Today> </div>}
+                {activeHome && <div className='scrollable-div'><Home></Home></div>}
+                {activeToday && <div className='scrollable-div'><Today setActiveHomeState={setActiveHome} setToday={setActiveToday} ></Today> </div>}
                 {activeUpcoming && <div className='scrollable-div'><Upcoming></Upcoming> </div>}
                 {activeHistory && <div className='scrollable-div'><History></History> </div>}
                 {activeFeedback && <div className='scrollable-div'>Feedback </div>}
