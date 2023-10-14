@@ -7,6 +7,7 @@ const EmpSerModel = require("../models/EmployeeServiceModel");
 const emailSender = require("../Helper/otpHelper")
 const { default: mongoose } = require("mongoose");
 const CustomerModel = require('../models/CustomerModel');
+// const emailSender = require('../Helper/otpHelper')
 const { response } = require('express');
 module.exports = {
     checkAvailability: async (req, res) => {
@@ -398,17 +399,13 @@ module.exports = {
     getServiceCompOTP :  async(req,res)=>{
         try{
             const orderId = req.body.orderId;
-            const order = await OrderModel.findById(orderId,{status : true,empId:true})
+            const order = await OrderModel.findById(orderId,{otp:true})
             if(order == null){
                     res.json({message : false});
             }else{
-                if(order.status === "active"){
-                    order.status = 'completed';
-                    await OrderModel.findByIdAndUpdate(orderId,order);
-                    res.json({message:true})
-                }else{
-                    res.send({message : false});
-                }
+
+                   await OrderModel.findByIdAndUpdate(orderId,order);
+                   res.json({message:true})
             }
         }catch(err){
             console.log(err);
@@ -608,7 +605,8 @@ module.exports = {
                     });
                 }).then(() => {
                     res.send("ok");
-                }).catch(() => {
+                }).catch((err) => {
+                    console.log(err)
                     res.send("error");
                 });
         } catch (error) {
