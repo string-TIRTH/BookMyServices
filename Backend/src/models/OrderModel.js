@@ -94,6 +94,12 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         default : "Not Assigned"
     },
+    addOns : [{
+      item : {
+        type : String,
+        default : ""
+      }
+    }],
     promo_code:{
       type : mongoose.Schema.Types.ObjectId, 
       ref: 'promocode',

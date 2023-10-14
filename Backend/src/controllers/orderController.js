@@ -2,6 +2,7 @@ const moment = require('moment-timezone');
 moment().tz("Asia/Kolkata").format();
 const distance = require('../Helper/distanceFinder')
 const OrderModel = require("../models/OrderModel");
+const AddOnModel = require("../models/AddOnModel");
 const ServiceModel = require("../models/ServiceModel");
 const EmpSerModel = require("../models/EmployeeServiceModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -645,6 +646,54 @@ module.exports = {
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
+        }
+    },
+    addAddons: async (req,res)=>{
+        try{
+            const orderId = req.body.orderId;
+            const addOnId = {item : req.body.addOnId};
+            // const addOn = await AddOnModel.find({"addOnList._id":addOnId.item})
+            const order = await OrderModel.findById(orderId);
+            const addOns = order.addOns;
+            // console.log(addOn)
+            if(addOns === '' || addOns === null){
+                addOns.push(addOnId);
+            }else{
+                addOns.push(addOnId);
+            }
+            order.addOns = addOns;
+
+            const newOrder = await OrderModel.findByIdAndUpdate(orderId,order);
+            res.send(newOrder)
+
+        }catch(err){
+            console.log(err);
+            res.json(err)
+        }
+    },
+    removeAddOns : async (req,res) =>{
+        try{
+            const orderId = req.body.orderId;
+            const addOnId = {item : req.body.addOnId};
+            const order = await OrderModel.findById(orderId);
+            const serId = order.serId;
+            // const addOn = await AddOnModel.find({"addOnList._id":addOnId})
+           
+            // const addOns = order.addOns;
+            // for (let i = 0; i < addOns.length; i++) {
+            //     if (addOns[i].item.toString() === addOnId.item) {
+            //         addOns.splice(i, 1);
+            //       break; // Exit the loop after removing one item.
+            //     }
+            // }
+            // order.addOns = addOns;
+            // const newOrder = await OrderModel.findByIdAndUpdate(orderId,order);
+            // res.send(newOrder)
+            res.json("ok")
+
+        }catch(err){
+            console.log(err);
+            res.json(err)
         }
     },
     completeOrder: async (req, res) => {
