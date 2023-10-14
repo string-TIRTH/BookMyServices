@@ -150,10 +150,13 @@ const Today = (props) => {
     }, []);
     const handleActive=(item)=>{
         // console.log(item);
+        const data ={
+            orderId : item._id
+        }
         try {
 
 
-            axios.post("http://localhost:5000/order/activeService",item)
+            axios.post("http://localhost:5000/order/activeService",data)
                 .then((response) => {
              
                     setActiveHomeState(true);

@@ -16,6 +16,7 @@ import img from '../img/loginBlock.png'
 import TextField from '@mui/material/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2'
 const Home = (props) => {
   const [today, setToday] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -30,7 +31,7 @@ const Home = (props) => {
   const [itemdetails, setitemdetails] = useState([]);
   const [itemComplete, setitemComplete] = useState([]);
   const [iscomp, setclosecomp] = useState(false);
-
+  const [otpValue, setOtpValue] = useState('');
   useEffect(() => {
     const data = {
       "empId": localStorage.getItem('id')
@@ -154,13 +155,128 @@ const Home = (props) => {
   const handleCompleted = (item) => {
     setclosecomp(true);
     setitemComplete(item)
+    const data = {
+      orderId: item._id,
+
+
+    }
+    try {
+
+
+      axios.post("http://localhost:5000/order/sendOTP", data)
+        .then((response) => {
+          console.log("ok")
+
+
+        })
+    }
+    catch (error) {
+      console.error('Error fetching cart data:', error);
+    }
+
   }
   const handleCloseComp = () => {
     setitemComplete([])
     setclosecomp(false);
   }
 
+  const handleOTP = () => {
+    setclosecomp(false);
+    const data = {
+      orderId: itemComplete._id
+    }
 
+    try {
+
+
+      axios.post("http://localhost:5000/order/sendOTP", data)
+      .then((response) => {
+       
+        if (response.status === 200) {
+          // The OTP was successfully sent
+          Swal.fire({
+            title: 'OTP Sent Successfully',
+            text: 'You should receive it shortly.',
+            icon: 'success',
+            confirmButtonText: 'Got It!'
+
+          }).then(() => {
+        
+            setclosecomp(true) 
+          })
+            
+          
+        } else {
+        
+          Swal.fire({
+            title: 'Something Went Wrong!',
+            text: 'Please Try Again Later',
+            icon: 'error',
+            confirmButtonText: 'Got It!'
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error sending OTP:', error);
+    
+        Swal.fire({
+          title: 'Network Error',
+          text: 'Please check your network connection and try again.',
+          icon: 'error',
+          confirmButtonText: 'Got It!'
+        });
+      });
+    }
+    catch (error) {
+      console.error('Error fetching cart data:', error);
+    }
+  }
+  const handleSubmit = () => {
+    setclosecomp(false) 
+    const data={
+      orderId: itemComplete._id,
+      otp:otpValue
+    }
+    try {
+
+
+      axios.post("http://localhost:5000/order/completeOrder", data)
+        .then((response) => {
+          // console.log("ok")
+          if (response.data.message) {
+        
+            Swal.fire({
+              title: 'Order completed successfully.',
+              text: 'Order is Completed',
+              icon: 'success',
+              confirmButtonText: 'Got It!'
+  
+            }).then(() => {
+          
+             window.location.href="/Employee/"
+            })
+              
+            
+          } else {
+          
+            Swal.fire({
+              title: 'Incorrect OTP. Please try again.',
+              text: 'Please Try Again Later',
+              icon: 'error',
+              confirmButtonText: 'Got It!'
+            });
+          }
+
+
+
+        })
+    }
+    catch (error) {
+      console.error('Error fetching cart data:', error);
+    }
+
+   
+   }
 
 
 
@@ -353,15 +469,18 @@ const Home = (props) => {
                   name="otp"
                   id="otp"
                   type="text"
-                // You may add more attributes, such as value and onChange, to manage the input field
+                  value={otpValue}
+                  onChange={(e) => setOtpValue(e.target.value)}
+
+
                 />
-             
+
                 <DialogActions>
-                  <Button variant="outlined" color="primary" type="submit">
-                  Resend OTP
+                  <Button variant="outlined" color="primary"  onClick={handleOTP}>
+                    Resend OTP
                   </Button>
-                  <Button variant="contained" color="success" onClick={handleCloseComp}>
-                  Submit
+                  <Button variant="contained" color="success"  onClick={handleSubmit}>
+                    Submit
                   </Button>
                 </DialogActions>
               </form>
