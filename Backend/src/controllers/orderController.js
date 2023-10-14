@@ -629,7 +629,7 @@ module.exports = {
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender.sendOrderCompletionOTP(customer.email ?? "tirthprajapati26@gmail.com", {
+                    const responseAck = emailSender.sendOrderCompletionOTP( "sgrana447@gmail.com", {
                         "name": service.name,
                         "price": service.price,
                         "startTime": newOrder.service_startTime,
@@ -649,6 +649,7 @@ module.exports = {
         }
     },
     addAddons: async (req, res) => {
+        console.log(req.body)
         try {
             const orderId = req.body.orderId;
             const addOnId = { item: req.body.addOnId };
@@ -718,8 +719,8 @@ module.exports = {
             }
             order.addOns = addOns;
             const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
-            res.send(newOrder)
-            res.json("ok")
+            res.send(newOrder)  
+            // res.json("ok")
 
         } catch (err) {
             console.log(err);
