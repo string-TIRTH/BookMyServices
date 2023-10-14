@@ -4,6 +4,7 @@ const distance = require('../Helper/distanceFinder')
 const OrderModel = require("../models/OrderModel");
 const ServiceModel = require("../models/ServiceModel");
 const EmpSerModel = require("../models/EmployeeServiceModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const emailSender = require("../Helper/otpHelper")
 const { default: mongoose } = require("mongoose");
 const CustomerModel = require('../models/CustomerModel');
@@ -612,13 +613,22 @@ module.exports = {
         try {
             // const orderOLD = await OrderModel.find({"orderId" : id},{_id:true});
             // console.log(orderOLD);
-            const order = await OrderModel.findByIdAndUpdate(id, { otp }, { new: false })
+            const order = await OrderModel.findById(id);
+            if(order.otp != null){
+                const oldOTPs = order.otp;
+                oldOTPs.push(otp);
+                order.otp = oldOTPs
+            }else{
+                const otparr = [otp];
+                order.otp  =otparr;
+            }
+            const newOrder = await OrderModel.findByIdAndUpdate(id, order)
                 .then(async () => {
                     const data = {}
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender(customer.email ?? "tirthprajapati26@gmail.com", {
+                    const responseAck = emailSender.sendOrderCompletionOTP (customer.email ?? "tirthprajapati26@gmail.com", {
                         "name": service.name,
                         "price": service.price,
                         "startTime": newOrder.service_startTime,
@@ -627,16 +637,37 @@ module.exports = {
                         console.log(responseAck);
                     });
                 }).then(() => {
-                    res.send("ok");
-                }).catch(() => {
-                    res.send("error");
+                    res.json({message:true});
+                }).catch((error) => {
+                    console.log(error)
+                    res.json({message:false,code:1});
                 });
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
+    completeOrder: async (req, res) => {
 
+        const id = req.body.orderId;
+        const otp = req.body.otp;
+        try {
+           const order = await OrderModel.findOne({_id:id,otp: {$in :otp}})
+           if(order != null){
+                order.status = "completed";
+                const empId = order.empId;
+                const emp = await EmployeeModel.findByIdAndUpdate(empId,{isBusy:false});
+                await OrderModel.findByIdAndUpdate(id,order);
+                res.json({message:true})
+           }else{
+                res.json({message:false,code:1}) // code 1 : incorrect OTP
+           }
+        //    console.log(order)
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    },
     deleteOrder: async (req, res) => {
 
         const id = req.body.id;
@@ -650,9 +681,6 @@ module.exports = {
     },
     getactiveService: async (req, res) => {
         try {
-            // Retrieve active orders
-            const order = await OrderModel.find({ isActive: true });
-
             // Perform aggregation to get service details
             const details = await OrderModel.aggregate([
                 {
@@ -679,15 +707,20 @@ module.exports = {
         activeService: async (req, res) => {
             const orderId = req.body.orderId;
             try {
-                const order = await OrderModel.findOneAndUpdate({ orderId },
-                    { isActive: true },
-                    { new: true }
-                );
+                const order = await OrderModel.findById(orderId);
 
-                if (!order) {
-                    return res.status(404).json({ message: 'Order not found' });
+                const empId = order.empId;
+
+                const emp = await EmployeeModel.findById(empId);
+                if(emp.isBusy == null || emp.isBusy === false){
+                    await EmployeeModel.findByIdAndUpdate(empId,{isBusy:true},{new:true})
+                    order.status = "working";
+                    const newOrder = await OrderModel.findByIdAndUpdate(orderId ,order);
+                        console.log(newOrder)
+                        res.json(newOrder)
+                }else{
+                    res.json({"message": false,code: 1})
                 }
-                res.json(order)
             } catch (err) {
                 console.error(err);
                 res.status(500).json({ message: 'An error occurred while activating the order' });

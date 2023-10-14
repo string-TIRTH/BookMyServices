@@ -60,8 +60,11 @@ const EmployeeSchema = new mongoose.Schema({
   isActive:{
    type : Boolean,
    default :true
-  }
-  ,emailstatus : {
+  },isBusy : {
+   type : Boolean,
+   default : false
+  },
+  emailstatus : {
      type : String,
      default : "Not Verified"
   },

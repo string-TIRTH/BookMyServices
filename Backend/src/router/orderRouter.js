@@ -19,6 +19,7 @@ router.post("/test", orderController.test);
 router.post("/cancelOrder", orderController.cancelOrder);
 router.post("/startService", orderController.startService);
 router.post("/sendOTP", orderController.sendOTP);
+router.post("/completeOrder", orderController.completeOrder);
 router.post("/endService", orderController.endService);
 router.post("/getActiveService", orderController.getactiveService);
 router.post("/activeService", orderController.activeService);
