@@ -615,13 +615,13 @@ module.exports = {
             // const orderOLD = await OrderModel.find({"orderId" : id},{_id:true});
             // console.log(orderOLD);
             const order = await OrderModel.findById(id);
-            if(order.otp != null){
+            if (order.otp != null) {
                 const oldOTPs = order.otp;
                 oldOTPs.push(otp);
                 order.otp = oldOTPs
-            }else{
+            } else {
                 const otparr = [otp];
-                order.otp  =otparr;
+                order.otp = otparr;
             }
             const newOrder = await OrderModel.findByIdAndUpdate(id, order)
                 .then(async () => {
@@ -629,7 +629,7 @@ module.exports = {
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender.sendOrderCompletionOTP (customer.email ?? "tirthprajapati26@gmail.com", {
+                    const responseAck = emailSender.sendOrderCompletionOTP(customer.email ?? "tirthprajapati26@gmail.com", {
                         "name": service.name,
                         "price": service.price,
                         "startTime": newOrder.service_startTime,
@@ -638,60 +638,90 @@ module.exports = {
                         console.log(responseAck);
                     });
                 }).then(() => {
-                    res.json({message:true});
+                    res.json({ message: true });
                 }).catch((error) => {
                     console.log(error)
-                    res.json({message:false,code:1});
+                    res.json({ message: false, code: 1 });
                 });
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
-    addAddons: async (req,res)=>{
-        try{
+    addAddons: async (req, res) => {
+        try {
             const orderId = req.body.orderId;
-            const addOnId = {item : req.body.addOnId};
+            const addOnId = { item: req.body.addOnId };
             // const addOn = await AddOnModel.find({"addOnList._id":addOnId.item})
             const order = await OrderModel.findById(orderId);
             const addOns = order.addOns;
             // console.log(addOn)
-            if(addOns === '' || addOns === null){
+            if (addOns === '' || addOns === null) {
                 addOns.push(addOnId);
-            }else{
+            } else {
                 addOns.push(addOnId);
             }
             order.addOns = addOns;
 
-            const newOrder = await OrderModel.findByIdAndUpdate(orderId,order);
+            const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
             res.send(newOrder)
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.json(err)
         }
     },
-    removeAddOns : async (req,res) =>{
-        try{
+    getAddOns: async (req, res) => {
+        try {
             const orderId = req.body.orderId;
-            const addOnId = {item : req.body.addOnId};
+            const order = await OrderModel.findById(orderId);
+            const serId = order.serId;
+            const addOnList = order.addOns
+            // console.log(addOnList)
+            let addOnRes = []
+            for (const item of addOnList) {
+                const addOnData = await AddOnModel.aggregate([
+                    { $unwind: "$addOnList" },
+                    {
+                        $match: {
+                            // "addOnList._id": "651be5bae3e7442b2a3674fb"
+                            "addOnList._id": new mongoose.Types.ObjectId(item.item)
+                        }
+                    },
+                    { $project: { addOnList: 1 } }
+
+                ])
+
+                addOnRes.push(addOnData[0])
+            }
+            console.log(addOnRes)
+            res.json({addOnList : addOnRes})
+        } catch (err) {
+            console.log(err);
+            res.json(err)
+        }
+    },
+    removeAddOns: async (req, res) => {
+        try {
+            const orderId = req.body.orderId;
+            const addOnId = { item: req.body.addOnId };
             const order = await OrderModel.findById(orderId);
             const serId = order.serId;
             // const addOn = await AddOnModel.find({"addOnList._id":addOnId})
-           
-            // const addOns = order.addOns;
-            // for (let i = 0; i < addOns.length; i++) {
-            //     if (addOns[i].item.toString() === addOnId.item) {
-            //         addOns.splice(i, 1);
-            //       break; // Exit the loop after removing one item.
-            //     }
-            // }
-            // order.addOns = addOns;
-            // const newOrder = await OrderModel.findByIdAndUpdate(orderId,order);
-            // res.send(newOrder)
+
+            const addOns = order.addOns;
+            for (let i = 0; i < addOns.length; i++) {
+                if (addOns[i].item.toString() === addOnId.item) {
+                    addOns.splice(i, 1);
+                    break; // Exit the loop after removing one item.
+                }
+            }
+            order.addOns = addOns;
+            const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
+            res.send(newOrder)
             res.json("ok")
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.json(err)
         }
@@ -701,17 +731,17 @@ module.exports = {
         const id = req.body.orderId;
         const otp = req.body.otp;
         try {
-           const order = await OrderModel.findOne({_id:id,otp: {$in :otp}})
-           if(order != null){
+            const order = await OrderModel.findOne({ _id: id, otp: { $in: otp } })
+            if (order != null) {
                 order.status = "completed";
                 const empId = order.empId;
-                const emp = await EmployeeModel.findByIdAndUpdate(empId,{isBusy:false});
-                await OrderModel.findByIdAndUpdate(id,order);
-                res.json({message:true})
-           }else{
-                res.json({message:false,code:1}) // code 1 : incorrect OTP
-           }
-        //    console.log(order)
+                const emp = await EmployeeModel.findByIdAndUpdate(empId, { isBusy: false });
+                await OrderModel.findByIdAndUpdate(id, order);
+                res.json({ message: true })
+            } else {
+                res.json({ message: false, code: 1 }) // code 1 : incorrect OTP
+            }
+            //    console.log(order)
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
@@ -746,35 +776,35 @@ module.exports = {
             ]);
 
             // Send a single JSON response with both order and history data
-            res.json( details );
+            res.json(details);
         } catch (err) {
             res.json({
                 message: err
             });
         }
     },
-        activeService: async (req, res) => {
-            const orderId = req.body.orderId;
-            try {
-                const order = await OrderModel.findById(orderId);
+    activeService: async (req, res) => {
+        const orderId = req.body.orderId;
+        try {
+            const order = await OrderModel.findById(orderId);
 
-                const empId = order.empId;
+            const empId = order.empId;
 
-                const emp = await EmployeeModel.findById(empId);
-                if(emp.isBusy == null || emp.isBusy === false){
-                    await EmployeeModel.findByIdAndUpdate(empId,{isBusy:true},{new:true})
-                    order.status = "working";
-                    const newOrder = await OrderModel.findByIdAndUpdate(orderId ,order);
-                        console.log(newOrder)
-                        res.json(newOrder)
-                }else{
-                    res.json({"message": false,code: 1})
-                }
-            } catch (err) {
-                console.error(err);
-                res.status(500).json({ message: 'An error occurred while activating the order' });
+            const emp = await EmployeeModel.findById(empId);
+            if (emp.isBusy == null || emp.isBusy === false) {
+                await EmployeeModel.findByIdAndUpdate(empId, { isBusy: true }, { new: true })
+                order.status = "working";
+                const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
+                console.log(newOrder)
+                res.json(newOrder)
+            } else {
+                res.json({ "message": false, code: 1 })
             }
-
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'An error occurred while activating the order' });
         }
-        // Similar functions for updating and deleting empSer...
-    };
+
+    }
+    // Similar functions for updating and deleting empSer...
+};
