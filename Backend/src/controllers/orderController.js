@@ -651,7 +651,7 @@ module.exports = {
     getactiveService: async (req, res) => {
         try {
             // Retrieve active orders
-            const order = await OrderModel.find({ isActive: true });
+          
 
             // Perform aggregation to get service details
             const details = await OrderModel.aggregate([

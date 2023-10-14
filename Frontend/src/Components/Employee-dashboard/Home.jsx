@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from './Sidebar';
 import { useEffect, useState } from "react";
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -13,7 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import img from '../img/loginBlock.png'
-
+import TextField from '@mui/material/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 const Home = (props) => {
@@ -23,8 +23,13 @@ const Home = (props) => {
   const [completed, setCompleted] = useState(0)
   const [avgRating, setAvgRating] = useState(0)
   const [order, setorder] = useState([]);
+  // const []=useState(false);
   // const [empdata, empdatachange] = useState([])
   const [isOpen, setIsOpen] = useState(true);
+  const [isOpendetails, setdetails] = useState(false);
+  const [itemdetails, setitemdetails] = useState([]);
+  const [itemComplete, setitemComplete] = useState([]);
+  const [iscomp, setclosecomp] = useState(false);
 
   useEffect(() => {
     const data = {
@@ -126,9 +131,34 @@ const Home = (props) => {
 
   }, [])
 
+  const handleOrderDetails = (item) => {
+    setdetails(true);
+    setitemdetails(item);
+    try {
 
 
-
+      axios.post("http://localhost:5000/order/getOrderById", item)
+        .then((response) => {
+          console.log(response.data)
+          // setorder(response.data)
+        })
+    }
+    catch (error) {
+      console.error('Error fetching cart data:', error);
+    }
+  }
+  const handleClosedetails = () => {
+    setdetails(false);
+    setitemdetails([])
+  }
+  const handleCompleted = (item) => {
+    setclosecomp(true);
+    setitemComplete(item)
+  }
+  const handleCloseComp = () => {
+    setitemComplete([])
+    setclosecomp(false);
+  }
 
 
 
@@ -145,7 +175,7 @@ const Home = (props) => {
 
             style={{ justifyContent: 'center', alignItems: 'center' }}
           />
-          <Dialog open={isOpen} onClose={handleClose}>
+          <Dialog open={isOpen} onClose={handleCloseComp}>
             <div style={{ padding: '16px' }}>
               <Typography variant="h5" component="div" gutterBottom>
                 Employee Must have to do login
@@ -253,9 +283,9 @@ const Home = (props) => {
                               </div>
                             </div>
                             <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
-                              <button className="btn btn-primary" style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> order Details</button>
+                              <button className="btn btn-primary" onClick={() => handleOrderDetails(item)} style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> order Details</button>
                               <button className="btn btn-danger" style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> add to AddOn</button>
-                              <button className="btn btn-success" style={{ width: "110px", marginRight: "10px", marginBottom: "10px" }}> Completed</button>
+                              <button className="btn btn-success" onClick={() => handleCompleted(item)} style={{ width: "110px", marginRight: "10px", marginBottom: "10px" }}> Completed</button>
                             </div>
                           </div>
                         </div>
@@ -267,6 +297,76 @@ const Home = (props) => {
             </div>
           </div>
 
+          <Dialog open={isOpendetails} onClose={handleClosedetails}>
+            <div style={{ padding: '16px' }}>
+
+              <DialogTitle style={{ color: "red" }}>Order Details</DialogTitle>
+              <DialogContent>
+                <p><strong>Order Id :</strong> {itemdetails.orderId}</p>
+                <DialogContentText>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <img className="rounded" src={itemdetails?.serviceDetails?.length > 0 ? itemdetails?.serviceDetails[0]?.url : ""} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
+                  </div>
+                  <br></br>
+
+                  <h6><strong>Service name :</strong> {itemdetails?.serviceDetails?.length > 0 ? itemdetails?.serviceDetails[0]?.name : ""}</h6>
+                  <h6><strong>Total amount :</strong> ₹{itemdetails?.serviceDetails?.length > 0 ? itemdetails?.serviceDetails[0]?.price : ""}</h6>
+                  <h6><strong>Booked at :</strong>{itemdetails.booking_datetime}</h6>
+                  <h6><strong>Service date :</strong>{itemdetails.service_date}</h6>
+                  <h6><strong>  Service start at:</strong>{itemdetails.service_startTime}</h6>
+                  <h6><strong>service ends on:</strong>{itemdetails.service_endTime}</h6>
+                  <h6><strong> Payment mode:</strong>{itemdetails.payment_mode} </h6>
+                  <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
+
+                </DialogContentText>
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClosedetails} style={{
+                  marginRight: "50px", backgroundColor: '#f96d00',
+                  color: '#f2f2f2',
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '16px'
+                }}>
+                  Close
+                </Button>
+
+              </DialogActions>
+            </div>
+
+
+          </Dialog>
+          <Dialog open={iscomp} onClose={handleCloseComp}>
+            <div style={{ padding: '16px' }}>
+              <Typography variant="h5" component="div" gutterBottom>
+                Enter OTP
+              </Typography>
+              <form>
+                <TextField
+                  label="OTP"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  name="otp"
+                  id="otp"
+                  type="text"
+                // You may add more attributes, such as value and onChange, to manage the input field
+                />
+             
+                <DialogActions>
+                  <Button variant="outlined" color="primary" type="submit">
+                  Resend OTP
+                  </Button>
+                  <Button variant="contained" color="success" onClick={handleCloseComp}>
+                  Submit
+                  </Button>
+                </DialogActions>
+              </form>
+            </div>
+          </Dialog>
 
 
 
