@@ -684,7 +684,7 @@ module.exports = {
             // Perform aggregation to get service details
             const details = await OrderModel.aggregate([
                 {
-                    $match: { isActive: true } // Add any additional match conditions if needed
+                    $match: { status: 'working' } // Add any additional match conditions if needed
                 },
                 {
                     $lookup: {

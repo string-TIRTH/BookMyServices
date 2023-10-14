@@ -489,7 +489,7 @@ const Home = (props) => {
 
 
 
-          hello
+
 
         </div>
       }
