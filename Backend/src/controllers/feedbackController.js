@@ -1,18 +1,21 @@
 const FeedbackModel = require("../models/FeedbackModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const ServiceModel = require("../models/ServiceModel");
+const OrderModel = require("../models/OrderModel");
 module.exports = {
     createFeedback : async (req, res) => {
         try {
-            const custId =req.body.custId;
-            const empId =req.body.empId;
-            const serId =req.body.serId;
+            const orderId = req.body.orderId;
+            const order = await OrderModel.findById(orderId);
+            const custId =order.custId;
+            const empId =order.empId;
+            const serId =order.serId;
             const serRating =req.body.serRating;
             const empRating =req.body.empRating;
             const feedback = new FeedbackModel({
                 custId: custId,
                 empId: empId,
-                orderId: req.body.orderId,
+                orderId: orderId,
                 serId: serId,
                 serRating: serRating,
                 empRating: empRating,
