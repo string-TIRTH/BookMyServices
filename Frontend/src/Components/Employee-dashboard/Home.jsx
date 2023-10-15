@@ -84,8 +84,11 @@ const Home = (props) => {
     axios.post(`http://localhost:5000/employee/avgRating`, data)
       .then((response) => {
 
-        setAvgRating(response?.data?.rating);
-        console.log(response.data.rating)
+        if(response?.data?.rating == -1)
+          setAvgRating("-");
+        else
+          setAvgRating(response.data.rating);
+          console.log(response.data.rating)
         // setcount(response.data.length)
         // console.log(count);
       })

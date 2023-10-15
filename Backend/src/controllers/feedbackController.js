@@ -43,20 +43,30 @@ module.exports = {
                 }
                 const newService= await ServiceModel.findByIdAndUpdate(serId,service);
             }
-            res.json(newFeedback);
+            res.json({message:true});
         }
         catch (err) {
             console.log(err)
             res.json({
-                message: err
+                message: false
             });
         }
     },
     
     getFeedbackByCustId: async (req, res) => {
-    
         try {
             const feedback = await FeedbackModel.find({custId:req.body.custId});
+            res.json(feedback);
+        }
+        catch (err) {
+            res.json({
+                message: err
+            });
+        }
+    },
+    getFeedbackByOrderId: async (req, res) => {
+        try {
+            const feedback = await FeedbackModel.find({orderId:req.body.orderId});
             res.json(feedback);
         }
         catch (err) {
