@@ -17,7 +17,7 @@ module.exports = {
             const date = req.body.date
             const time = req.body.time
             const empIdList = await EmpSerModel.distinct("empId", { "serList.serId": serId }, { empId: true });
-            console.log(empIdList)
+            // console.log(empIdList)
             serTimeList = [];
             const startTime = time;
             hour = startTime[0] + startTime[1]
@@ -31,14 +31,14 @@ module.exports = {
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-            console.log(serTimeList)
+            // console.log(serTimeList)
             let orderList = []
             let foundEmpId = null;
             let empFound = false;
             for (let eid of empIdList) {
-                console.log(eid)
+                // console.log(eid)
                 const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList }, isActive: true })
-                console.log(availOrderList)
+                // console.log(availOrderList)
                 if (availOrderList != null && availOrderList != "") {
                     orderList.push(availOrderList)
                 } else {
@@ -56,7 +56,7 @@ module.exports = {
                     message: false
                 }
             }
-            console.log(responseAck)
+            // console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -69,14 +69,14 @@ module.exports = {
         try {
             const custId = req.body.custId;
             const address = req.body.address;
-            console.log(address)
-            console.log(custId)
+            // console.log(address)
+            // console.log(custId)
             const customer = await CustomerModel.findById(custId, { cart: true });
-            console.log(customer)
+            // console.log(customer)
 
             const serList = customer.cart.serList;
             // const serList = req.body.serList;
-            console.log(serList)
+            // console.log(serList)
             let temp = [];
             const serDate = req.body.service_date;
             let i = 0;
@@ -87,7 +87,7 @@ module.exports = {
                 let empIdList = await EmpSerModel.distinct("empId", { "serList.serId": ser.serId }, { empId: true });
                 serTimeList = [];
                 const startTime = ser.time;
-                console.log(startTime);
+                // console.log(startTime);
                 hour = startTime[0] + startTime[1]
                 minute = startTime[3] + startTime[4]
                 var st = moment({ hour: hour, minute: minute, seconds: 0 });
@@ -150,7 +150,7 @@ module.exports = {
 
             }
             let responseAck = {}
-            console.log(i)
+            // console.log(i)
             if (i == 0) {
                 // console.log("employee not found")
                 responseAck.serviceAssign = 0;
@@ -179,7 +179,7 @@ module.exports = {
     },
     test: async (req, res) => {
         try {
-            console.log(moment().unix());
+            // console.log(moment().unix());
             res.send("he;;pw");
         }
         catch (err) {
@@ -314,7 +314,7 @@ module.exports = {
 
                 ],
             )
-            console.log(completedOrders)
+            // console.log(completedOrders)
             res.json({ completedOrders: completedOrders, pendingOrders: pendingOrders });
         }
         catch (err) {
@@ -328,7 +328,7 @@ module.exports = {
         try {
             const empId = req.body.empId;
             const date = moment().format('YYYY-MM-DD');
-            console.log(date)
+            // console.log(date)
             const pendingOrders = await OrderModel.aggregate(
                 [
                     { $match: { empId: new mongoose.Types.ObjectId(empId), service_date: date, status: "assigned" } },
@@ -379,7 +379,7 @@ module.exports = {
 
                 ],
             )
-            console.log(pendingOrders)
+            // console.log(pendingOrders)
             res.json({ pendingOrders: pendingOrders });
         }
         catch (err) {
@@ -569,7 +569,7 @@ module.exports = {
 
                 ],
             )
-            console.log(history)
+            // console.log(history)
             res.json({ "history": history });
         }
         catch (err) {
@@ -623,19 +623,35 @@ module.exports = {
                 const otparr = [otp];
                 order.otp = otparr;
             }
+            const addOnList = order.addOns
+            let total = 0;
+            for (const item of addOnList) {
+                const addOnData = await AddOnModel.aggregate([
+                    { $unwind: "$addOnList" },
+                    {
+                        $match: {
+                            "addOnList._id": new mongoose.Types.ObjectId(item.item)
+                        }
+                    },
+                    { $project: { addOnList: 1 } }
+
+                ])
+                total +=parseInt(addOnData[0].addOnList.price);
+            }
+            total += order.amount;
             const newOrder = await OrderModel.findByIdAndUpdate(id, order)
                 .then(async () => {
                     const data = {}
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender.sendOrderCompletionOTP( "sgrana447@gmail.com", {
+                    const responseAck = emailSender.sendOrderCompletionOTP( customer.email, {
                         "name": service.name,
-                        "price": service.price,
+                        "price": total,
                         "startTime": newOrder.service_startTime,
                         "otp": otp
                     }).then(async () => {
-                        console.log(responseAck);
+                        // console.log(responseAck);
                     });
                 }).then(() => {
                     res.json({ message: true });
@@ -649,11 +665,10 @@ module.exports = {
         }
     },
     addAddons: async (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         try {
             const orderId = req.body.orderId;
             const addOnId = { item: req.body.addOnId };
-            // const addOn = await AddOnModel.find({"addOnList._id":addOnId.item})
             const order = await OrderModel.findById(orderId);
             const addOns = order.addOns;
             // console.log(addOn)
@@ -664,7 +679,9 @@ module.exports = {
             }
             order.addOns = addOns;
 
+            
             const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
+            
             res.send(newOrder)
 
         } catch (err) {
@@ -680,12 +697,12 @@ module.exports = {
             const addOnList = order.addOns
             // console.log(addOnList)
             let addOnRes = []
+            let total = 0;
             for (const item of addOnList) {
                 const addOnData = await AddOnModel.aggregate([
                     { $unwind: "$addOnList" },
                     {
                         $match: {
-                            // "addOnList._id": "651be5bae3e7442b2a3674fb"
                             "addOnList._id": new mongoose.Types.ObjectId(item.item)
                         }
                     },
@@ -694,9 +711,12 @@ module.exports = {
                 ])
 
                 addOnRes.push(addOnData[0])
+                total +=parseInt(addOnData[0].addOnList.price);
             }
-            console.log(addOnRes)
-            res.json({addOnList : addOnRes})
+            
+            // addOnRes.total = total;
+            // console.log(addOnRes)
+            res.json({addOnList : addOnRes,subtotal : total})
         } catch (err) {
             console.log(err);
             res.json(err)
@@ -733,10 +753,27 @@ module.exports = {
         const otp = req.body.otp;
         try {
             const order = await OrderModel.findOne({ _id: id, otp: { $in: otp } })
+            const addOnList = order.addOns
+            let total = 0;
+            for (const item of addOnList) {
+                const addOnData = await AddOnModel.aggregate([
+                    { $unwind: "$addOnList" },
+                    {
+                        $match: {
+                            "addOnList._id": new mongoose.Types.ObjectId(item.item)
+                        }
+                    },
+                    { $project: { addOnList: 1 } }
+
+                ])
+                total +=parseInt(addOnData[0].addOnList.price);
+            }
+            total += order.amount;
             if (order != null) {
                 order.status = "completed";
                 const empId = order.empId;
                 const emp = await EmployeeModel.findByIdAndUpdate(empId, { isBusy: false });
+                order.amount +=total;
                 await OrderModel.findByIdAndUpdate(id, order);
                 res.json({ message: true })
             } else {
@@ -796,7 +833,7 @@ module.exports = {
                 await EmployeeModel.findByIdAndUpdate(empId, { isBusy: true }, { new: true })
                 order.status = "working";
                 const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
-                console.log(newOrder)
+                // console.log(newOrder)
                 res.json(newOrder)
             } else {
                 res.json({ "message": false, code: 1 })

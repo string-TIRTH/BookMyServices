@@ -37,6 +37,7 @@ const Home = (props) => {
   const [otpValue, setOtpValue] = useState('');
   const [Addon, setAddon] = useState([]);
   const [getAddon, setgetaddon] = useState([])
+  const [subtotal, setSubtotal] = useState(0)
   useEffect(() => {
     const data = {
       "empId": localStorage.getItem('id')
@@ -140,6 +141,8 @@ const Home = (props) => {
             .then((response) => {
               console.log(response.data);
               setgetaddon(response.data.addOnList);
+              setSubtotal(response.data.subtotal)
+              console.log(response.data.subtotal)
 
             })
             .catch((addOnError) => {
@@ -513,7 +516,7 @@ const Home = (props) => {
                   ) : (
                     order.map((item, index) => (
                       <div className='row mt-2'>
-                        <div className='col-md-10'>
+                        <div className='col-md-12'>
                           <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                             <div className='row' style={{ marginTop: 30 }}>
                               <div className="col-md-6">
@@ -536,12 +539,13 @@ const Home = (props) => {
                                 <p className="card-title"><strong>Service Start at:</strong> {item.service_startTime}</p>
                                 <p className="card-title"><strong>Service end at:</strong> {item.service_endTime}</p>
                                 <p className="card-title"><strong>Status of service:</strong> {item.status}</p>
+                                <p className="card-title"><strong>Amount To Pay :</strong> {item.amount+subtotal}</p>
                               </div>
                             </div>
                             <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
-                              <button className="btn btn-primary" onClick={() => handleOrderDetails(item)} style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> order Details</button>
-                              <button className="btn btn-danger" onClick={() => handleAddon(item)} style={{ width: 100, marginRight: "10px", marginBottom: "10px" }}> add to AddOn</button>
-                              <button className="btn btn-success" onClick={() => handleCompleted(item)} style={{ width: "110px", marginRight: "10px", marginBottom: "10px" }}> Completed</button>
+                              <button className="btn btn-primary" onClick={() => handleOrderDetails(item)} style={{ width: "auto", marginRight: "10px", marginBottom: "10px" }}> order Details</button>
+                              <button className="btn btn-danger" onClick={() => handleAddon(item)} style={{ width: "auto", marginRight: "10px", marginBottom: "10px" }}> add to AddOn</button>
+                              <button className="btn btn-success" onClick={() => handleCompleted(item)} style={{ width: "auto", marginRight: "10px", marginBottom: "10px" }}> Completed</button>
                             </div>
                           </div>
                         </div>

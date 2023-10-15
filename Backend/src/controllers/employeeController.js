@@ -118,11 +118,11 @@ module.exports = {
     // const status = req.body.status
     // console.log(req.body); 
     const date = moment().format('YYYY-MM-DD')
-    console.log(date)
+    // console.log(date)
     try {
         const order = await OrderModel.find({empId:empId,service_date:date,status:'assigned'});
         
-        console.log(order)
+        // console.log(order)
         res.send(order);
     }catch (error) {
         console.error(error);
@@ -134,11 +134,11 @@ module.exports = {
     // const status = req.body.status
     // console.log(req.body); 
     const date = moment().format('YYYY-MM-DD')
-    console.log(date)
+    // console.log(date)
     try {
         const order = await OrderModel.find({empId:empId,service_date:{$nin :date},status:'assigned'});
         
-        console.log(order)
+        // console.log(order)
         res.send(order);
     }catch (error) {
         console.error(error);
