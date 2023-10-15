@@ -10,8 +10,6 @@ router.post("/getFeedbackByEmpId",feedbackController.getFeedbackByEmpId);
 
 router.post("/getFeedback", feedbackController.getFeedback);
 
-router.post("/updateFeedback", feedbackController.updateFeedback);
-
 router.post("/deleteFeedback", feedbackController.deleteFeedback);
 
 

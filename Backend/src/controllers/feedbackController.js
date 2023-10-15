@@ -88,21 +88,6 @@ module.exports = {
             });
         }
     },
-    
-    updateFeedback: async (req, res) => {
-    
-        const id  = req.body.id;
-        const  {fname,lname,email,password,contact_no}  = req.body;
-    
-        try {
-            const feedback = await FeedbackModel.findByIdAndUpdate(id, { fname,lname,email,password,contact_no}, { new: true });
-            res.send(feedback);
-        }catch (error) {
-            console.error(error);
-            res.status(500).send(error);
-        }
-    },
-    
     deleteFeedback: async (req, res) => {
     
         const id  = req.body.id;
