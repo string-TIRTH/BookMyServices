@@ -334,7 +334,7 @@ const Today = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                                <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
+                                                                <h6><strong>Status: </strong><span className={`text-${pItem.status === 'cancelled' ? 'danger' : pItem.status === ' Scheduled Today' ? 'warning' : 'success'}`}>{pItem.status}</span></h6>
                                                                 <p>
                                                                     <h6>
 

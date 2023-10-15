@@ -228,7 +228,8 @@ const Today = () => {
 
                                                                             <h6><strong>Total amount:</strong> ₹{item?.serviceDetails[0]?.price}</h6>
 
-                                                                            <h6><strong> Status: </strong><span className="text-warning">Scheduled Today</span>  </h6>
+                                                                            {item.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
+                                                                                            : <h6><strong> Status: </strong><span className="text-warning">Schedual Today</span>  </h6>}
                                                                             <h6>
                                                                                 <strong>
                                                                                     Customer Name: </strong>{item?.customerDetails[0]?.fname} {item?.customerDetails[0]?.lname}
@@ -280,7 +281,10 @@ const Today = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                                <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
+                                                                {pItem.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
+                                                                                : <h6><strong> Status: </strong><span className="text-warning">Schedual Today</span>  </h6>
+
+                                                                            }
                                                                 <p>
                                                                     <h6>
                                                                        
