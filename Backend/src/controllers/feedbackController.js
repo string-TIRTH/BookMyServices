@@ -7,6 +7,8 @@ module.exports = {
         try {
             const orderId = req.body.orderId;
             const order = await OrderModel.findById(orderId);
+            order.feedActive = true;
+            await OrderModel.findByIdAndUpdate(orderId);
             const custId =order.custId;
             const empId =order.empId;
             const serId =order.serId;
