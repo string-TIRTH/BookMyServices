@@ -13,6 +13,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaShoppingCart } from 'react-icons/fa';
+import { Box, Paper, Container, Grid, Rating, TextareaAutosize } from '@mui/material';
+import { Send } from '@mui/icons-material';
+import {
+    Card,
+    CardContent,
+} from '@mui/material';
 const CustOrder = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [cartActive, setCartActive] = useState(false)
@@ -23,6 +29,62 @@ const CustOrder = () => {
     const [opencomp, setOpencomp] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
     const [pItem, setpItem] = useState({});
+    const [Feed, SetFeedOpen] = useState(false);
+    const [Item, SetItem] = useState([]);
+    const [serviceRating, setServiceRating] = useState(0);
+    const [employeeRating, setEmployeeRating] = useState(0);
+    const [feedback, setFeedback] = useState('');
+    const [Feedget, SetFeedgetOpen] = useState(false);
+    const [Itemget, SetgetItem] = useState([]);
+    const [feedbackDetails, setFeedbackDetails] = useState([])
+    const handleServiceRatingChange = (event, newValue) => {
+        setServiceRating(newValue);
+    };
+
+    const handleEmployeeRatingChange = (event, newValue) => {
+        setEmployeeRating(newValue);
+    };
+
+    const handleSubmit = (e) => {
+        SetFeedOpen(false);
+        e.preventDefault();
+        const data = {
+            orderId: Item._id,
+            serRating: serviceRating,
+            empRating: employeeRating,
+            feed_text: feedback
+
+        }
+        try {
+
+
+
+            axios.post("http://localhost:5000/feedback/createFeedback", data)
+                .then((response) => {
+
+                    console.log(response.data);
+                    Swal.fire({
+                        title: 'Deleted successfully.',
+                        text: 'Deleted to service successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Okay'
+
+                    }).then(() => {
+
+                        window.location.href = "/Customer/CustOrder/"
+                    })
+
+
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+        console.log('Service Rating:', serviceRating);
+        console.log('Employee Rating:', employeeRating);
+        console.log('Feedback:', feedback);
+    };
     // var date, time; 
     const handleClose = () => {
         setIsOpen(false);
@@ -47,41 +109,41 @@ const CustOrder = () => {
             cancelButtonText: 'No',
             confirmButtonText: 'Yes',
             confirmButtonColor: '#FF4F00',
-            allowOutsideClick : false
+            allowOutsideClick: false
         }).then((result) => {
             if (result.isConfirmed) {
                 const data = {
-                    id : item._id
+                    id: item._id
                 };
                 axios.post(`http://localhost:5000/order/cancelOrder`, data)
-                .then((response) => {
-                    if (response.data.message === true) {
-                        Swal.fire({
-                            title: 'Your Order Has Been Cancelled!',
-                            text: 'Next Time Please Place Order According To Your Needs And Time',
-                            icon: 'warning',
-                            confirmButtonText: 'Got It'
-                        }).then(()=>{
-                            window.location.href = '/Customer/CustOrder'
-                    })
-                    } else {
-                        Swal.fire({
-                            title: 'Something Went Wrong!',
-                            text: 'Please Try Again Later',
-                            icon: 'question',
-                            confirmButtonText: 'Got It!'
-                          })
-                    }
+                    .then((response) => {
+                        if (response.data.message === true) {
+                            Swal.fire({
+                                title: 'Your Order Has Been Cancelled!',
+                                text: 'Next Time Please Place Order According To Your Needs And Time',
+                                icon: 'warning',
+                                confirmButtonText: 'Got It'
+                            }).then(() => {
+                                window.location.href = '/Customer/CustOrder'
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'Something Went Wrong!',
+                                text: 'Please Try Again Later',
+                                icon: 'question',
+                                confirmButtonText: 'Got It!'
+                            })
+                        }
 
-                });
-            }else{
+                    });
+            } else {
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: 'Thanks For Not Cancelling Your Order',
                     showConfirmButton: false,
                     timer: 1500
-                  })
+                })
             }
         })
     }
@@ -140,9 +202,60 @@ const CustOrder = () => {
                 setPending(response.data.pendingOrders)
                 setComplete(response.data.completedOrders)
             })
-            
-    },[]);
 
+    }, []);
+
+
+    const HandleFeedback = (item) => {
+        SetFeedOpen(true);
+        SetItem(item);
+
+
+    }
+    const HandleFeedClose = () => {
+        SetItem([]);
+        SetFeedOpen(false);
+    }
+
+    const HandleViewFeedback = (item) => {
+        SetFeedgetOpen(true);
+        SetgetItem(item);
+
+        const data1 = {
+            orderId: item._id
+        }
+
+        axios.post(`http://localhost:5000/feedback/getFeedbackByOrderId/`, data1)
+            .then((response) => {
+                console.log(response.data);
+                setFeedbackDetails(response.data);
+
+            })
+
+
+    }
+    const HandleFeedgetClose = () => {
+        SetFeedgetOpen(false);
+        SetgetItem([]);
+
+    }
+    function mapRatingToLabel(rating) {
+        switch (rating) {
+          case 1:
+            return 'Very Poor';
+          case 2:
+            return 'Poor';
+          case 3:
+            return 'Average';
+          case 4:
+            return 'Good';
+          case 5:
+            return 'Very Good';
+          default:
+            return 'N/A';
+        }
+      }
+      
 
     return (
 
@@ -235,15 +348,15 @@ const CustOrder = () => {
                                                                     </div>
                                                                     <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
                                                                         < Button onClick={() => handleOrderDetails(item)} style={{
-                                                                            marginRight: "50px", backgroundColor: '#007bff', 
-                                                                            color: 'white', 
-                                                                            padding: '10px 20px', 
+                                                                            marginRight: "50px", backgroundColor: '#007bff',
+                                                                            color: 'white',
+                                                                            padding: '10px 20px',
                                                                             borderRadius: '5px',
-                                                                            border: 'none', 
-                                                                            cursor: 'pointer', 
+                                                                            border: 'none',
+                                                                            cursor: 'pointer',
                                                                             fontSize: '16px'
                                                                         }} variant="contained" color="warning">Order Details</Button>
-                                                                        <button className="btn btn-danger" style={{ width: 50, }} onClick={()=> handleCancelOrder(item)} > <BsTrash /></button>
+                                                                        <button className="btn btn-danger" style={{ width: 50, }} onClick={() => handleCancelOrder(item)} > <BsTrash /></button>
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
@@ -290,14 +403,14 @@ const CustOrder = () => {
                                                         </DialogContent>
                                                         <DialogActions>
                                                             <Button onClick={handleC} style={{
-                                                                            marginRight: "50px", backgroundColor: '#f96d00', 
-                                                                            color: '#f2f2f2', 
-                                                                            padding: '10px 20px', 
-                                                                            borderRadius: '5px',
-                                                                            border: 'none', 
-                                                                            cursor: 'pointer', 
-                                                                            fontSize: '16px'
-                                                                        }}>
+                                                                marginRight: "50px", backgroundColor: '#f96d00',
+                                                                color: '#f2f2f2',
+                                                                padding: '10px 20px',
+                                                                borderRadius: '5px',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                fontSize: '16px'
+                                                            }}>
                                                                 Close
                                                             </Button>
 
@@ -340,10 +453,10 @@ const CustOrder = () => {
 
                                                                             <h6><strong> Payment mode: </strong>{item.payment_mode}  </h6>
                                                                             {item.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
-                                                                            :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
-                                                                
+                                                                                : <h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
+
                                                                             }
-                                                                
+
                                                                             <h6><strong>
                                                                                 Employee Name: </strong>{item?.employeeDetails[0]?.fname} {item?.employeeDetails[0]?.lname}
                                                                             </h6>
@@ -353,15 +466,16 @@ const CustOrder = () => {
                                                                     </div>
                                                                     <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
                                                                         < Button onClick={() => handlecompOrderDetails(item)} style={{
-                                                                            marginRight: "50px", backgroundColor: '#007bff', 
-                                                                            color: '#f2f2f2', 
-                                                                            padding: '10px 20px', 
+                                                                            marginRight: "50px", backgroundColor: '#007bff',
+                                                                            color: '#f2f2f2',
+                                                                            padding: '10px 20px',
                                                                             borderRadius: '5px',
-                                                                            border: 'none', 
-                                                                            cursor: 'pointer', 
+                                                                            border: 'none',
+                                                                            cursor: 'pointer',
                                                                             fontSize: '16px'
-                                                                        }}variant="contained" color="warning">Order Details</Button>
-                                                                        <button className="btn btn-danger" style={{ width: 50, }} > <BsTrash /></button>
+                                                                        }} variant="contained" color="warning">Order Details</Button>
+                                                                        {item.feedActive === false && <button className="btn btn-success" onClick={() => HandleFeedback(item)} style={{ width: 100 }} >FeedBack</button>}
+                                                                        {item.feedActive === true && <button className="btn btn-success" onClick={() => HandleViewFeedback(item)} style={{ width: 100 }} >view FeedBack</button>}
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
@@ -394,11 +508,11 @@ const CustOrder = () => {
                                                                 <h6><strong>  Service start at:</strong>{pItem.service_startTime}</h6>
                                                                 <h6><strong>service ends on:</strong>{pItem.service_endTime}</h6>
                                                                 <h6><strong> Payment mode:</strong>{pItem.payment_mode} </h6>
-                                                                
+
                                                                 {pItem.status == 'cancelled' ? <h6><strong> Status: </strong><span className="text-danger">Cancelled</span>  </h6>
-                                                                            :<h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
-                                                                
-                                                                            }
+                                                                    : <h6><strong> Status: </strong><span className="text-success">Completed</span>  </h6>
+
+                                                                }
 
                                                                 <p>
                                                                     <strong>
@@ -413,14 +527,14 @@ const CustOrder = () => {
                                                         </DialogContent>
                                                         <DialogActions>
                                                             <Button onClick={handleCcomp} style={{
-                                                                            marginRight: "50px", backgroundColor: '#f96d00', 
-                                                                            color: 'white', 
-                                                                            padding: '10px 20px', 
-                                                                            borderRadius: '5px',
-                                                                            border: 'none', 
-                                                                            cursor: 'pointer', 
-                                                                            fontSize: '16px'
-                                                                        }}>
+                                                                marginRight: "50px", backgroundColor: '#f96d00',
+                                                                color: 'white',
+                                                                padding: '10px 20px',
+                                                                borderRadius: '5px',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                fontSize: '16px'
+                                                            }}>
                                                                 Close
                                                             </Button>
 
@@ -454,6 +568,108 @@ const CustOrder = () => {
 
 
             )}
+            <Dialog open={Feed} onClose={HandleFeedClose}>
+                <Container style={{ marginTop: "40px", marginBottom: "40px" }}>
+                    <Paper elevation={3} style={{ padding: '20px', borderRadius: '10px' }}>
+                        <Typography variant="h4" align="center" gutterBottom>
+                            Customer Feedback Form
+                        </Typography>
+                        <form onSubmit={handleSubmit}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={6}>
+                                    <Typography variant="h6">Service Rating:</Typography>
+                                    <Rating
+                                        name="service-rating"
+                                        value={serviceRating}
+                                        onChange={handleServiceRatingChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography variant="h6">Employee Rating:</Typography>
+                                    <Rating
+                                        name="employee-rating"
+                                        value={employeeRating}
+                                        onChange={handleEmployeeRatingChange}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Typography variant="h6">Feedback:</Typography>
+                            <TextareaAutosize
+                                aria-label="Feedback"
+                                rowsMin={4}
+                                placeholder="We appreciate your feedback."
+                                value={feedback}
+                                onChange={(e) => setFeedback(e.target.value)}
+                                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                            />
+                            <Box mt={2}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<Send />}
+                                    type="submit"
+                                    style={{ textTransform: 'none' }}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </form>
+                    </Paper>
+                </Container>
+
+            </Dialog>
+            <Dialog open={Feedget} onClose={HandleFeedgetClose}>
+  <DialogContent>
+    <Card style={{ borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',width:"370px" }}>
+      <CardContent>
+        <Grid container spacing={4} >
+          <Grid item xs={5}>
+            <Paper elevation={3} style={{ padding: '10px', textAlign: 'center', backgroundColor: '#f0e68c', borderRadius: '10px',width:"150px",marginLeft:"10px" }}>
+              <Typography variant="h6">Service Rating</Typography>
+              <Rating
+                name="service-rating"
+                value={feedbackDetails[0]?.serRating}
+                readOnly
+                max={5} // Specify the maximum rating value (in this case, 5)
+              />
+              <Typography variant="body1">
+                {mapRatingToLabel(feedbackDetails[0]?.serRating)}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper elevation={3} style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ffb6c1', borderRadius: '10px',width:"150px",marginLeft:"20px",marginRight:"10px" }}>
+              <Typography variant="h6">Employee Rating</Typography>
+              <Rating
+                name="employee-rating"
+                value={feedbackDetails[0]?.empRating}
+                readOnly
+                max={5} // Specify the maximum rating value (in this case, 5)
+              />
+              <Typography variant="body1">
+                {mapRatingToLabel(feedbackDetails[0]?.empRating)}
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Box mt={2}>
+          <Paper elevation={3} style={{ padding: '10px', borderRadius: '10px' }}>
+            <Typography variant="h6">Feedback</Typography>
+            <Typography variant="body1">{feedbackDetails[0]?.feed_text}</Typography>
+          </Paper>
+        </Box>
+      </CardContent>
+    </Card>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={HandleFeedgetClose} variant="outlined" color="error">
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
+
+
+
 
         </>
     );

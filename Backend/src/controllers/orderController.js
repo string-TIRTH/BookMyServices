@@ -262,6 +262,7 @@ module.exports = {
                             service_date: 1,
                             payment_mode: 1,
                             booking_datetime: 1,
+                            feedActive:1,
                             "serviceDetails.name": 1,
                             "serviceDetails.price": 1,
                             "serviceDetails.avgRating": 1,
@@ -658,7 +659,7 @@ module.exports = {
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender.sendOrderCompletionOTP( customer.email, {
+                    const responseAck = emailSender.sendOrderCompletionOTP( customer.email??"sgrana447@gmail.com", {
                         "name": service.name,
                         "price": total,
                         "startTime": newOrder.service_startTime,

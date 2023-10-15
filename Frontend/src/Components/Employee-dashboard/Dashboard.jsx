@@ -62,13 +62,8 @@
       setActiveHome(false)
       setActiveFeedback(false)
     }
-    const handleFeedback = ()=>{
-      setActiveFeedback(true)
-      setActiveHistory(false)
-      setActiveUpcoming(false)
-      setActiveToday(false)
-      setActiveHome(false)
-    }
+    
+  
     const handleLogout = ()=>{
       localStorage.clear()
       Swal.fire({
@@ -113,11 +108,7 @@
           icon:<FaServer/>,
           func : handleHistory
       },
-      {
-          name:"Feedbacks",
-          icon:<FaServer/>,
-          func : handleFeedback
-      },
+    
       {
           name:"Logout",
           icon:<FaThList/>,
@@ -162,7 +153,7 @@
                 {activeToday && <div className='scrollable-div'><Today setActiveHomeState={setActiveHome} setToday={setActiveToday} ></Today> </div>}
                 {activeUpcoming && <div className='scrollable-div'><Upcoming></Upcoming> </div>}
                 {activeHistory && <div className='scrollable-div'><History></History> </div>}
-                {activeFeedback && <div className='scrollable-div'>Feedback </div>}
+                
                 {activeLogout && <div className='scrollable-div'><Logout></Logout> </div>}
               </div>
               
