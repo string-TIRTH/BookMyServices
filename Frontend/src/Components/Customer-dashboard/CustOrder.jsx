@@ -435,7 +435,7 @@ const CustOrder = () => {
                             </div>
                         </div>
                     </div>
-                    {cartActive && isLoggedIn
+                    {/* {cartActive && isLoggedIn
                     ? <Link to={"/Customer/Cart/"}>
                         <FaShoppingCart size={50} color="#89cff0" item='10' style={{
                             position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
@@ -445,8 +445,8 @@ const CustOrder = () => {
                             boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
                         }} cartActive={false} />
                     </Link>
-                    : <></>
-                }
+                    : <></> */}
+                {/* } */}
 
                 </div>
 

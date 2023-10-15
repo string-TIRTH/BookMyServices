@@ -50,8 +50,8 @@ const DetailEmployee =()=>{
           <strong>Landmark:</strong> {user?.address?.length > 0 ? user.address[0].landmark: "N/A"}<br />
           <strong>City:</strong> {user?.address?.length > 0 ? user.address[0].city: "N/A"}<br />
           <strong>Pincode:</strong> {user?.address?.length > 0 ? user.address[0].pincode: "N/A"}<br />
-          <strong>Latitude:</strong> {user.latitude}<br />
-          <strong>Longitude:</strong> {user.longitude}<br />
+          <strong>Lat :</strong> {user?.address?.length > 0 ? user.address[0].lat: "N/A"}<br />
+          <strong>Lng :</strong> {user?.address?.length > 0 ? user.address[0].lng: "N/A"}<br />
           <strong>Status:</strong> {user.status}<br />
           <strong>emailStatus:</strong> {user.emailstatus}<br />
           <strong>Rating:</strong> {user.rating}<br />

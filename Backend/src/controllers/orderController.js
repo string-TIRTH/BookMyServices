@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
 moment().tz("Asia/Kolkata").format();
-const distance = require('../Helper/distanceFinder')
+const distanceCalc = require('../Helper/distanceFinder')
 const OrderModel = require("../models/OrderModel");
 const AddOnModel = require("../models/AddOnModel");
 const ServiceModel = require("../models/ServiceModel");
@@ -69,11 +69,17 @@ module.exports = {
         try {
             const custId = req.body.custId;
             const address = req.body.address;
+            const custLat = req.body.lat;
+            const custLng = req.body.lng;
             // console.log(address)
             // console.log(custId)
+           
             const customer = await CustomerModel.findById(custId, { cart: true });
             // console.log(customer)
-
+            address.lat = custLat;
+            address.lng = custLng;
+            console.log(custLat)
+            console.log(custLng)
             const serList = customer.cart.serList;
             // const serList = req.body.serList;
             // console.log(serList)
@@ -110,8 +116,15 @@ module.exports = {
                         orderList.push(availOrderList)
                     } else {
                         foundEmpId = eid;
-                        empFound = true;
-                        break;
+                        const employee = await EmployeeModel.findById(eid, { address: true });
+                        const distance = distanceCalc(custLat,custLng,employee.address[0].lat,employee.address[0].lng)  
+                        console.log(distance)
+                        console.log(employee)
+                        if(distance <= 10){
+                            empFound = true;
+                            console.log("hherere")
+                            break;
+                        }
                     }
                 }
 
@@ -135,7 +148,7 @@ module.exports = {
                         service_startTime: startTime,
                         service_endTime: service_endTime,
                         service_date: ser.date,
-                        address: req.body.address,
+                        address: address,
                         payment_mode: req.body.payment_mode ?? "Cash",
                         amount: price,
                         status: "assigned",

@@ -85,7 +85,15 @@ export default function AddEmployee() {
           }
           if(isEmailValid && isPasswordValid){
             try {
-            
+              let lat = 0;
+              let lng = 0;
+              console.log(pincode)
+              const result = await axios.get(`https://api.geoapify.com/v1/geocode/search?postcode=`+pincode+`&country=india&type=postcode&format=json&apiKey=e61b88dd95644ef79521f24baa6fb8f4`)
+                    .then((result) => {
+                      console.log(result.data.results[0])
+                        lat = result.data.results[0].lat;
+                        lng = result.data.results[0].lon;
+                    })
               const add = {
       
                 house_no: house_no,
@@ -93,10 +101,11 @@ export default function AddEmployee() {
                 landmark: landmark,
                 city: city,
                 pincode: pincode,
-      
+                lat : lat,
+                lng : lng,
       
               };
-      
+              console.log(add)
               const data = {
                 fname: fname,
                 lname: lname,
@@ -107,7 +116,7 @@ export default function AddEmployee() {
               }
               console.log("haassss!!!!")
       
-              const response = axios.post('http://localhost:5000/employee/createEmployee', data);
+              const response = await axios.post('http://localhost:5000/employee/createEmployee', data);
               alert('Added Successfully');
       
       

@@ -35,10 +35,18 @@ const Home = () => {
     const [user, setuser] = useState([{}])
     const [cartActive, setCartActive] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [pincode,setPincode] = useState(0)
     useEffect(() => {
        
         //Runs only on the first render
-        if (localStorage.getItem('role') != null) {
+        const role = localStorage.getItem('role');
+        if (role != null) {
+            if(role === md5("Employee"))
+            {
+                window.location.href='/Employee';
+            }else if(role === md5("Admin")){
+                window.location.href='/admin';
+            }
             setIsLoggedIn(true);
             const data = {
                 _id: localStorage.getItem('id')
@@ -46,7 +54,12 @@ const Home = () => {
             axios.post(`http://localhost:5000/customer/getCustomerById`, data)
                 .then((response) => {
                     
+                    console.log("response")
+                    // console.log(response.data[0].address[0].pincode)
+                    setPincode(response.data[0].address[0].pincode)
                     
+                    
+
                     if (response?.data[0]?.cart?.serList == '' || response?.data[0]?.cart?.serList == null) {
                         setCartActive(false)
                       
@@ -477,7 +490,7 @@ const Home = () => {
 
                 </div>
             </div>
-            {cartActive && isLoggedIn
+            {!cartActive && isLoggedIn
                     ? <Link to={"/Customer/Cart/"}>
                         <FaShoppingCart size={50} color="#89cff0" item='10' style={{
                             position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',

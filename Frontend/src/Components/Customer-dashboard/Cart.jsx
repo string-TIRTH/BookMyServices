@@ -26,9 +26,8 @@ const Cart = () => {
     const [open, setOpen] = useState(false);
     const [Item, setItem] = useState([]);
     const [user, setUser] = useState({});
-    const [isCartEmpty, setIsCartEmpty] = useState(false);
+    const [isCartEmpty, setIsCartEmpty] = useState(true);
     // console.log(count)
-
     const handleClickOpen = (item) => {
         setItem(item)
         setOpen(true);
@@ -176,11 +175,22 @@ const Cart = () => {
     };
     const handlePlaceOrder = async () => {
         try {
+            setIsCartEmpty(true)
+            let lat = 0;
+            let lng = 0;
+            const result = await axios.get(`https://api.geoapify.com/v1/geocode/search?postcode=`+address.pincode+`&type=postcode&format=json&apiKey=e61b88dd95644ef79521f24baa6fb8f4`)
+                    .then((result) => {
+                        lat = result.data.results[0].lat;
+                        lng = result.data.results[0].lon;
+                    })
+                    // console.log(lat +" " + lng)
             const placeOrderData = {
                 custId: id._id,
-                address: address
+                address: address,
+                lat : lat,
+                lng : lng
             }
-            console.log(address)
+            // console.log(placeOrderData)
             const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
             if (response) {
                 setIsCartEmpty(true);
@@ -205,9 +215,9 @@ const Cart = () => {
                             custId: id._id
                         }
                         axios.post("http://localhost:5000/customer/removeCart", data);
-                        setIsCartEmpty(false);
+                        setIsCartEmpty(true);
                     })
-                }else{
+                } else {
                     Swal.fire({
                         title: 'workers are not available... for some services',
                         icon: 'warning',
@@ -218,7 +228,7 @@ const Cart = () => {
                         custId: id._id
                     }
                     axios.post("http://localhost:5000/customer/removeCart", data);
-                    
+
                 }
             }
 
@@ -258,20 +268,20 @@ const Cart = () => {
                                     <div className='row mt-2'>
                                         <div className='col-md-8'>
                                             <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-                                                <div className='row' style={{marginTop:20}}>
+                                                <div className='row' style={{ marginTop: 20 }}>
                                                     <div className="col-md-6">
                                                         <img className="rounded" src={item.serviceDetails.url} alt={item.serviceDetails.name} style={{ width: "50%", textAlign: "center", paddingLeft: 20 }} />
                                                     </div>
 
 
 
-                                                    <div className='col-md-6' style={{textAlign:'left'}}>
+                                                    <div className='col-md-6' style={{ textAlign: 'left' }}>
 
-                            
+
                                                         <p className="card-title"> {item.serviceDetails.name}</p>
-                                                        
-                                                        <p style={{ textAlign: 'left'}}>Price : ₹{item.serviceDetails.price}</p>
-                                                        
+
+                                                        <p style={{ textAlign: 'left' }}>Price : ₹{item.serviceDetails.price}</p>
+
                                                         <p> Want on: {item.date} at: {item.time}</p>
                                                     </div>
                                                 </div>
@@ -317,32 +327,43 @@ const Cart = () => {
                                 ))
                             )}
 
-{!isCartEmpty ?
-                        <div className="col-md-12 align-content-right" style={{}}>
-                            <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "10px" }} >
-                                <div className="card" style={{ height: "200px", marginBottom: "50px" }}>
-                                    <div className="card-body">
-                                        <h5 className="card-title">Total Price</h5>
-                                        <p className="card-text">₹{calculateTotalPrice()}</p>
-                                        <Button
-                                            style={{ width: "100px" }}
-                                            variant="contained"
-                                            color="warning"
-                                            onClick={handleOpenOrderDialog}
+                            {!isCartEmpty ?
+                                <div className="col-md-12 align-content-right" style={{}}>
+                                    <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "10px" }} >
+                                        <div className="card" style={{ height: "auto", marginBottom: "50px", textAlign:"center"}}>
+                                            <div className="card-body">
+                                                <h5 className="card-title" style={{textAlign:"center"}}>Total Amount</h5>
+                                                
+                                        {
+                                        cartItems.map((item, index) => (
+                                            <div style={{display:"flex",justifyContent: "space-between"}}>
+                                            <p style={{textAlign:"left", marginRight:"15px"}}>{item.serviceDetails.name} : </p> <p style={{textAlign : "right"}}>₹ {item.serviceDetails.price}</p>
+                                            </div>
+                                                ))
+                                        }
+                                        <div style={{display:"flex",justifyContent: "space-between"}}>
+                                            <p style={{textAlign:"left", marginRight:"15px"}}>Total : </p> <p style={{textAlign : "right"}}>₹ {calculateTotalPrice()}</p>
+                                            </div>
+
+                                                <Button
+                                                    style={{ width: "150px",justifyContent:"center" }}
+                                                    variant="contained"
+                                                    color="warning"
+                                                    onClick={handleOpenOrderDialog}
 
 
-                                        >
-                                            Place Order
-                                        </Button>
+                                                >
+                                                    Place Order
+                                                </Button>
 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                : <></>}
+
                         </div>
-                        : <></>}
-                    
-                        </div>
-                       
+
                     </div>
                     <Dialog open={orderDialogOpen} onClose={handleCloseOrderDialog}>
                         <DialogTitle>Place Order</DialogTitle>
