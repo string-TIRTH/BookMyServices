@@ -17,7 +17,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaShoppingCart } from 'react-icons/fa';
 import img from '../img/loginBlock.png'
-
+import { Box, Paper, Container, Grid, Rating, TextareaAutosize } from '@mui/material';
+import {
+    Card,
+    CardContent,
+} from '@mui/material';
 const Today = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [cartActive, setCartActive] = useState(false)
@@ -28,6 +32,9 @@ const Today = () => {
     const [opencomp, setOpencomp] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
     const [pItem, setpItem] = useState({});
+    const [dia, setdia] = useState(false);
+    const [Item, setItem] = useState([]);
+    const [feedbackDetails, setFeedbackDetails] = useState([])
     // var date, time; 
     const handleClose = () => {
         setIsOpen(false);
@@ -143,10 +150,45 @@ const Today = () => {
                 // console.log(response.data.pendingOrders)
                 // console.log(response.data.completedOrders)
                 setPending(response.data.history)
-               
+
             })
 
     }, []);
+    const HandleFeedback = (item) => {
+        setdia(true);
+        setItem(item);
+        const data1 = {
+            orderId: item._id
+        }
+
+        axios.post(`http://localhost:5000/feedback/getFeedbackByOrderId/`, data1)
+            .then((response) => {
+                console.log(response.data);
+                setFeedbackDetails(response.data);
+
+            })
+
+    }
+    function mapRatingToLabel(rating) {
+        switch (rating) {
+            case 1:
+                return 'Very Poor';
+            case 2:
+                return 'Poor';
+            case 3:
+                return 'Average';
+            case 4:
+                return 'Good';
+            case 5:
+                return 'Very Good';
+            default:
+                return 'N/A';
+        }
+    }
+    const handleclosedia = () => {
+        setdia(false);
+        setItem([])
+    }
 
 
     return (
@@ -154,7 +196,7 @@ const Today = () => {
             {!isLoggedIn && (
                 <div style={{ width: '100%', height: '500px' }}>
 
-<img
+                    <img
                         src={img}
                         alt="Full Page Image"
 
@@ -237,18 +279,30 @@ const Today = () => {
 
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
+
+                                                                    <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%', marginTop: "10px" }}>
                                                                         < Button onClick={() => handleOrderDetails(item)} style={{
-                                                                            marginRight: "50px", backgroundColor: '#007bff',
+                                                                            marginRight: "20px",
                                                                             color: 'white',
                                                                             padding: '10px 20px',
                                                                             borderRadius: '5px',
                                                                             border: 'none',
                                                                             cursor: 'pointer',
                                                                             fontSize: '16px'
-                                                                        }} variant="contained" color="warning">Order Details</Button>
+                                                                        }} variant="contained" color="warning">Details</Button>
+                                                                        < Button onClick={() => HandleFeedback(item)} style={{
+                                                                            marginRight: "0px",
+                                                                            color: 'white',
+                                                                            padding: '10px 20px',
+                                                                            borderRadius: '5px',
+                                                                            border: 'none',
+                                                                            cursor: 'pointer',
+                                                                            fontSize: '16px'
+                                                                        }} variant="contained" color="success">View Feedback</Button>
 
                                                                     </div>
+
+
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
 
@@ -283,14 +337,14 @@ const Today = () => {
                                                                 <h6><strong> Status: </strong><span className="text-warning">Pending</span>  </h6>
                                                                 <p>
                                                                     <h6>
-                                                                       
-                                                                    <h6><strong>Customer Name: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.fname : ""} {pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.lname : ""}</h6>
-                                                                          <h6> <strong>Customer contact Number: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.contact_no : ""} </h6> 
-                                                                          <h6> <strong>Customer House Number : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.house_no : "he "} </h6> 
-                                                                          <h6> <strong>Customer Society Name : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.society_name : ""} </h6> 
-                                                                          <h6> <strong>Customer Landmark : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.landmark : ""} </h6> 
-                                                                          <h6> <strong>Customer City : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.city : ""} </h6> 
-                                                                          <h6> <strong>Customer Pincode : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.pincode : ""} </h6> 
+
+                                                                        <h6><strong>Customer Name: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.fname : ""} {pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.lname : ""}</h6>
+                                                                        <h6> <strong>Customer contact Number: </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.contact_no : ""} </h6>
+                                                                        <h6> <strong>Customer House Number : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.house_no : "he "} </h6>
+                                                                        <h6> <strong>Customer Society Name : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.society_name : ""} </h6>
+                                                                        <h6> <strong>Customer Landmark : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.landmark : ""} </h6>
+                                                                        <h6> <strong>Customer City : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.city : ""} </h6>
+                                                                        <h6> <strong>Customer Pincode : </strong>{pItem?.customerDetails?.length > 0 ? pItem?.customerDetails[0]?.address[0]?.pincode : ""} </h6>
                                                                     </h6>
 
 
@@ -313,11 +367,60 @@ const Today = () => {
 
                                                         </DialogActions>
                                                     </Dialog>
+                                                    <Dialog open={dia} onClose={handleclosedia}>
+                                                        <DialogContent>
+                                                            <Card style={{ borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)', width: "370px" }}>
+                                                                <CardContent>
+                                                                    <Grid container spacing={4} >
+                                                                        <Grid item xs={5}>
+                                                                            <Paper elevation={3} style={{ padding: '10px', textAlign: 'center', backgroundColor: '#f0e68c', borderRadius: '10px', width: "150px", marginLeft: "10px" }}>
+                                                                                <Typography variant="h6">Service Rating</Typography>
+                                                                                <Rating
+                                                                                    name="service-rating"
+                                                                                    value={feedbackDetails[0]?.serRating}
+                                                                                    readOnly
+                                                                                    max={5} // Specify the maximum rating value (in this case, 5)
+                                                                                />
+                                                                                <Typography variant="body1">
+                                                                                    {mapRatingToLabel(feedbackDetails[0]?.serRating)}
+                                                                                </Typography>
+                                                                            </Paper>
+                                                                        </Grid>
+                                                                        <Grid item xs={6}>
+                                                                            <Paper elevation={3} style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ffb6c1', borderRadius: '10px', width: "150px", marginLeft: "20px", marginRight: "10px" }}>
+                                                                                <Typography variant="h6">Employee Rating</Typography>
+                                                                                <Rating
+                                                                                    name="employee-rating"
+                                                                                    value={feedbackDetails[0]?.empRating}
+                                                                                    readOnly
+                                                                                    max={5} // Specify the maximum rating value (in this case, 5)
+                                                                                />
+                                                                                <Typography variant="body1">
+                                                                                    {mapRatingToLabel(feedbackDetails[0]?.empRating)}
+                                                                                </Typography>
+                                                                            </Paper>
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                    <Box mt={2}>
+                                                                        <Paper elevation={3} style={{ padding: '10px', borderRadius: '10px' }}>
+                                                                            <Typography variant="h6">Feedback</Typography>
+                                                                            <Typography variant="body1">{feedbackDetails[0]?.feed_text}</Typography>
+                                                                        </Paper>
+                                                                    </Box>
+                                                                </CardContent>
+                                                            </Card>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleclosedia} variant="outlined" color="error">
+                                                                Close
+                                                            </Button>
+                                                        </DialogActions>
+                                                    </Dialog>
                                                 </>
 
 
                                             )}
-                                       
+
                                     </>
 
 
@@ -325,7 +428,7 @@ const Today = () => {
                             </div>
                         </div>
                     </div>
-            
+
 
                 </div>
 
