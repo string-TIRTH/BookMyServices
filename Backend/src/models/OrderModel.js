@@ -54,6 +54,11 @@ const OrderSchema = new mongoose.Schema({
         ref: 'employee',
         default: null
     },
+    feedId :{
+        type : mongoose.Schema.Types.ObjectId, 
+        ref: 'feedback',
+        default: null
+    },
     qty :{
       type : Number, 
       default : 1,
