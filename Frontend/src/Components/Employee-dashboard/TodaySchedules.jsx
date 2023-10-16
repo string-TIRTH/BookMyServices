@@ -236,7 +236,7 @@ const Today = (props) => {
                                                         <div className='row mt-2'>
 
 
-                                                            <div className='col-md-8'>
+                                                            <div className='col-md-10'>
                                                                 <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                                                                     <div className='row' style={{ marginTop: 20 }}>
                                                                         <div className="col-md-6">
