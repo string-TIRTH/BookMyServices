@@ -32,21 +32,6 @@
       required : false,
    },
  })
- const serviceWithDayAndTimeSchema = new mongoose.Schema({
-   service_id: {
-     type:String,
-   //   ref: 'Service', 
-     required: false,
-   },
-   day: {
-     type: String,
-     required: false,
-   },
-   time: {
-     type: String,   
-     required: false,
-   },
- });
  
  const CustomerSchema = new mongoose.Schema({
    fname :{
@@ -75,10 +60,6 @@
    status : {
       type : String,
       default : "active"
-   },
-   services:{
-     type : [serviceWithDayAndTimeSchema]
-
    },
    cart: {
      

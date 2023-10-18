@@ -59,7 +59,7 @@ const AdminSchema = new mongoose.Schema({
   },
   status : {
      type : String,
-     default : "Not Verified"
+     default : "Verified"
   }
 })
 
