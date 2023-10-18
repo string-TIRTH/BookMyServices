@@ -32,6 +32,7 @@ const Cart = () => {
     const [Item, setItem] = useState([]);
     const [user, setUser] = useState({});
     const [isCartEmpty, setIsCartEmpty] = useState(true);
+    const [isCash, setIsCash] = useState(false);
 
     // const [custId,setCustId] = useState(localStorage.getItem("id"))
     // console.log(count)
@@ -217,6 +218,60 @@ const Cart = () => {
     const handleCloseOrderDialog = () => {
         setOrderDialogOpen(false);
     };
+    const payWithCash = async ()=>{
+        setOrderDialogOpen(false);
+        try {
+            setIsCartEmpty(true)
+            let lat = 0;
+            let lng = 0;
+            const result = await axios.get(`https://api.geoapify.com/v1/geocode/search?postcode=` + address.pincode + `&type=postcode&format=json&apiKey=e61b88dd95644ef79521f24baa6fb8f4`)
+                .then((result) => {
+                    lat = result.data.results[0].lat;
+                    lng = result.data.results[0].lon;
+                })
+            // console.log(lat +" " + lng)
+            const placeOrderData = {
+                custId: id._id,
+                address: address,
+                lat: lat,
+                lng: lng
+            }
+            // console.log(placeOrderData)
+            const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
+            if (response) {
+                
+                handleCloseOrderDialog();
+                // setCartItems(null);
+                
+                console.log(response.data)
+                if (response.data.code === 0) {
+                    
+                    localStorage.setItem("orderId",response.data.orderId);
+                    console.log(cartItems);
+                    
+                    window.location.href = "/Customer/checkout/success";
+                   
+                    
+                    // setPaymentOpen(true)
+                } else {
+                    Swal.fire({
+                        title: 'workers are not available... for some services',
+                        icon: 'warning',
+                        text: "try to order one by one",
+                        confirmButtonText: 'Okay'
+                    })
+                    const data = {
+                        custId: id._id
+                    }
+                    // axios.post("http://localhost:5000/customer/removeCart", data);
+
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const handlePlaceOrder = async () => {
         setOrderDialogOpen(false);
         try {
@@ -247,7 +302,11 @@ const Cart = () => {
                     
                     localStorage.setItem("orderId",response.data.orderId);
                     console.log(cartItems);
-                    await makePayment();
+                    if(isCash){
+                        window.location.href = "/Customer/checkout/success";
+                    }else{
+                        await makePayment();
+                    }
                     
                     // setPaymentOpen(true)
                 } else {
@@ -456,34 +515,15 @@ const Cart = () => {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handlePlaceOrder}variant="contained" color="success">
-                                Cash Payment
-                            </Button>
-                            <Button onClick={makePayment}variant="contained" color="warning">
                               Online Payment
                             </Button>
-                        </DialogActions>
-                    </Dialog>
-
-                    <Dialog open={paymentOpen} onClose={handlePaymantDialog}>
-                        <DialogTitle>Place Order</DialogTitle>
-                        <DialogContent>
-                            Make Payment
-                            <DialogContentText>
-                                <form onSubmit={makePayment}>
-
-                                </form>
-
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handlePaymantDialog}  variant="contained" color="success">
-                                Cancel
-                            </Button>
-                            <Button onClick={makePayment} variant="contained" color="warning">
-                                Confirm Address
+                            <Button onClick={payWithCash}variant="contained" color="warning">
+                              Cash Payment
                             </Button>
                         </DialogActions>
                     </Dialog>
+
+                    
 
 
 
