@@ -180,7 +180,7 @@ const Today = () => {
             case 5:
                 return 'Very Good';
             default:
-                return 'N/A';
+                return 'Not Rated';
         }
     }
     const handleclosedia = () => {
