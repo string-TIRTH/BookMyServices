@@ -117,7 +117,7 @@
   ]
   return (
     <>
-      <div style={{width: "300px"}} className="sidebar">
+      <div style={{width: "200px"}} className="sidebar">
           <div className="top_section">
               <h1 style={{display:"block"}} className="logo">DashBoard</h1>
               <div style={{marginLeft: "50px"}} className="bars">
