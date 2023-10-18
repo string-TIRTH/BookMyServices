@@ -27,6 +27,8 @@ router.post("/addAddons", orderController.addAddons);
 router.post("/removeAddOns", orderController.removeAddOns);
 router.post("/getAddOns", orderController.getAddOns);
 router.post("/createCheckout", orderController.createCheckout);
+router.post("/failed", orderController.paymentDeclined);
+router.get("/success", orderController.success);
 
 
 

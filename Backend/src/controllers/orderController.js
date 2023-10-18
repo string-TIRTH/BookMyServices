@@ -184,6 +184,7 @@ module.exports = {
                 responseAck.orderId = orderId;
                 responseAck.code = 0; //
             }
+            console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -534,19 +535,15 @@ module.exports = {
 
         // console.log(req.body)
         const services = req.body.products
-        // console.log(services)
+        console.log(services)
         const lineItems = services.map((services)=>({
             price_data:{
                 
                 currency:"inr",
                 product_data:{
                     name: services.serviceDetails.name,
-                    // time: services.serviceDetails.time,
-                    // id: services.serId,
                 },
-                unit_amount : services.serviceDetails.price * 100
-                
-                    
+                unit_amount : services.serviceDetails.price * 100,
             },
             quantity : "1",
         }));
@@ -554,14 +551,25 @@ module.exports = {
             // payment_method_types: ['card'],
             line_items: lineItems,
             mode: 'payment',
-            success_url: `http://localhost:3000/Customer/CustOrder/`,
-            cancel_url: `http://localhost:3000/Customer/Cart`,
+            success_url: `http://localhost:3000/Customer/Checkout/success`,
+            cancel_url: `http://localhost:3000/Customer/Checkout/failed`,
         });
         console.log("session Data:")
         console.log(session)
-
+        // session.orderId = 10001;
         res.json({id:session.id});
 
+    },
+    success : async (req, res) => {
+        const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+        // const customer = await stripe.customers.retrieve(session.customer);
+        console.log("orderId")
+        console.log(session.status)
+        // console.log(customer)
+        
+        // res.send(`<html><body><h1>Thanks for your order!</h1></body></html>`);
+        res.redirect("http://localhost:3000/Customer/CustOrder");
+        res.end();
     },
     getHistoryByEmpId: async (req, res) => {
         try {
@@ -628,6 +636,20 @@ module.exports = {
             );
         }
     },
+    paymentDeclined:async (req, res) => {
+
+        const orderId = req.body.orderId;
+
+        try {
+            status = "cancelled";
+            isActive = false;
+            const order = await OrderModel.updateMany({orderId:orderId}, { status, isActive });
+            res.json({ "message": true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    }, 
     cancelOrder: async (req, res) => {
 
         const id = req.body.id;
@@ -738,6 +760,7 @@ module.exports = {
             res.json(err)
         }
     },
+   
     getAddOns: async (req, res) => {
         try {
             const orderId = req.body.orderId;

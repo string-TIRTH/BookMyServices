@@ -41,6 +41,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CustEditProfile from './Components/Customer-dashboard/CustEditProfile';
 import CustOrder from './Components/Customer-dashboard/CustOrder';
 import Feedback from './Components/Customer-dashboard/Feedback';
+import Success from './Components/Customer-dashboard/Success';
+import Failed from './Components/Customer-dashboard/Failed';
 // import Contact from './Components/Customer-dashboard/';
 
 function App() {
@@ -86,11 +88,14 @@ function App() {
           <Route path="/Customer/CustOrder/" element={<CustOrder />} />
           <Route path="/Customer/Place/" element={<Places />} />
           <Route path="/Customer/Feedback/" element={<Feedback />} />
+          <Route path="/Customer/Checkout/success" element={<Success />} />
+          <Route path="/Customer/Checkout/failed" element={<Failed />} />
           
           {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
           {/* <Route path="/Admin/Services" element={<Services />} /> */}
           
           <Route path="/Employee/" element={<EmpDashBoard />} />
+          {/* <Route path="/Order/success" element={<EmpDashBoard />} /> */}
           
         </Routes>
 

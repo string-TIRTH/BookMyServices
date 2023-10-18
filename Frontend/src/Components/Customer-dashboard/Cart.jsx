@@ -22,7 +22,7 @@ let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
     const [paymentOpen, setPaymentOpen] = useState(false);
-    const [orderId ,setOrderId] = useState(0);
+    const [orderId ,setOrderId] = useState(100);
     const [cartItems, setCartItems] = useState([]);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const [ash, setash] = useState(1);
@@ -30,6 +30,7 @@ const Cart = () => {
     const [Item, setItem] = useState([]);
     const [user, setUser] = useState({});
     const [isCartEmpty, setIsCartEmpty] = useState(true);
+    // const [custId,setCustId] = useState(localStorage.getItem("id"))
     // console.log(count)
     const handleClickOpen = (item) => {
         setItem(item)
@@ -40,9 +41,9 @@ const Cart = () => {
         setItem([])
         setOpen(false);
     };
-    const customerId = "6513add1e0353232755a88f5";
+    const customerId = localStorage.getItem("id");
     const id = {
-        _id: "6513add1e0353232755a88f5"
+        _id: localStorage.getItem("id")
     }
 
     var cartData
@@ -144,11 +145,13 @@ const Cart = () => {
             body:JSON.stringify(body)
         });
         const session = await response.json();
-
-        const result = stripe.redirectToCheckout({
+        
+        cartItems.length = 0;
+        setIsCartEmpty(true);
+        const result = await stripe.redirectToCheckout({
             sessionId:session.id
         })
-        console.log(result)
+        
         if(result.error){
             console.log(result.error);
         }
@@ -231,37 +234,18 @@ const Cart = () => {
             // console.log(placeOrderData)
             const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
             if (response) {
-                setIsCartEmpty(true);
+                
                 handleCloseOrderDialog();
                 // setCartItems(null);
-                cartItems.length = 0;
+                
                 console.log(response.data)
                 if (response.data.code === 0) {
-                    let text = "";
-
-                    cartItems.map((item, index) => (item) => {
-                        text += "\n" + item.serviceDetails.name;
-                    });
-                    console.log(text)
                     
-                    setOrderId(response.data.orderId);
+                    localStorage.setItem("orderId",response.data.orderId);
+                    console.log(cartItems);
+                    await makePayment();
                     
-
-
-
-                    Swal.fire({
-                        title: 'Order Placed Successfully',
-                        icon: 'success',
-                        text: text,
-                        confirmButtonText: 'Okay'
-                    }).then(() => {
-                        const data = {
-                            custId: id._id
-                        }
-                        axios.post("http://localhost:5000/customer/removeCart", data);
-                        setIsCartEmpty(true);
-                    })
-                    setPaymentOpen(true)
+                    // setPaymentOpen(true)
                 } else {
                     Swal.fire({
                         title: 'workers are not available... for some services',
@@ -272,7 +256,7 @@ const Cart = () => {
                     const data = {
                         custId: id._id
                     }
-                    axios.post("http://localhost:5000/customer/removeCart", data);
+                    // axios.post("http://localhost:5000/customer/removeCart", data);
 
                 }
             }
@@ -395,7 +379,7 @@ const Cart = () => {
                                                     style={{ width: "150px",justifyContent:"center" }}
                                                     variant="contained"
                                                     color="warning"
-                                                    onClick={makePayment}
+                                                    onClick={handleOpenOrderDialog}
 
 
                                                 >
