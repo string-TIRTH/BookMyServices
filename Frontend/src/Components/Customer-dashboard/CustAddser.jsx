@@ -27,6 +27,11 @@ const CustAddser = () => {
     const [SerId, SetSerId] = useState('');
     const [cartActive, setCartActive] = useState(false);
     const [message, HideMessage] = useState(false);
+    const [searchText, setSearchText] = useState("");
+  
+    const handleSearch = (event) => {
+      setSearchText(event.target.value);
+  };
     const handleHideMessage = () => {
         HideMessage(true);
     }
@@ -190,7 +195,7 @@ const CustAddser = () => {
         const today = moment();
         if (selectedDate.isSame(today, 'day')) {
             const nextHour = moment().startOf('hour').add(1, 'hour');
-            while (nextHour.isBefore(moment().endOf('day')) && nextHour.hour() <= 24) {
+            while (nextHour.isBefore(moment().endOf('day')) && nextHour.hour() <= 18) {
                 timeSlots.push(nextHour.format('HH:mm:ss'));
                 nextHour.add(1, 'hour');
             }
@@ -208,7 +213,7 @@ const CustAddser = () => {
     const timeSlots = generateTimeSlots();
 
     const id = {
-        _id: "6513add1e0353232755a88f5"
+        _id: localStorage.getItem('id')
     }
     const [user, setuser] = useState([])
     const [thought, setthougth] = useState({})
@@ -446,10 +451,33 @@ const CustAddser = () => {
         padding: '8px',
         boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', // Add the box shadow property
     };
+    const filteredEmpData = user.filter((item) => {
+        return (
+            item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.price.toString().includes(searchText)
+        );
+    });
+
     return (
         <>
             <div style={{ background: "#D4E6F1" }}>
                 <NavBar></NavBar>
+                <div className="divbtn">
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                   
+                                        <div style={{ width: "600px", display: "flex", alignItems: "flex-end", backgroundColor: "#feffdf", border: "1px solid #ccc", borderRadius: "5px", padding: "5px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" ,marginTop:"10px",marginBottom:"10px" ,marginLeft:"20px"}}>
+                                            <input
+                                                type="text"
+                                                placeholder="Search..."
+                                                value={searchText}
+                                                onChange={handleSearch}
+                                                style={{ border: "none", outline: "none", width: "100%", padding: "5px",backgroundColor:"#feffdf",marginTop:"10px",marginBottom:"10px" }}
+                                            />
+                                            <i className="fa fa-search" style={{ marginLeft: "10px", color: "#888", cursor: "pointer", fontSize: "18px" }}></i>
+                                        </div>
+                                    </div>
+                                </div> 
+
                 {!isLoggedIn && !message && (
                     <div
                         style={{
@@ -484,7 +512,7 @@ const CustAddser = () => {
                     <div className="d-flex">
                         <div className="left-container">
                             {user &&
-                                user
+                                filteredEmpData
                                     .filter((item) => item.isActive)
                                     .map((item) => (
                                         <div

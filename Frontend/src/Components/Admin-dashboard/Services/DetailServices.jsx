@@ -59,9 +59,9 @@ const DetailServices = () => {
           <Card.Title>{user.name}</Card.Title>
           <p>Price: ₹{user.price}</p>
       <p>Time: {timeToDisplay}</p>
-      <p>Average Rating: {user.avgRating}</p>
+      <p>Average Rating: {user.rating}</p>
       <p>Description: {user.desc}</p>
-      <p>isActive: {user.isActive ? "True":"False"}</p>
+     
         
           <Button variant="primary" onClick={handleclick}>Go Back</Button>
         </Card.Body>

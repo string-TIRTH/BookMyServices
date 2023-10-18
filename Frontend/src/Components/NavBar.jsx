@@ -90,7 +90,7 @@ const NavBar = () => {
                         {isLoggedIn
                             ? <>
                                 <div className="h-100 d-inline-flex align-items-center me-4">
-                                    <Link to="https://www.ddu.ac.in/"><i className="fa fa-map-marker-alt text-danger me-2"></i></Link>
+                                    <Link to=""><i className="fa fa-map-marker-alt text-danger me-2"></i></Link>
                                     <p className="m-0">{address.city}</p>
                                 </div>
                                 <div className="h-100 d-inline-flex align-items-center me-4">

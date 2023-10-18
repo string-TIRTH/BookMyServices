@@ -3,6 +3,8 @@ import TextField from "@mui/material/TextField";
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import md5 from "md5"
 const CustEditProfile = () => {
 
     const data = {
@@ -64,7 +66,7 @@ const CustEditProfile = () => {
             fname: formData.fname,
             lname: formData.lname,
             email: formData.email,
-            password: formData.password,
+            password: md5(formData.password),
             contact_no: formData.contact_no,
             address: add
         }
@@ -154,7 +156,7 @@ const CustEditProfile = () => {
                                             label="Password"
                                             name="password"
                                             type="password"
-                                            value={formData?.password}
+                                          
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -217,6 +219,10 @@ const CustEditProfile = () => {
                                         <button type="submit" className="btn btn-primary">
                                             Submit
                                         </button>
+                                        <Link to="/">
+                                        <button  className="btn btn-info" style={{marginLeft:"30px"}}>
+                                            back to Home
+                                        </button> </Link>
                                     </div>
                                 </form>
                             </div>

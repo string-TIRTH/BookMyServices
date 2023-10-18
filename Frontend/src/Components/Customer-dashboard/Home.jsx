@@ -55,7 +55,7 @@ const Home = () => {
                 .then((response) => {
                     
                     console.log("response")
-                    // console.log(response.data[0].address[0].pincode)
+                  
                     setPincode(response.data[0].address[0].pincode)
                     
                     
@@ -68,6 +68,7 @@ const Home = () => {
                     }
                     
                 });
+                
                
         }
     }, []);
@@ -347,7 +348,7 @@ const Home = () => {
 
                 </div>
             </div>
-            {!cartActive && isLoggedIn
+            {cartActive && isLoggedIn
                     ? <Link to={"/Customer/Cart/"}>
                         <FaShoppingCart size={50} color="#89cff0" item='10' style={{
                             position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
