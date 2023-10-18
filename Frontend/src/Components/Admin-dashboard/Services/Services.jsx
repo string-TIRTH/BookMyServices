@@ -113,7 +113,7 @@ const Services = () => {
                                             <i className="fa fa-search" style={{ marginLeft: "10px", color: "#888", cursor: "pointer", fontSize: "18px" }}></i>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
 
 
                             </div>

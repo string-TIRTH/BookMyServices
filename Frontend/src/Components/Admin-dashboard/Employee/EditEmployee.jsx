@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import md5 from "md5"
 // import { Link } from 'react-router-dom';
 import axios from 'axios';
 const EditEmployee = (props) => {
@@ -132,7 +133,7 @@ const EditEmployee = (props) => {
             fname: fname,
             lname: lname,
             email: email,
-            password: password,
+            password: md5(password),
             contact_no: contact_no,
             address: add
           }
@@ -165,7 +166,7 @@ const EditEmployee = (props) => {
                 type="text"
                 //   defaultValue={user[0].fname}
                 placeholder={user.fname}
-                value={fname}
+                value={fname || user.fname}
                 onChange={(e) => setfname(e.target.value)}
                 required
               />
@@ -176,7 +177,7 @@ const EditEmployee = (props) => {
                 type="text"
                 //   defaultValue={user[0].fname}
                 placeholder={user.lname}
-                value={lname}
+                value={lname || user.lname}
                 onChange={(e) => setlname(e.target.value)}
                 required
               />
@@ -185,8 +186,8 @@ const EditEmployee = (props) => {
               <Form.Label>Enter email address:</Form.Label>
               <Form.Control
                 type="email"
-                placeholder={user.email}
-                value={email}
+                placeholder={user.email || user.email}
+                value={email || user.email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -195,7 +196,7 @@ const EditEmployee = (props) => {
               <Form.Label>Enter Password:</Form.Label>
               <Form.Control
                 type="password"
-                placeholder={user.password}
+          
                 value={password}
                 onChange={(e) => setpassword(e.target.value)}
                 required
@@ -207,7 +208,7 @@ const EditEmployee = (props) => {
               <Form.Control
                 type="text"
                 placeholder={user.contact_no}
-                value={contact_no}
+                value={contact_no || user.contact_no}
                 onChange={(e) => setcontact(e.target.value)}
                 required
               />
@@ -218,8 +219,8 @@ const EditEmployee = (props) => {
                 <Form.Label>house_no</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={user?.address?.length > 0 ? user.address[0].house_no: "N/A"}
-                  value={house_no}
+                  placeholder=   {user?.address?.length > 0 ? user.address[0].house_no : 'N/A'} 
+                  value={house_no|| user?.address?.length > 0 && user.address[0].house_no}
                   onChange={(e) => sethouse_no(e.target.value)}
                   required
                 />
@@ -229,7 +230,7 @@ const EditEmployee = (props) => {
                 <Form.Control
                   type="text"
                     placeholder={user?.address?.length > 0 ? user.address[0].society_name: "N/A"}
-                  value={streetAddress}
+                  value={streetAddress || user?.address?.length > 0 && user.address[0].society_name}
                   onChange={(e) => setAddress(e.target.value)}
                   required
                 />
@@ -239,7 +240,7 @@ const EditEmployee = (props) => {
                 <Form.Control
                   type="landmark"
                     placeholder={user?.address?.length > 0 ? user.address[0].landmark: "N/A"}
-                  value={landmark}
+                  value={landmark || user?.address?.length > 0 && user.address[0].landmark}
                   onChange={(e) => setlandmark(e.target.value)}
 
                 />
@@ -249,7 +250,7 @@ const EditEmployee = (props) => {
                 <Form.Control
                   type="text"
                   placeholder={user?.address?.length > 0 ? user.address[0].city: "N/A"}
-                  value={city}
+                  value={city || user?.address?.length > 0 && user.address[0].city}
                   onChange={(e) => setcity(e.target.value)}
                 />
               </Form.Group>
@@ -260,7 +261,7 @@ const EditEmployee = (props) => {
                 <Form.Control
                   type="text"
                   placeholder={user?.address?.length > 0 ? user.address[0].pincode: "N/A"}
-                  value={pincode}
+                  value={pincode || user?.address?.length > 0 && user.address[0].pincode}
                   onChange={(e) => setPincode(e.target.value)}
                 />
               </Form.Group>

@@ -3,8 +3,41 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Paper, Typography, TextField, Button, Grid, Box } from '@mui/material';
 import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
 import NavBar from '../NavBar';
+import { FaShoppingCart } from 'react-icons/fa';
+import axios from 'axios';
+import md5 from 'md5'
+import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
+   
 const Contact = () => {
+  const [cartActive, setCartActive] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false);
+  useEffect(() => {
+      const role = localStorage.getItem('role');
+      if (role != null) {
+          if (role === md5("Employee")) {
+              window.location.href = '/Employee';
+          } else if (role === md5("Admin")) {
+              window.location.href = '/admin';
+          }
+          setIsLoggedIn(true);
+          const data = {
+              _id: localStorage.getItem('id')
+          };
+          axios.post(`http://localhost:5000/customer/getCustomerById`, data)
+              .then((response) => {
+                  // console.log(cartActive)
+
+                  if (response?.data[0]?.cart?.serList == '') {
+                      setCartActive(false)
+                  } else {
+                      setCartActive(true)
+                  }
+              });
+
+      }}, []);
   return (
     <div style={{ backgroundColor: "#D4E6F1", minHeight: "100vh"  }}>
       <NavBar></NavBar>
@@ -48,6 +81,18 @@ const Contact = () => {
 
         </Grid>
       </div>
+      {cartActive && isLoggedIn
+                ? <Link to={"/Customer/Cart/"}>
+                    <FaShoppingCart size={50} color="#89cff0" item='10' style={{
+                        position: 'fixed', bottom: '20px', right: '20px', cursor: 'pointer', border: '1px solid #f8f4ff',
+                        borderRadius: '10px',
+                        padding: '8px',
+                        backgroundColor: '#faebd7',
+                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginRight: "50px"
+                    }} cartActive={false} />
+                </Link>
+                : <></>
+            }
     </div>
   );
 }

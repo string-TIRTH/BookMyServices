@@ -4,6 +4,7 @@ import './CssF/signup.css';
 import NavBar from './NavBar';
 import { useEffect } from 'react';
 import axios from 'axios';
+import md5 from 'md5';
 // import {  useHistory } from 'react-router-dom'; // Import Link for navigation
 
 const Signup = () => {
@@ -124,7 +125,7 @@ const Signup = () => {
                 fname : fname,
                 lname : lname,
                 email : email,
-                password : password,    
+                password : md5(password),    
                 contact_no : contact_no,
                 address: add
             }

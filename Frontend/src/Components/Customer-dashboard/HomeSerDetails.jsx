@@ -10,7 +10,7 @@ import axios from 'axios';
 const DetailServices = () => {
   const { id } = useParams();
   const [user, setuser] = useState({});
-  // const [user,setuser] =useState({});
+
   const data = {
     serId: id
   };
@@ -33,7 +33,7 @@ const DetailServices = () => {
       });
   }, []);
   const handleclick = () => {
-    window.location.href = '/Customer/AddServices';
+    window.location.href = '/customer/AddServices';
   }
   const timeInMinutes = parseInt(user.time, 10);
 
@@ -59,7 +59,7 @@ const DetailServices = () => {
         <Card.Title>{user.name}</Card.Title>
         <p>Price: ₹{user.price}</p>
         <p>Time: {timeToDisplay} </p>
-        <p>Average Rating: {user.avgRating}</p>
+        <p>Average Rating: {user.rating}</p>
         <p>Description: {user.desc}</p>
         {/* <p>isActive: {user.isActive ? "True" : "False"}</p> */}
 

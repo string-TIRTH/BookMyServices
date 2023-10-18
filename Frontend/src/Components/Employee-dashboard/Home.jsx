@@ -84,11 +84,11 @@ const Home = (props) => {
     axios.post(`http://localhost:5000/employee/avgRating`, data)
       .then((response) => {
 
-        if(response?.data?.rating == -1)
+        if (response?.data?.rating == -1)
           setAvgRating("-");
         else
           setAvgRating(response.data.rating);
-          console.log(response.data.rating)
+        console.log(response.data.rating)
         // setcount(response.data.length)
         // console.log(count);
       })
@@ -389,8 +389,8 @@ const Home = (props) => {
   //   }
 
   // }, [])
-  const handledeleteAddon =(item) =>{
-    const data={
+  const handledeleteAddon = (item) => {
+    const data = {
       addOnId: item?.addOnList?._id,
       orderId: order[0]._id
 
@@ -402,7 +402,7 @@ const Home = (props) => {
 
       axios.post("http://localhost:5000/order/removeAddOns", data)
         .then((response) => {
-          
+
 
           Swal.fire({
             title: 'Deleted successfully.',
@@ -421,7 +421,7 @@ const Home = (props) => {
     catch (error) {
       console.log(error)
     }
-   
+
   }
 
 
@@ -542,7 +542,7 @@ const Home = (props) => {
                                 <p className="card-title"><strong>Service Start at:</strong> {item.service_startTime}</p>
                                 <p className="card-title"><strong>Service end at:</strong> {item.service_endTime}</p>
                                 <p className="card-title"><strong>Status of service:</strong> {item.status}</p>
-                                <p className="card-title"><strong>Amount To Pay :</strong> {item.amount+subtotal}</p>
+                                <p className="card-title"><strong>Amount To Pay :</strong> {item.amount + subtotal}</p>
                               </div>
                             </div>
                             <div className="col-md-12" style={{ textAlign: "right", paddingRight: '10%' }}>
@@ -554,47 +554,52 @@ const Home = (props) => {
                         </div>
                       </div>
                     )))}
-                  <h1>Addons Items</h1>
-                  {getAddon?.length === 0 ? (
-                    <h1 style={{ textAlign: 'center' }}>No Addon Items</h1>
+
+                  {order.length === 0 || getAddon.length === 0 ? (<></>
+
                   ) : (
-                    getAddon?.map((item, index) => (
-                      <div className='row mt-2'>
-                        <div className='col-md-6'>
-                          <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
-                            <div className='row' style={{ marginTop: 2, marginBottom: 2 }}>
-                              <div className="col-md-6">
-                                <div className="d-flex justify-content-center align-items-center" style={{ position: 'relative' }}>
-                                  {/* <FontAwesomeIcon icon={faSpinner} spin style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1 }} /> */}
-                                  <img
-                                    className="rounded"
-                                    src={item?.addOnList?.url}
-                                    style={{ width: "40%", zIndex: 0 }}
-                                  />
+                    <>
+                      <h1 style={{ textAlign: 'center' }}> Addon Items</h1>
+                      {getAddon?.map((item, index) => (
+                        <div className='row mt-2'>
+                          <div className='col-md-6'>
+                            <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
+                              <div className='row' style={{ marginTop: 2, marginBottom: 2 }}>
+                                <div className="col-md-6">
+                                  <div className="d-flex justify-content-center align-items-center" style={{ position: 'relative' }}>
+                                    {/* <FontAwesomeIcon icon={faSpinner} spin style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1 }} /> */}
+                                    <img
+                                      className="rounded"
+                                      src={item?.addOnList?.url}
+                                      style={{ width: "40%", zIndex: 0 }}
+                                    />
+                                  </div>
                                 </div>
+
+
+
+                                <div className='col-md-6' style={{ textAlign: 'left' }}>
+
+
+
+                                  <p className="card-title"><strong>Name</strong> {item?.addOnList?.name}</p>
+                                  <p className="card-title"><strong>price:</strong> ₹{item?.addOnList?.price}</p>
+
+                                  <div className='col-md-10' style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                    <BsTrash onClick={() => handledeleteAddon(item)} style={{ fontSize: '24px', color: 'red', cursor: 'pointer' }} />
+                                  </div>
+                                </div>
+
+
                               </div>
-
-
-
-                              <div className='col-md-6' style={{ textAlign: 'left' }}>
-
-
-
-                                <p className="card-title"><strong>Name</strong> {item?.addOnList?.name}</p>
-                                <p className="card-title"><strong>price:</strong> ₹{item?.addOnList?.price}</p>
-
-                              <div className='col-md-10' style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                <BsTrash onClick={()=>handledeleteAddon(item)} style={{ fontSize: '24px', color: 'red', cursor: 'pointer' }} />
-                              </div>
-                              </div>
-
 
                             </div>
-
                           </div>
                         </div>
-                      </div>
-                    )))}
+                      ))}
+  </>
+                      )}
+                  
 
                 </div>
               </div>

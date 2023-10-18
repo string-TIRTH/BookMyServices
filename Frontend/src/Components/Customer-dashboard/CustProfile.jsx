@@ -48,7 +48,7 @@ const CustProfile = () => {
                     <strong >First Name:</strong> {user[0]?.fname}<br />
                     <strong>Last Name:</strong> {user[0]?.lname}<br />
                     <strong>Email:</strong> {user[0]?.email}<br />
-                    <strong>Password:</strong> {user[0]?.password}<br />
+                   
                     <strong>Contact:</strong> {user[0]?.contact_no}<br />
                     <strong>House Number:</strong> {user[0]?.address?.length > 0 ? user[0].address[0].house_no : "N/A"}<br />
                     <strong>Street Name:</strong> {user[0]?.address?.length > 0 ? user[0].address[0].society_name : "N/A"}<br />

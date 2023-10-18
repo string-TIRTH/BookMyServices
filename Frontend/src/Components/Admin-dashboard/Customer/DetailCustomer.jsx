@@ -30,7 +30,7 @@ const DetailCustomer = () => {
             <strong>First Name:</strong> {user[0].fname} <br />
             <strong>Last Name:</strong> {user[0].lname} <br />
             <strong>Email:</strong> {user[0].email} <br />
-            <strong>Password:</strong> {user[0].password} <br />
+        
             <strong>Contact:</strong> {user[0].contact_no} <br />
             <strong>House Number:</strong>{' '}
             {user[0]?.address?.length > 0 ? user[0].address[0].house_no : 'N/A'} <br />
@@ -42,9 +42,9 @@ const DetailCustomer = () => {
             {user[0]?.address?.length > 0 ? user[0].address[0].city : 'N/A'} <br />
             <strong>Pincode:</strong>{' '}
             {user[0]?.address?.length > 0 ? user[0].address[0].pincode : 'N/A'} <br />
-            <strong>Latitude:</strong> {user[0].latitude} <br />
-            <strong>Longitude:</strong> {user[0].longitude} <br />
-            <strong>Status:</strong> {user[0].status} <br />
+            {/* <strong>Latitude:</strong> {user[0].latitude} <br />
+            <strong>Longitude:</strong> {user[0].longitude} <br /> */}
+
           </Card.Text>
         </Card.Body>
       </Card>

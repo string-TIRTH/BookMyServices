@@ -205,9 +205,7 @@ return (
       <p>
         Don't have an account? <Link to="/signup">Sign up</Link>
       </p>
-      <p>
-        Forgot your password? <Link to="/forgot">Reset password</Link>
-      </p>
+     
     </div>
   </div>
 );

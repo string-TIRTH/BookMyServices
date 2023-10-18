@@ -45,7 +45,7 @@ const DetailEmployee =()=>{
       <strong>First Name:</strong> {user.fname} <br />
       <strong>Last Name:</strong> {user.lname} <br />
       <strong>Email:</strong> {user.email} <br />
-      <strong>Password:</strong> {user.password} <br />
+    
       <strong>Contact:</strong> {user.contact_no} <br />
       <strong>House Number:</strong>{' '}
       {user?.address?.length > 0 ? user.address[0].house_no : 'N/A'} <br />
@@ -61,7 +61,7 @@ const DetailEmployee =()=>{
       {user?.address?.length > 0 ? user.address[0].lat : 'N/A'} <br />
       <strong>Lng:</strong>{' '}
       {user?.address?.length > 0 ? user.address[0].lng : 'N/A'} <br />
-      <strong>Status:</strong> {user.Status} <br />
+    
       <strong>Email Status:</strong> {user.emailstatus} <br />
       <strong>Rating:</strong> {user.rating} <br />
     </Card.Text>

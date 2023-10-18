@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 // import { Link } from 'react-router-dom';
-
+import md5 from "md5"
 import Swal from "sweetalert2"
 import axios from 'axios';
 const EditCustomer = (props) => {
@@ -153,7 +153,7 @@ const EditCustomer = (props) => {
             fname: fname,
             lname: lname,
             email: email,
-            password: password,
+            password: md5(password),
             contact_no: contact_no,
             address: add
           }
@@ -183,6 +183,7 @@ const EditCustomer = (props) => {
     }
   }
 
+
   return (
     <>
       {/* <h1>{user[0]._id}</h1> */}
@@ -196,7 +197,7 @@ const EditCustomer = (props) => {
                 type="text"
                 //   defaultValue={user[0].fname}
                 placeholder={user[0].fname}
-                value={fname}
+                value={fname || user[0]?.fname}
                 onChange={(e) => setfname(e.target.value)}
                 required
               />
@@ -207,7 +208,7 @@ const EditCustomer = (props) => {
                 type="text"
                 //   defaultValue={user[0].fname}
                 placeholder={user[0].lname}
-                value={lname}
+                value={lname || user[0]?.lname}
                 onChange={(e) => setlname(e.target.value)}
                 required
               />
@@ -216,8 +217,8 @@ const EditCustomer = (props) => {
               <Form.Label>Enter your email address:</Form.Label>
               <Form.Control
                 type="email"
-                placeholder={user[0].email}
-                value={email}
+                placeholder={user[0]?.email }
+                value={email || user[0].email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -226,7 +227,7 @@ const EditCustomer = (props) => {
               <Form.Label>Enter your Password:</Form.Label>
               <Form.Control
                 type="password"
-                placeholder={user[0].password}
+              
                 value={password}
                 onChange={(e) => setpassword(e.target.value)}
                 required
@@ -238,7 +239,7 @@ const EditCustomer = (props) => {
               <Form.Control
                 type="text"
                 placeholder={user[0].contact_no}
-                value={contact_no}
+                value={contact_no || user[0]?.contact_no}
                 onChange={(e) => setcontact(e.target.value)}
                 required
               />
@@ -249,8 +250,8 @@ const EditCustomer = (props) => {
                 <Form.Label>house_no</Form.Label>
                 <Form.Control
                   type="text"
-                  // placeholder={user[0].house_no}
-                  value={house_no}
+                  placeholder={user[0]?.address?.length > 0 ? user[0].address[0].house_no : 'N/A'}
+                  value={house_no || user[0]?.address?.length > 0 && user[0].address[0].house_no }
                   onChange={(e) => sethouse_no(e.target.value)}
                   required
                 />
@@ -259,8 +260,8 @@ const EditCustomer = (props) => {
                 <Form.Label>Enter your street Address:</Form.Label>
                 <Form.Control
                   type="text"
-                  //   placeholder={user[0].address[0].streetAddress}
-                  value={streetAddress}
+                    placeholder={user[0]?.address?.length > 0 ? user[0].address[0].society_name : 'N/A'}
+                  value={streetAddress ||  user[0]?.address?.length > 0 && user[0].address[0].society_name}
                   onChange={(e) => setAddress(e.target.value)}
                   required
                 />
@@ -269,8 +270,8 @@ const EditCustomer = (props) => {
                 <Form.Label>Enter landmark</Form.Label>
                 <Form.Control
                   type="landmark"
-                  //   placeholder={user[0].landmark}
-                  value={landmark}
+                  placeholder={user[0]?.address?.length > 0 ? user[0].address[0].landmark : 'N/A'}
+                  value={landmark ||  user[0]?.address?.length > 0 && user[0].address[0].landmark}
                   onChange={(e) => setlandmark(e.target.value)}
 
                 />
@@ -279,8 +280,8 @@ const EditCustomer = (props) => {
                 <Form.Label>Enter city:</Form.Label>
                 <Form.Control
                   type="text"
-                  // placeholder={user[0].city}
-                  value={city}
+                  placeholder={user[0]?.address?.length > 0 ? user[0].address[0].city : 'N/A'}
+                  value={city || user[0]?.address?.length > 0 && user[0].address[0].city  }
                   onChange={(e) => setcity(e.target.value)}
                 />
               </Form.Group>
@@ -290,8 +291,8 @@ const EditCustomer = (props) => {
                 <Form.Label>Enter your pincode:</Form.Label>
                 <Form.Control
                   type="text"
-                  // placeholder={user[0].pincode}
-                  value={pincode}
+                  placeholder={user[0]?.address?.length > 0 ? user[0].address[0].pincode : 'N/A'}
+                  value={pincode ||  user[0]?.address?.length > 0 &&  user[0].address[0].pincode }
                   onChange={(e) => setPincode(e.target.value)}
                 />
               </Form.Group>
