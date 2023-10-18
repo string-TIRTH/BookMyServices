@@ -35,6 +35,7 @@ const Success = () => {
             text: "Your Order Has Been Placed Successfully",
             confirmButtonText: 'Okay'
         }).then(()=>{
+            localStorage.removeItem("orderId");
             window.location.href = "/Customer/CustOrder/";
         })
     },[]);
