@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
 
-const rowsPerPageOptions = [4, 5, 7];
+const rowsPerPageOptions =  [8,10,15];
 
 const EmpSer = () => {
  
@@ -177,7 +177,7 @@ const EmpSer = () => {
 
     const [empdata, empdatachange] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(4);
+    const [rowsPerPage, setRowsPerPage] = useState(8);
 
 
     const handleChangePage = (event, newPage) => {

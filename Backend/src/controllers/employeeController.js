@@ -205,7 +205,7 @@ module.exports = {
         res.status(500).json({ error: 'Server error' });
     }
   },
-  getActiveCustomer : async (req, res) => {
+  getActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
     // console.log(req.body); 
@@ -219,7 +219,7 @@ module.exports = {
         res.status(500).json({ error: 'Server error' });
     }
   },
-  getInActiveCustomer : async (req, res) => {
+  getInActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
     // console.log(req.body); 

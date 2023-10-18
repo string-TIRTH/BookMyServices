@@ -147,8 +147,7 @@ const Today = () => {
         axios.post(`http://localhost:5000/order/getHistoryByEmpId`, data)
             .then((response) => {
                 console.log(response.data)
-                // console.log(response.data.pendingOrders)
-                // console.log(response.data.completedOrders)
+               
                 setPending(response.data.history)
 
             })
@@ -252,7 +251,7 @@ const Today = () => {
                                                         <div className='row mt-2'>
 
 
-                                                            <div className='col-md-8'>
+                                                            <div className='col-md-10'>
                                                                 <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                                                                     <div className='row' style={{ marginTop: 20 }}>
                                                                         <div className="col-md-6">

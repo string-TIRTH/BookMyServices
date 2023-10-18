@@ -36,7 +36,7 @@
     position: fixed; /* Change the position to fixed */
     color: #fff;
     z-index: 1;
-    height: 94vh;
+    height:100%;
     width: 100px;
     transition: all 0.5s;
 }

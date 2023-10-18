@@ -842,11 +842,27 @@ module.exports = {
                         localField: "serId",
                         foreignField: "_id",
                         as: "serviceDetails",
-                    }
-                }
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "customers",
+                        localField: "custId",
+                        foreignField: "_id",
+                        as: "customerDetails",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "employees",
+                        localField: "empId",
+                        foreignField: "_id",
+                        as: "employeeDetails",
+                    },
+                },
             ]);
 
-            // Send a single JSON response with both order and history data
+        
             res.json(details);
         } catch (err) {
             res.json({
@@ -876,6 +892,7 @@ module.exports = {
             res.status(500).json({ message: 'An error occurred while activating the order' });
         }
 
-    }
+    },
+    
     // Similar functions for updating and deleting empSer...
 };
