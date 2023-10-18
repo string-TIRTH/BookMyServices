@@ -26,6 +26,7 @@ router.post("/activeService", orderController.activeService);
 router.post("/addAddons", orderController.addAddons);
 router.post("/removeAddOns", orderController.removeAddOns);
 router.post("/getAddOns", orderController.getAddOns);
+router.post("/makePayment", orderController.makePayment);
 
 
 

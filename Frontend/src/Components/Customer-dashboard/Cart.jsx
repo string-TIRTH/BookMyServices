@@ -20,6 +20,7 @@ import Swal from 'sweetalert2'
 let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
+    const [orderId ,setOrderId] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const [ash, setash] = useState(1);
@@ -110,7 +111,25 @@ const Cart = () => {
         setAddress({ ...address, [name]: value });
     };
 
+
+    const paymantDialog = (e) => {
+        const { name, value } = e.target;
+        console.log("here " + name, value)
+        setAddress({ ...address, [name]: value });
+    };
+
+    const handlePaymantDialog = (e) => {
+        const { name, value } = e.target;
+        console.log("here " + name, value)
+        setAddress({ ...address, [name]: value });
+    };
+    
     const handleSubmit = (e) => {
+        e.preventDefault();
+        // You can perform any action with the address data here
+        console.log("Address submitted:", address);
+    };
+    const makePayment = (e) => {
         e.preventDefault();
         // You can perform any action with the address data here
         console.log("Address submitted:", address);
@@ -205,6 +224,12 @@ const Cart = () => {
                         text += "\n" + item.serviceDetails.name;
                     });
                     console.log(text)
+                    
+                    setOrderId(response.data.orderId);
+                    
+
+
+
                     Swal.fire({
                         title: 'Order Placed Successfully',
                         icon: 'success',
@@ -423,7 +448,27 @@ const Cart = () => {
                                 Cancel
                             </Button>
                             <Button onClick={handlePlaceOrder} variant="contained" color="primary">
-                                Confirm Order
+                                Confirm Address
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog open={paymantDialog} onClose={handlePaymantDialog}>
+                        <DialogTitle>Place Order</DialogTitle>
+                        <DialogContent>
+                            Make Payment 
+                            <DialogContentText>
+                                <form onSubmit={makePayment}>
+                                    
+                                </form>
+
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handlePaymantDialog} style={{ backgroundColor: "blue", color: "black" }}>
+                                Cancel
+                            </Button>
+                            <Button onClick={paymantDialog} variant="contained" color="primary">
+                                Confirm Address
                             </Button>
                         </DialogActions>
                     </Dialog>

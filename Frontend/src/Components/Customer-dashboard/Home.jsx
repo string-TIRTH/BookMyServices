@@ -321,169 +321,26 @@ const Home = () => {
                         ))}
             </div>
 
-            {/* serviceform */}
-            <div className="container position-relative wow fadeInUp d-flex justify-content-center align-items-center" data-wow-delay="0.1s" style={{}}>
-                <div className="row justify-content-center">
-                    <div className="col-lg-8">
-                        <div className="bg-light text-center p-5">
-                            <h1 className="mb-4">Book For A Service</h1>
-                            <form>
-                                <div className="row g-3">
-                                    <div className="col-12 col-sm-6">
-                                        <input type="text" className="form-control border-0" placeholder="Your Name" style={{ height: "55px;" }} />
-                                    </div>
-                                    <div className="col-12 col-sm-6">
-                                        <input type="email" className="form-control border-0" placeholder="Your Email" style={{ height: "55px;" }} />
-                                    </div>
-                                    <div className="col-12 col-sm-6">
-                                        <select className="form-select border-0" style={{ height: "55px;" }}>
-                                            <option selected> Service</option>
-                                            <option value="1">Salon for Women</option>
-                                            <option value="2">Salon for Men</option>
-                                            <option value="3">Massage</option>
-                                            <option value="4">Cleaning</option>
-                                            <option value="5">Appliances Repairing</option>
-                                            <option value="6">Plumber</option>
-                                            <option value="7">Electrician</option>
-                                            <option value="8">Painting</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-12 col-sm-6">
-                                        <div className="date" id="date1" data-target-input="nearest">
-                                            <input type="text"
-                                                className="form-control border-0 datetimepicker-input"
-                                                placeholder="Service Date" data-target="#date1" data-toggle="datetimepicker" style={{ height: "55px;" }} />
-                                        </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <textarea className="form-control border-0" placeholder="Special Request"></textarea>
-                                    </div>
-                                    <div className="col-12">
-                                        <Link to={"/Customer/AddServices/"} button className="btn btn-primary w-100 py-3" type="submit" >Book Now</Link>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* team start */}
-            <div className="container-xxl py-5 ">
-
-                <h6 className="text-secondary text-uppercase d-flex justify-content-center align-items-center">OUR TECHNICIANS</h6>
-                <h1 className="mb-5 d-flex justify-content-center align-items-center">Our Expert Technicians</h1>
-                <div className='container d-flex justify-content-center align-items-center'>
-                    <div className="row g-4 ">
-                        <div className="col-lg-3 col-md-6 wow fadeInUp " data-wow-delay="0.1s">
-                            <div className="team-item ">
-                                <div className="position-relative overflow-hidden">
-                                    <img className="img-fluid" src={img6} alt="" />
-                                </div>
-                                <div className="team-text">
-                                    <div className="bg-light">
-                                        <h5 className="fw-bold mb-0">Full Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                    <div className="bg-success d-flex justify-content-center align-items-center">
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-facebook-f"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-twitter"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-instagram"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div className="team-item">
-                                <div className="position-relative overflow-hidden">
-                                    <img className="img-fluid" src={img7} alt="" />
-                                </div>
-                                <div className="team-text">
-                                    <div className="bg-light">
-                                        <h5 className="fw-bold mb-0">Full Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                    <div className="bg-danger d-flex justify-content-center align-items-center">
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-facebook-f"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-twitter"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-instagram"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                            <div className="team-item">
-                                <div className="position-relative overflow-hidden">
-                                    <img className="img-fluid" src={img8} alt="" />
-                                </div>
-                                <div className="team-text">
-                                    <div className="bg-light">
-                                        <h5 className="fw-bold mb-0">Full Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                    <div className="bg-warning d-flex justify-content-center align-items-center">
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-facebook-f"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-twitter"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-instagram"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                            <div className="team-item">
-                                <div className="position-relative overflow-hidden">
-                                    <img className="img-fluid" src={img9} alt="" />
-                                </div>
-                                <div className="team-text">
-                                    <div className="bg-light">
-                                        <h5 className="fw-bold mb-0">Full Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                    <div className="bg-primary d-flex justify-content-center align-items-center">
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-facebook-f"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-twitter"></i></a>
-                                        <a className="btn btn-square mx-1" href=""><i className="fab fa-instagram"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* foooter */}
-
-            <div className='container' style={{ maxWidth: "100%" }}>
-                <div className="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn  " data-wow-delay="0.1s">
-                    <div className="container py-5 ">
+            <div className='container-fluid' style={{flex:"auto"}}>
+                <div className="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn  " data-wow-delay="0.1s" style={{padding:"10px"}}>
+                    <div className="container-fluid" style={{padding:"40px"}}>
                         <div className="row g-5">
                             <div className="col-lg-3 col-md-6">
                                 <h4 className="text-light mb-4">Address</h4>
-                                <p className="mb-2"><i className="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                                <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                                <p className="mb-2"><i className="fa fa-envelope me-3"></i>info@example.com</p>
-                                <div className="d-flex pt-3">
-                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-twitter"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-facebook-f"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-youtube"></i></a>
-                                    <a className="btn btn-outline-light btn-social" style={{ marginRight: "10px" }} href=""><i className="fab fa-linkedin-in"></i></a>
-                                </div>
+                                <p className="mb-2"><i className="fa fa-map-marker-alt me-2"></i>Nadiad, Gujarat</p>
+                                <p className="mb-2"><i className="fa fa-phone-alt me-2"></i>+91 8780176056</p>
+                                <p className="mb-3"><i className="fa fa-envelope me-2"></i>bookmyservices.one@gmail.com</p>
+                            </div>
+
+                            <div className="col-lg-3 col-md-6" style={{ marginLeft: "120px" }}>
+                                <h4 className="text-light mb-4">BookMyServices</h4>
+                                <p>You Say We Do..!</p>
                             </div>
 
                             <div className="col-lg-3 col-md-6" style={{ marginLeft: "150px" }}>
                                 <h4 className="text-light mb-4">Opening Hours</h4>
-                                <h6 className="text-light">Monday - Friday:</h6>
-                                <p className="mb-4">09.00 AM - 09.00 PM</p>
-                                <h6 className="text-light">Saturday - Sunday:</h6>
-                                <p className="mb-0">09.00 AM - 12.00 PM</p>
-                            </div>
-
-                            <div className="col-lg-3 col-md-6" style={{ marginLeft: "120px" }}>
-                                <h4 className="text-light mb-4">Newsletter</h4>
-                                <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                                <div className="position-relative mx-auto" style={{ maxWidth: "2000px" }}>
-                                    <input className="" type="text" placeholder="Your email" /><br>
-                                    </br>
-                                    <button type="button" style={{ marginTop: "10px" }}>SignUp</button>
-                                </div>
+                                <h6 className="text-light">Monday - Sunday:</h6>
+                                <p className="mb-4">08.00 AM - 06.00 PM</p>
                             </div>
                         </div>
                     </div>

@@ -67,7 +67,7 @@ const Login = () => {
       const data = {
 
         email: email,
-        password: password,
+        password: md5(password),
         role : role
       }
 

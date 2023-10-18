@@ -4,6 +4,7 @@ const Employee = require('../models/EmployeeModel');
 const OrderModel = require('../models/OrderModel');
 const emailSender = require('../Helper/emailHelper');
 const moment = require('moment-timezone')
+const md5 = require('md5')
 moment().tz("Asia/Kolkata").format();
 module.exports = {
   getAllEmployees: async (req, res) => {
@@ -40,15 +41,16 @@ module.exports = {
       const speCharList = "!@#$%^&*()~_+=";
       password += speCharList[Math.floor(Math.random() * 13)];
       
-
+      console.log(password)
       const employee = new Employee({
           fname : fname,
           lname : lname,
           email : email,
-          password : password,
+          password : md5(password),
           contact_no : req.body.contact_no,
           address : req.body.address
       });
+      console.log(employee)
       const newEmployee = await employee.save();
       emailSender({email:email,password:password})
       res.status(201).json(newEmployee);
@@ -208,7 +210,7 @@ module.exports = {
     // const status = req.body.status
     // console.log(req.body); 
     try {
-        const customer = await Employee.find({status:'active'});
+        const customer = await Employee.find({isActive:true});
         
         
         res.send(customer);
@@ -222,7 +224,7 @@ module.exports = {
     // const status = req.body.status
     // console.log(req.body); 
     try {
-        const customer = await Employee.find({status:'inactive'});
+        const customer = await Employee.find({isActive:false});
         
         
         res.send(customer);

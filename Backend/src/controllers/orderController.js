@@ -10,6 +10,7 @@ const emailSender = require("../Helper/otpHelper")
 const { default: mongoose } = require("mongoose");
 const CustomerModel = require('../models/CustomerModel');
 const { response } = require('express');
+const stripe = require('stripe')("sk_test_51O2WDWSDtYEklcYFMYUjPxx6mOCNQLz9xQnNs9mXKVa5wfVJdsSwMV8sYMmREvId03RHBm8Xs6ayDaF6cgvJg5Up003VkJPTVB")
 module.exports = {
     checkAvailability: async (req, res) => {
         try {
@@ -179,7 +180,8 @@ module.exports = {
             } else {
                 // console.log("employee assigned")
                 responseAck.serviceAssign = i;
-                responseAck.status = "success"
+                responseAck.status = "success";
+                responseAck.orderId = orderId;
                 responseAck.code = 0; //
             }
             res.json(responseAck);
@@ -527,6 +529,23 @@ module.exports = {
                 err
             );
         }
+    },
+    makePayment : async (req,res) => {
+        
+            const session = await stripe.checkout.sessions.create({
+              line_items: [
+                {
+                   price: 'pr_1234',
+                  quantity: 1,
+                },
+              ],
+              mode: 'payment',
+              success_url: `/success`,
+              cancel_url: `/cancel`,
+            });
+          
+            res.redirect(303, session.url);
+          
     },
     getHistoryByEmpId: async (req, res) => {
         try {

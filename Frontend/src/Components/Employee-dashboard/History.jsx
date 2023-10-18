@@ -165,7 +165,6 @@ const Today = () => {
             .then((response) => {
                 console.log(response.data);
                 setFeedbackDetails(response.data);
-
             })
 
     }

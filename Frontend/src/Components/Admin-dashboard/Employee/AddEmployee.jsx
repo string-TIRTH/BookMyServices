@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-
+import Swal from 'sweetalert2';
 const containerStyle = {
   display: 'flex',
   justifyContent: 'center',
@@ -114,16 +114,26 @@ export default function AddEmployee() {
                 contact_no: contact_no,
                 address: add
               }
-              console.log("haassss!!!!")
+              
       
               const response = await axios.post('http://localhost:5000/employee/createEmployee', data);
-              alert('Added Successfully');
+              Swal.fire({
+                title: 'Employee Added',
+                icon: 'success',
+                text: "email has been sent",
+                confirmButtonText: 'Close'
+              })
       
       
               console.log('Data sent successfully:', response.data);
               window.location.href = '/Admin/Employee';
             } catch (error) {
-              alert('Signup fails :(')
+              Swal.fire({
+                title: 'Something Went Wrong... :/',
+                icon: 'warning',
+                text: "please try again later",
+                confirmButtonText: 'Got It'
+              })
               console.error('Error sending data:', error);
       
             }

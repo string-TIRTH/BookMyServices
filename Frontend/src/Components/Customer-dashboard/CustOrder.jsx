@@ -320,7 +320,7 @@ const CustOrder = () => {
                                                         <div className='row mt-2'>
 
 
-                                                            <div className='col-md-8'>
+                                                            <div className='col-md-12'>
                                                                 <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                                                                     <div className='row' style={{ marginTop: 20 }}>
                                                                         <div className="col-md-6">
@@ -434,7 +434,7 @@ const CustOrder = () => {
                                                         <div className='row mt-2'>
 
 
-                                                            <div className='col-md-8'>
+                                                            <div className='col-md-12'>
                                                                 <div className="card" key={index} style={{ backgroundColor: '#f5f5f5', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                                                                     <div className='row' style={{ marginTop: 20 }}>
                                                                         <div className="col-md-6">
@@ -474,8 +474,8 @@ const CustOrder = () => {
                                                                             cursor: 'pointer',
                                                                             fontSize: '16px'
                                                                         }} variant="contained" color="warning">Order Details</Button>
-                                                                        {item.feedActive === false && <button className="btn btn-success" onClick={() => HandleFeedback(item)} style={{ width: 100 }} >FeedBack</button>}
-                                                                        {item.feedActive === true && <button className="btn btn-success" onClick={() => HandleViewFeedback(item)} style={{ width: 100 }} >view FeedBack</button>}
+                                                                        {item.feedActive === false && <button className="btn btn-success" onClick={() => HandleFeedback(item)} style={{ width: 150 }} >FeedBack</button>}
+                                                                        {item.feedActive === true && <button className="btn btn-success" onClick={() => HandleViewFeedback(item)} style={{ width: 150 }} >view FeedBack</button>}
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
