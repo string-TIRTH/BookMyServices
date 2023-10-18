@@ -147,8 +147,7 @@ const Today = () => {
         axios.post(`http://localhost:5000/order/getHistoryByEmpId`, data)
             .then((response) => {
                 console.log(response.data)
-                // console.log(response.data.pendingOrders)
-                // console.log(response.data.completedOrders)
+               
                 setPending(response.data.history)
 
             })

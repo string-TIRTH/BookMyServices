@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TablePagination from '@mui/material/TablePagination';
 
-const rowsPerPageOptions = [4,5,7];
+const rowsPerPageOptions =  [8,10,15];
 
 const Customer = () => {
  
    
     const [empdata, empdatachange] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(4);
+    const [rowsPerPage, setRowsPerPage] = useState(8);
  
 
     const handleChangePage = (event, newPage) => {

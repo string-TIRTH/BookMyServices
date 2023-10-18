@@ -203,12 +203,12 @@ module.exports = {
         res.status(500).json({ error: 'Server error' });
     }
   },
-  getActiveCustomer : async (req, res) => {
+  getActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
     // console.log(req.body); 
     try {
-        const customer = await Employee.find({status:'active'});
+        const customer = await Employee.find({isActive:true});
         
         
         res.send(customer);
@@ -217,12 +217,12 @@ module.exports = {
         res.status(500).json({ error: 'Server error' });
     }
   },
-  getInActiveCustomer : async (req, res) => {
+  getInActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
     // console.log(req.body); 
     try {
-        const customer = await Employee.find({status:'inactive'});
+        const customer = await Employee.find({isActive:false});
         
         
         res.send(customer);

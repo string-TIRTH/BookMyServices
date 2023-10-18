@@ -1,143 +1,58 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import moment from 'moment';
+import React from 'react';
 
 const YourComponent = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(moment());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
-  const [next6Days, setNext6Days] = useState([]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const bigCardStyle = {
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    padding: '20px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const containerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setSelectedTimeSlot('');
+  const cardStyle = {
+    flex: 1,
+    margin: '10px',
+    padding: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    textAlign: 'center',
   };
 
-  const handleTimeSlotChange = (e) => {
-    setSelectedTimeSlot(e.target.value);
+  const buttonStyle = {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#0074d9',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
   };
-
-  const handleConfirm = () => {
-    // Handle the selected date and time slot
-    console.log('Selected Date:', selectedDate.format('YYYY-MM-DD'));
-    console.log('Selected Time Slot:', selectedTimeSlot);
-
-    // Close the dialog
-    handleClose();
-  };
-
-  // Generate buttons for the next 6 days including today
-  const generateNext6Days = () => {
-    const days = [];
-    for (let i = 0; i < 6; i++) {
-      const day = moment().add(i, 'days');
-      days.push(day);
-    }
-    setNext6Days(days);
-  };
-
-  // Initialize the date buttons
-  useState(() => {
-    generateNext6Days();
-  }, []);
-
-  // Generate time slots based on the selected date
-  const generateTimeSlots = () => {
-    const timeSlots = [];
-    const today = moment();
-    if (selectedDate.isSame(today, 'day')) {
-      // Display time slots starting from the next hour for today
-      const nextHour = moment().startOf('hour').add(1, 'hour');
-      while (nextHour.isBefore(moment().endOf('day'))) {
-        timeSlots.push(nextHour.format('h:mm A'));
-        nextHour.add(1, 'hour');
-      }
-    } else {
-      // Display time slots from 8:00 AM to 6:00 PM for other days
-      let hour = 8;
-      while (hour <= 18) {
-        timeSlots.push(moment().hour(hour).format('h:00 A'));
-        hour++;
-      }
-    }
-    return timeSlots;
-  };
-
-  const timeSlots = generateTimeSlots();
 
   return (
-    <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        Open Dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Select Date and Time Slot</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <div>
-              <div>
-                <h5>Select Date:</h5>
-                
-                <div className="row">
-
-                {next6Days.map((day,index) => (
-                     <div className="col-md-2" key={index}>
-                  <button
-                    key={day}
-                    className={`btn btn-sm ${
-                      day.isSame(selectedDate, 'day') ? 'btn-primary' : 'btn-success'
-                    }`}
-                    onClick={() => handleDateChange(    day)}
-                    style={{width:"65px",height:"50px"}}
-                  >
-                    {day.format('MMM DD')}
-                  </button>
-                  </div>
-                ))}
-                </div>
-              </div>
-              <div>
-                
-                <h5 style={{marginTop:"10px"}}>Select Time Slot:</h5>
-                <select
-                  id="timeSlotSelect"
-                  className="form-select"
-                  value={selectedTimeSlot}
-                  onChange={handleTimeSlotChange}
-                >
-                  <option value="">Select a time slot</option>
-                  {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleConfirm} color="primary">
-            Confirm
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <div style={bigCardStyle}>
+      <h2>OrderId:</h2>
+      <div style={containerStyle}>
+        <div style={cardStyle}>
+          <h3>Employee Details</h3>
+          <p>Column 1 description goes here.</p>
+          <button style={buttonStyle}>Button 1</button>
+        </div>
+        <div style={cardStyle}>
+          <h3>Service</h3>
+          <p>Column 2 description goes here.</p>
+          <button style={buttonStyle}>Button 2</button>
+        </div>
+        <div style={cardStyle}>
+          <h3>customer Details</h3>
+          <p>Column 3 description goes here.</p>
+          <button style={buttonStyle}>Button 3</button>
+        </div>
+      </div>
+      <button className="btn bg-warning"style={{width:100}}>Order Details</button>
     </div>
   );
 };

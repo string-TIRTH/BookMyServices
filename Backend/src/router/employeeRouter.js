@@ -83,8 +83,8 @@ router.post("/updateEmployee",employeeController.updateEmployee);
 
 router.post("/deleteEmployee",employeeController.deleteEmployee);
 router.post("/activeEmployee", employeeController.activeEmployee);
-router.post("/getActiveEmployee", employeeController.getActiveCustomer);
-router.post("/getInActiveEmployee", employeeController.getInActiveCustomer);
+router.post("/getActiveEmployee", employeeController.getActiveEmployee);
+router.post("/getInActiveEmployee", employeeController.getInActiveEmployee);
 
 
 /**

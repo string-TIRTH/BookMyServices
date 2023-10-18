@@ -23,9 +23,12 @@
   .sidebar{
     background: #000;
     color: #fff;
-    height: 94vh  ;
-    width: 200px;
+    height: 94vh;
+    width: 100%;
     transition: all 0.5s;
+    position: relative;
+   
+  
   }
   .top_section{
     /* display: flex; */

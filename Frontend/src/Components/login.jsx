@@ -36,8 +36,9 @@ const Login = () => {
 
     // Check email and password against the regular expressions
     const isEmailValid = emailPattern.test(email);
-    const isPasswordValid = passwordPattern.test(password);
-
+    
+    // const isPasswordValid = passwordPattern.test(password);
+    const isPasswordValid =true;
     // Display validation messages
     if (!isEmailValid) {
       Swal.fire({
