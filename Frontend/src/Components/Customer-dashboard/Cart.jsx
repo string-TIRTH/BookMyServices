@@ -11,9 +11,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Swal from 'sweetalert2'
-import {loadStripe} from '@stripe/stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+
 // import Container from 'react-bootstrap/Container';
 // import Row from 'react-bootstrap/Row';
 // import Col from 'react-bootstrap/Col';
@@ -22,7 +24,7 @@ let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
     const [paymentOpen, setPaymentOpen] = useState(false);
-    const [orderId ,setOrderId] = useState(100);
+    const [orderId, setOrderId] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const [ash, setash] = useState(1);
@@ -30,6 +32,7 @@ const Cart = () => {
     const [Item, setItem] = useState([]);
     const [user, setUser] = useState({});
     const [isCartEmpty, setIsCartEmpty] = useState(true);
+
     // const [custId,setCustId] = useState(localStorage.getItem("id"))
     // console.log(count)
     const handleClickOpen = (item) => {
@@ -125,24 +128,24 @@ const Cart = () => {
     const handlePaymantDialog = (e) => {
         setPaymentOpen(false)
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // You can perform any action with the address data here
         console.log("Address submitted:", address);
     };
-    const makePayment = async()=>{
+    const makePayment = async () => {
         const stripe = await loadStripe("pk_test_51O2WDWSDtYEklcYF04UfHkzAnWJGz2u8kHYHVeLk1ohRSl7M45wAfkTD4hHhey9QJo0BcrFzKSjwNGAXNFG3mVbK00TOVBPOVP");
         const body = {
-            products:cartItems
+            products: cartItems
         }
         const header = {
-            "Content-Type" : "application/json"
+            "Content-Type": "application/json"
         }
-        const response = await fetch("http://localhost:5000/order/createCheckout",{
-            method:"POST",
-            headers : header,
-            body:JSON.stringify(body)
+        const response = await fetch("http://localhost:5000/order/createCheckout", {
+            method: "POST",
+            headers: header,
+            body: JSON.stringify(body)
         });
         const session = await response.json();
         
@@ -215,21 +218,22 @@ const Cart = () => {
         setOrderDialogOpen(false);
     };
     const handlePlaceOrder = async () => {
+        setOrderDialogOpen(false);
         try {
             setIsCartEmpty(true)
             let lat = 0;
             let lng = 0;
-            const result = await axios.get(`https://api.geoapify.com/v1/geocode/search?postcode=`+address.pincode+`&type=postcode&format=json&apiKey=e61b88dd95644ef79521f24baa6fb8f4`)
-                    .then((result) => {
-                        lat = result.data.results[0].lat;
-                        lng = result.data.results[0].lon;
-                    })
-                    // console.log(lat +" " + lng)
+            const result = await axios.get(`https://api.geoapify.com/v1/geocode/search?postcode=` + address.pincode + `&type=postcode&format=json&apiKey=e61b88dd95644ef79521f24baa6fb8f4`)
+                .then((result) => {
+                    lat = result.data.results[0].lat;
+                    lng = result.data.results[0].lon;
+                })
+            // console.log(lat +" " + lng)
             const placeOrderData = {
                 custId: id._id,
                 address: address,
-                lat : lat,
-                lng : lng
+                lat: lat,
+                lng: lng
             }
             // console.log(placeOrderData)
             const response = await axios.post("http://localhost:5000/Order/createOrder", placeOrderData);
@@ -266,7 +270,7 @@ const Cart = () => {
         }
     }
 
-    
+
     return (
         <div >
             <NavBar></NavBar>
@@ -360,23 +364,23 @@ const Cart = () => {
                             {!isCartEmpty ?
                                 <div className="col-md-12 align-content-right" style={{}}>
                                     <div className="col-md-11 mt-8 d-flex justify-content-end align-items-end" style={{ height: "10px" }} >
-                                        <div className="card" style={{ height: "auto", marginBottom: "50px", textAlign:"center"}}>
+                                        <div className="card" style={{ height: "auto", marginBottom: "50px", textAlign: "center" }}>
                                             <div className="card-body">
-                                                <h5 className="card-title" style={{textAlign:"center"}}>Total Amount</h5>
-                                                
-                                        {
-                                        cartItems.map((item, index) => (
-                                            <div style={{display:"flex",justifyContent: "space-between"}}>
-                                            <p style={{textAlign:"left", marginRight:"15px"}}>{item.serviceDetails.name} : </p> <p style={{textAlign : "right"}}>₹ {item.serviceDetails.price}</p>
-                                            </div>
-                                                ))
-                                        }
-                                        <div style={{display:"flex",justifyContent: "space-between"}}>
-                                            <p style={{textAlign:"left", marginRight:"15px"}}>Total : </p> <p style={{textAlign : "right"}}>₹ {calculateTotalPrice()}</p>
-                                            </div>
+                                                <h5 className="card-title" style={{ textAlign: "center" }}>Total Amount</h5>
+
+                                                {
+                                                    cartItems.map((item, index) => (
+                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p style={{ textAlign: "left", marginRight: "15px" }}>{item.serviceDetails.name} : </p> <p style={{ textAlign: "right" }}>₹ {item.serviceDetails.price}</p>
+                                                        </div>
+                                                    ))
+                                                }
+                                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                    <p style={{ textAlign: "left", marginRight: "15px" }}>Total : </p> <p style={{ textAlign: "right" }}>₹ {calculateTotalPrice()}</p>
+                                                </div>
 
                                                 <Button
-                                                    style={{ width: "150px",justifyContent:"center" }}
+                                                    style={{ width: "150px", justifyContent: "center" }}
                                                     variant="contained"
                                                     color="warning"
                                                     onClick={handleOpenOrderDialog}
@@ -442,6 +446,8 @@ const Cart = () => {
                                         fullWidth
                                         margin="normal"
                                     />
+                                  
+
 
                                 </form>
 
@@ -449,30 +455,31 @@ const Cart = () => {
                             {/* Add your form fields and order confirmation content */}
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCloseOrderDialog} style={{ backgroundColor: "blue", color: "black" }}>
-                                Cancel
+                            <Button onClick={handlePlaceOrder}variant="contained" color="success">
+                                Cash Payment
                             </Button>
-                            <Button onClick={handlePlaceOrder} variant="contained" color="primary">
-                                Confirm Address
+                            <Button onClick={makePayment}variant="contained" color="warning">
+                              Online Payment
                             </Button>
                         </DialogActions>
                     </Dialog>
+
                     <Dialog open={paymentOpen} onClose={handlePaymantDialog}>
                         <DialogTitle>Place Order</DialogTitle>
                         <DialogContent>
-                            Make Payment 
+                            Make Payment
                             <DialogContentText>
                                 <form onSubmit={makePayment}>
-                                    
+
                                 </form>
 
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handlePaymantDialog} style={{ backgroundColor: "blue", color: "black" }}>
+                            <Button onClick={handlePaymantDialog}  variant="contained" color="success">
                                 Cancel
                             </Button>
-                            <Button onClick={paymantDialog} variant="contained" color="primary">
+                            <Button onClick={makePayment} variant="contained" color="warning">
                                 Confirm Address
                             </Button>
                         </DialogActions>

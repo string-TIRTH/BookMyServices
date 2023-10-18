@@ -181,14 +181,13 @@ const Dashboard = () => {
       <div className="container" style={{ backgroundColor: "#000" }}>
         <div className="left-sidebar" >
 
-          <div className='row'>
-            <div className='col-md-2'>
-            <Sidebar></Sidebar>
-            </div>
-            <div className='col-md-10'>
-              <div className="container-fluid" style={{ backgroundColor: "#D4E6F1", height: "99vh" }}>
-                
-                <div className="container">
+          <Sidebar></Sidebar>
+        </div>
+        <div className="right-content">
+          <div className="centered-form" style={{ width: "100%", height: "100%" }}>
+            <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "2px", marginRight: "0px" }}>
+              <h1> Welcome,User</h1>
+              <div className="container">
                 <div className="row">
                   <div className="col-sm" >
                     <div class="card bg-warning" style={{ width: "15rem" }}>
@@ -366,7 +365,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-        </div>
+
   );
 }
 export default Dashboard
