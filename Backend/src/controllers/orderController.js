@@ -74,7 +74,7 @@ module.exports = {
             const custLng = req.body.lng;
             // console.log(address)
             // console.log(custId)
-           
+
             const customer = await CustomerModel.findById(custId, { cart: true });
             // console.log(customer)
             address.lat = custLat;
@@ -118,10 +118,10 @@ module.exports = {
                     } else {
                         foundEmpId = eid;
                         const employee = await EmployeeModel.findById(eid, { address: true });
-                        const distance = distanceCalc(custLat,custLng,employee.address[0].lat,employee.address[0].lng)  
+                        const distance = distanceCalc(custLat, custLng, employee.address[0].lat, employee.address[0].lng)
                         console.log(distance)
                         console.log(employee)
-                        if(distance <= 10){
+                        if (distance <= 10) {
                             empFound = true;
                             console.log("hherere")
                             break;
@@ -264,7 +264,7 @@ module.exports = {
                             service_date: 1,
                             payment_mode: 1,
                             booking_datetime: 1,
-                            feedActive:1,
+                            feedActive: 1,
                             "serviceDetails.name": 1,
                             "serviceDetails.price": 1,
                             "serviceDetails.avgRating": 1,
@@ -530,22 +530,38 @@ module.exports = {
             );
         }
     },
-    makePayment : async (req,res) => {
-        
-            const session = await stripe.checkout.sessions.create({
-              line_items: [
-                {
-                   price: 'pr_1234',
-                  quantity: 1,
+    createCheckout: async (req, res) => {
+
+        // console.log(req.body)
+        const services = req.body.products
+        // console.log(services)
+        const lineItems = services.map((services)=>({
+            price_data:{
+                
+                currency:"inr",
+                product_data:{
+                    name: services.serviceDetails.name,
+                    // time: services.serviceDetails.time,
+                    // id: services.serId,
                 },
-              ],
-              mode: 'payment',
-              success_url: `/success`,
-              cancel_url: `/cancel`,
-            });
-          
-            res.redirect(303, session.url);
-          
+                unit_amount : services.serviceDetails.price * 100
+                
+                    
+            },
+            quantity : "1",
+        }));
+        const session = await stripe.checkout.sessions.create({
+            // payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `http://localhost:3000/Customer/CustOrder/`,
+            cancel_url: `http://localhost:3000/Customer/Cart`,
+        });
+        console.log("session Data:")
+        console.log(session)
+
+        res.json({id:session.id});
+
     },
     getHistoryByEmpId: async (req, res) => {
         try {
@@ -669,7 +685,7 @@ module.exports = {
                     { $project: { addOnList: 1 } }
 
                 ])
-                total +=parseInt(addOnData[0].addOnList.price);
+                total += parseInt(addOnData[0].addOnList.price);
             }
             total += order.amount;
             const newOrder = await OrderModel.findByIdAndUpdate(id, order)
@@ -678,7 +694,7 @@ module.exports = {
                     const newOrder = await OrderModel.findById(id, { serId: true, custId: true, service_startTime: true });
                     const service = await ServiceModel.findById(newOrder.serId, { price: true, name: true });
                     const customer = await CustomerModel.findById(newOrder.custId, { email: true });
-                    const responseAck = emailSender.sendOrderCompletionOTP( customer.email??"sgrana447@gmail.com", {
+                    const responseAck = emailSender.sendOrderCompletionOTP(customer.email ?? "sgrana447@gmail.com", {
                         "name": service.name,
                         "price": total,
                         "startTime": newOrder.service_startTime,
@@ -712,9 +728,9 @@ module.exports = {
             }
             order.addOns = addOns;
 
-            
+
             const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
-            
+
             res.send(newOrder)
 
         } catch (err) {
@@ -744,12 +760,12 @@ module.exports = {
                 ])
 
                 addOnRes.push(addOnData[0])
-                total +=parseInt(addOnData[0].addOnList.price);
+                total += parseInt(addOnData[0].addOnList.price);
             }
-            
+
             // addOnRes.total = total;
             // console.log(addOnRes)
-            res.json({addOnList : addOnRes,subtotal : total})
+            res.json({ addOnList: addOnRes, subtotal: total })
         } catch (err) {
             console.log(err);
             res.json(err)
@@ -772,7 +788,7 @@ module.exports = {
             }
             order.addOns = addOns;
             const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
-            res.send(newOrder)  
+            res.send(newOrder)
             // res.json("ok")
 
         } catch (err) {
@@ -799,14 +815,14 @@ module.exports = {
                     { $project: { addOnList: 1 } }
 
                 ])
-                total +=parseInt(addOnData[0].addOnList.price);
+                total += parseInt(addOnData[0].addOnList.price);
             }
             total += order.amount;
             if (order != null) {
                 order.status = "completed";
                 const empId = order.empId;
                 const emp = await EmployeeModel.findByIdAndUpdate(empId, { isBusy: false });
-                order.amount +=total;
+                order.amount += total;
                 await OrderModel.findByIdAndUpdate(id, order);
                 res.json({ message: true })
             } else {
@@ -862,7 +878,7 @@ module.exports = {
                 },
             ]);
 
-        
+
             res.json(details);
         } catch (err) {
             res.json({
@@ -893,6 +909,6 @@ module.exports = {
         }
 
     },
-    
+
     // Similar functions for updating and deleting empSer...
 };

@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Swal from 'sweetalert2'
+import {loadStripe} from '@stripe/stripe-js'
 // import Container from 'react-bootstrap/Container';
 // import Row from 'react-bootstrap/Row';
 // import Col from 'react-bootstrap/Col';
@@ -20,6 +21,7 @@ import Swal from 'sweetalert2'
 let count = 0;
 const Cart = () => {
     const [orderDialogOpen, setOrderDialogOpen] = useState(false);
+    const [paymentOpen, setPaymentOpen] = useState(false);
     const [orderId ,setOrderId] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
@@ -84,6 +86,7 @@ const Cart = () => {
 
         Promise.all(promises)
             .then((updatedCartData) => {
+                console.log("data")
                 console.log(updatedCartData)
                 setCartItems(updatedCartData);
             });
@@ -119,9 +122,7 @@ const Cart = () => {
     };
 
     const handlePaymantDialog = (e) => {
-        const { name, value } = e.target;
-        console.log("here " + name, value)
-        setAddress({ ...address, [name]: value });
+        setPaymentOpen(false)
     };
     
     const handleSubmit = (e) => {
@@ -129,11 +130,29 @@ const Cart = () => {
         // You can perform any action with the address data here
         console.log("Address submitted:", address);
     };
-    const makePayment = (e) => {
-        e.preventDefault();
-        // You can perform any action with the address data here
-        console.log("Address submitted:", address);
-    };
+    const makePayment = async()=>{
+        const stripe = await loadStripe("pk_test_51O2WDWSDtYEklcYF04UfHkzAnWJGz2u8kHYHVeLk1ohRSl7M45wAfkTD4hHhey9QJo0BcrFzKSjwNGAXNFG3mVbK00TOVBPOVP");
+        const body = {
+            products:cartItems
+        }
+        const header = {
+            "Content-Type" : "application/json"
+        }
+        const response = await fetch("http://localhost:5000/order/createCheckout",{
+            method:"POST",
+            headers : header,
+            body:JSON.stringify(body)
+        });
+        const session = await response.json();
+
+        const result = stripe.redirectToCheckout({
+            sessionId:session.id
+        })
+        console.log(result)
+        if(result.error){
+            console.log(result.error);
+        }
+    }
 
     const HandleRemove = (item) => {
         const data = {
@@ -242,6 +261,7 @@ const Cart = () => {
                         axios.post("http://localhost:5000/customer/removeCart", data);
                         setIsCartEmpty(true);
                     })
+                    setPaymentOpen(true)
                 } else {
                     Swal.fire({
                         title: 'workers are not available... for some services',
@@ -262,6 +282,7 @@ const Cart = () => {
         }
     }
 
+    
     return (
         <div >
             <NavBar></NavBar>
@@ -374,7 +395,7 @@ const Cart = () => {
                                                     style={{ width: "150px",justifyContent:"center" }}
                                                     variant="contained"
                                                     color="warning"
-                                                    onClick={handleOpenOrderDialog}
+                                                    onClick={makePayment}
 
 
                                                 >
@@ -452,7 +473,7 @@ const Cart = () => {
                             </Button>
                         </DialogActions>
                     </Dialog>
-                    <Dialog open={paymantDialog} onClose={handlePaymantDialog}>
+                    <Dialog open={paymentOpen} onClose={handlePaymantDialog}>
                         <DialogTitle>Place Order</DialogTitle>
                         <DialogContent>
                             Make Payment 
