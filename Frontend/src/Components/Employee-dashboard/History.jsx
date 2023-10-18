@@ -147,7 +147,7 @@ const Today = () => {
         axios.post(`http://localhost:5000/order/getHistoryByEmpId`, data)
             .then((response) => {
                 console.log(response.data)
-               
+
                 setPending(response.data.history)
 
             })
@@ -163,7 +163,7 @@ const Today = () => {
         axios.post(`http://localhost:5000/feedback/getFeedbackByOrderId/`, data1)
             .then((response) => {
                 console.log(response.data);
-                setFeedbackDetails(response.data);
+                setFeedbackDetails(response.data[0]);
             })
 
     }
@@ -187,7 +187,19 @@ const Today = () => {
         setdia(false);
         setItem([])
     }
-
+    const paperStyle = {
+        padding: '10px',
+        textAlign: 'center',
+        backgroundColor: '#ffb6c1',
+        borderRadius: '10px',
+        width: '150px',
+        marginLeft: '20px',
+        marginRight: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      };
 
     return (
         <>
@@ -375,26 +387,30 @@ const Today = () => {
                                                                                 <Typography variant="h6">Service Rating</Typography>
                                                                                 <Rating
                                                                                     name="service-rating"
-                                                                                    value={feedbackDetails[0]?.serRating}
+                                                                                    value={feedbackDetails?.serRating ||0 }
                                                                                     readOnly
                                                                                     max={5} // Specify the maximum rating value (in this case, 5)
                                                                                 />
                                                                                 <Typography variant="body1">
-                                                                                    {mapRatingToLabel(feedbackDetails[0]?.serRating)}
+                                                                                    {mapRatingToLabel(feedbackDetails?.serRating)}
                                                                                 </Typography>
                                                                             </Paper>
                                                                         </Grid>
                                                                         <Grid item xs={6}>
-                                                                            <Paper elevation={3} style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ffb6c1', borderRadius: '10px', width: "150px", marginLeft: "20px", marginRight: "10px" }}>
+                                                                            <Paper elevation={3} style={paperStyle}>
                                                                                 <Typography variant="h6">Employee Rating</Typography>
-                                                                                <Rating
-                                                                                    name="employee-rating"
-                                                                                    value={feedbackDetails[0]?.empRating}
-                                                                                    readOnly
-                                                                                    max={5} // Specify the maximum rating value (in this case, 5)
-                                                                                />
+                                                                                <Box component="fieldset" borderColor="transparent">
+                                                                                    <Typography variant="body1">
+                                                                                        <Rating
+                                                                                            name="employee-rating"
+                                                                                            value={feedbackDetails?.empRating || 0}
+                                                                                            readOnly
+                                                                                            max={5}
+                                                                                        />
+                                                                                    </Typography>
+                                                                                </Box>
                                                                                 <Typography variant="body1">
-                                                                                    {mapRatingToLabel(feedbackDetails[0]?.empRating)}
+                                                                                    {mapRatingToLabel(feedbackDetails?.empRating)}
                                                                                 </Typography>
                                                                             </Paper>
                                                                         </Grid>
@@ -402,7 +418,7 @@ const Today = () => {
                                                                     <Box mt={2}>
                                                                         <Paper elevation={3} style={{ padding: '10px', borderRadius: '10px' }}>
                                                                             <Typography variant="h6">Feedback</Typography>
-                                                                            <Typography variant="body1">{feedbackDetails[0]?.feed_text}</Typography>
+                                                                            <Typography variant="body1">{feedbackDetails?.feed_text}</Typography>
                                                                         </Paper>
                                                                     </Box>
                                                                 </CardContent>
