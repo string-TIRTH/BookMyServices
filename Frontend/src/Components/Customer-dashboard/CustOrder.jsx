@@ -64,8 +64,8 @@ const CustOrder = () => {
 
                     console.log(response.data);
                     Swal.fire({
-                        title: 'Deleted successfully.',
-                        text: 'Deleted to service successfully',
+                        title: 'Send successfully.',
+                        text: 'Feedback is Send successfully',
                         icon: 'success',
                         confirmButtonText: 'Okay'
 
@@ -252,7 +252,7 @@ const CustOrder = () => {
           case 5:
             return 'Very Good';
           default:
-            return 'N/A';
+            return 'Not Rated';
         }
       }
       
@@ -474,8 +474,8 @@ const CustOrder = () => {
                                                                             cursor: 'pointer',
                                                                             fontSize: '16px'
                                                                         }} variant="contained" color="warning">Order Details</Button>
-                                                                        {item.feedActive === false && <button className="btn btn-success" onClick={() => HandleFeedback(item)} style={{ width: 150 }} >FeedBack</button>}
-                                                                        {item.feedActive === true && <button className="btn btn-success" onClick={() => HandleViewFeedback(item)} style={{ width: 150 }} >view FeedBack</button>}
+                                                                        {item.status === 'completed' && item.feedActive === false && <button className="btn btn-success" onClick={() => HandleFeedback(item)} style={{ width: 150 }} >FeedBack</button>}
+                                                                        {item.status === 'completed' && item.feedActive === true && <button className="btn btn-success" onClick={() => HandleViewFeedback(item)} style={{ width: 150 }} >view FeedBack</button>}
                                                                     </div>
                                                                     <div className="col-md-6" style={{ margin: 10 }}>
 
@@ -628,7 +628,7 @@ const CustOrder = () => {
               <Typography variant="h6">Service Rating</Typography>
               <Rating
                 name="service-rating"
-                value={feedbackDetails[0]?.serRating}
+                value={feedbackDetails[0]?.serRating  || 0}
                 readOnly
                 max={5} // Specify the maximum rating value (in this case, 5)
               />
@@ -642,7 +642,7 @@ const CustOrder = () => {
               <Typography variant="h6">Employee Rating</Typography>
               <Rating
                 name="employee-rating"
-                value={feedbackDetails[0]?.empRating}
+                value={feedbackDetails[0]?.empRating || 0}
                 readOnly
                 max={5} // Specify the maximum rating value (in this case, 5)
               />
