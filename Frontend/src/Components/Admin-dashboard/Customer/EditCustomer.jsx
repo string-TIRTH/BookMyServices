@@ -165,10 +165,12 @@ const EditCustomer = (props) => {
             text: 'Updated Successfully!',
             icon: 'success',
             confirmButtonText: 'Okay'
-        })
+        }).then(
+          
+          
+          window.location.href = '/Admin/Customer'
+        )
 
-          console.log('Data sent successfully:', response.data);
-          window.location.href = '/Admin/Customer';
         } catch (error) {
           Swal.fire({
             title: 'Ah.. Something Went Wrong...!',

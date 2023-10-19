@@ -10,10 +10,10 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Card from 'react-bootstrap/Card';
 // import Button from 'react-bootstrap/Button';
-
+import Typography from '@mui/material/Typography';
 import 'bootstrap/dist/css/bootstrap.css';
-
-
+import img from '../img/AdminLock.jpg'
+import md5 from 'md5'
 const Dashboard = () => {
   const [eopen, setopenemp] = useState(false);
   const [eitem, esetitem] = useState({});
@@ -23,6 +23,8 @@ const Dashboard = () => {
   const [citem, csetitem] = useState({});
   const [oopen, setopenord] = useState(false);
   const [oitem, osetitem] = useState({});
+  const [isOpen, setIsOpen] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const bigCardStyle = {
     border: '1px solid #ddd',
     borderRadius: '8px',
@@ -30,7 +32,9 @@ const Dashboard = () => {
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     marginTop: "10px"
   };
-
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   const containerStyle = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -171,13 +175,55 @@ const Dashboard = () => {
     setopenord(false);
     osetitem({})
   }
+ const handleLogin = () =>{
+    window.location.href="/login";
+ }
+ useEffect(() => {
 
+
+  if (localStorage.getItem('role') === md5("Admin")) {
+    setIsLoggedIn(true);
+  
+ 
+
+  }
+}, []);
 
 
 
 
   return (
     <div>
+      {!isLoggedIn && (
+        <div style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+          <img
+            src={img}
+            alt="Full Page Image"
+
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          />
+          <Dialog open={isOpen} onClose={handleClose}>
+            <div style={{ padding: '16px' }}>
+              <Typography variant="h5" component="div" gutterBottom>
+              Access to the admin section is restricted
+              </Typography>
+              <Typography variant="body1" component="div">
+              Please ensure you have the appropriate permissions to access this area.
+              </Typography>
+            </div>
+            <DialogActions>
+              <Button onClick={handleLogin} variant="contained" color="primary">
+                Login
+              </Button>
+              <Button onClick={handleClose} variant="outlined" color="error">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )}
+      {isLoggedIn &&
       <div className="container" style={{ backgroundColor: "#000" }}>
         <div className="left-sidebar" >
 
@@ -306,7 +352,7 @@ const Dashboard = () => {
 
                   <p><strong>Average Rating: </strong>{sitem.avgRating}</p>
                   <p><strong>Description: </strong> {sitem.desc}</p>
-                  <p><strong>Is Active:</strong> {sitem.isActive ? "True" : "False"}</p>
+             
 
                   <Button onClick={handleCloses} variant="contained" color="error">
                     Close
@@ -363,7 +409,7 @@ const Dashboard = () => {
           </div>
 
         </div>
-      </div>
+      </div>}
     </div>
 
   );

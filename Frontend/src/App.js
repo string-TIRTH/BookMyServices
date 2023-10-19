@@ -32,7 +32,7 @@ import Sample from './Components/Customer-dashboard/Sample';
 import Sample2 from './Components/Customer-dashboard/Sample2';
 import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
 import AddOn from './Components/Admin-dashboard/AddOn/AddOn';
-import EmpDashBoard from './Components/Employee-dashboard/Dashboard';
+import EmpDashBoard, { AppContext } from './Components/Employee-dashboard/Dashboard';
 // import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
 // import Employee from './Components/Admin-dashboard/Employee';
 // import Services from './Components/Admin-dashboard/Services';
@@ -44,17 +44,39 @@ import Feedback from './Components/Customer-dashboard/Feedback';
 import Success from './Components/Customer-dashboard/Success';
 import Failed from './Components/Customer-dashboard/Failed';
 // import Contact from './Components/Customer-dashboard/';
-
+import img from './Components/img/AdminLock.jpg'
+import { useEffect, useState } from "react";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import md5 from'md5'
+import Typography from '@mui/material/Typography';
 function App() {
+  const [isOpen, setIsOpen] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  useEffect(() => {
+
+
+    if (localStorage.getItem('role') === md5("Admin")) {
+      setIsLoggedIn(true);
+  
+    }
+  }, []);
+  const handleClose =() =>{
+    setIsOpen(false);
+  }
+  const handleLogin =() =>{
+    window.location.herf="/login";
+  }
   return (
     <div>
+    
       <Router>
-
+      
         <Routes>
-          <Route path="/login" element={<Login></Login>} />
-          <Route path="/signup" element={<Signup />} />
-
-          <Route path="/Admin/" element={<Dashboard />} />
+        
+         
+          <Route path="/Admin/" element={ <Dashboard />} />
           <Route path="/Admin/Customer" element={<Customer />} />
           <Route path="/Admin/Addcustomer" element={<AddCustomer />} />
           <Route path="/Admin/EditCustomer/:id" element={<EditCustomer />} />
@@ -70,8 +92,10 @@ function App() {
           <Route path="/Admin/AddOn/" element={<AddOn />} />
           <Route path="/Admin/Logout/" element={<Logout />} />
           <Route path="/Admin/EmpSer/" element={<EmpSer />} />
+        
 
-
+          <Route path="/login" element={<Login></Login>} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home></Home>} />
           <Route path="/Customer/AddServices/" element={<CustAddser />} />
           <Route path="/Customer/About/" element={<About />} />
@@ -91,11 +115,10 @@ function App() {
           <Route path="/Customer/Checkout/success" element={<Success />} />
           <Route path="/Customer/Checkout/failed" element={<Failed />} />
           
-          {/* <Route path="/Admin/Employee" element={<Employee />} /> */}
-          {/* <Route path="/Admin/Services" element={<Services />} /> */}
+
           
           <Route path="/Employee/" element={<EmpDashBoard />} />
-          {/* <Route path="/Order/success" element={<EmpDashBoard />} /> */}
+         
           
         </Routes>
 

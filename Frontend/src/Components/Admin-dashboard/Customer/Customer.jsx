@@ -4,10 +4,40 @@ import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TablePagination from '@mui/material/TablePagination';
-
+import md5 from 'md5';
+import img from '../AdminLock.jpg';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 const rowsPerPageOptions =  [8,10,15];
 
 const Customer = () => {
+    const [isOpen, setIsOpen] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    useEffect(() => {
+  
+  
+      if (localStorage.getItem('role') === md5("Admin")) {
+        setIsLoggedIn(true);
+    
+      }
+    }, []);
+    const handleClose =() =>{
+      setIsOpen(false);
+    }
+    const handleLogin =() =>{
+      window.location.href="/login"
+    }
+    useEffect(() => {
+
+
+        if (localStorage.getItem('role') === md5("Admin")) {
+          setIsLoggedIn(true);
+               
+    
+        }
+      }, []);
  
    
     const [empdata, empdatachange] = useState([]);
@@ -103,6 +133,37 @@ const Customer = () => {
         }, []);
 
     return (
+        <>
+         {!isLoggedIn && (
+        <div style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+          <img
+            src={img}
+            alt="Full Page Image"
+
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          />
+          <Dialog open={isOpen} onClose={handleClose}>
+            <div style={{ padding: '16px' }}>
+              <Typography variant="h5" component="div" gutterBottom>
+                Employee Must have to do login
+              </Typography>
+              <Typography variant="body1" component="div">
+                Please log in to view your orders and details.
+              </Typography>
+            </div>
+            <DialogActions>
+              <Button onClick={handleLogin} variant="contained" color="primary">
+                Login
+              </Button>
+              <Button onClick={handleClose} variant="outlined" color="error">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )}
+      {isLoggedIn && 
 
         <div className="container" style={{ backgroundColor: "#000" }}>
             <div className="left-sidebar">
@@ -177,6 +238,8 @@ const Customer = () => {
                 </div>
             </div>
         </div>
+}
+        </>
 
 
     );

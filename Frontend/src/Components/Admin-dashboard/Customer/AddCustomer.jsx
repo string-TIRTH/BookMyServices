@@ -130,10 +130,10 @@ export default function AddCustomer() {
                 text: 'BookMyService Got Your Back',
                 icon: 'success',
                 confirmButtonText: 'Okay'
-            })
+            }).then(  
+            window.location.href = '/Admin/Customer')
       
-              console.log('Data sent successfully:', response.data);
-              window.location.href = '/Admin/Customer';
+             
             } catch (error) {
                 Swal.fire({
                   title: 'Ah.. Something Went Wrong...!',

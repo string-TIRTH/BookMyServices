@@ -18,6 +18,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 import { BsTrash } from 'react-icons/bs';
+import Employee from '../Admin-dashboard/Employee/Employee';
+import md5 from 'md5'
 const Home = (props) => {
   const [today, setToday] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -108,16 +110,17 @@ const Home = (props) => {
   useEffect(() => {
 
 
-    if (localStorage.getItem('role') != null) {
+    if (localStorage.getItem('role') === md5("Employee")) {
       setIsLoggedIn(true);
-      const data = {
-        _id: localStorage.getItem('id')
-      };
-      axios.post(`http://localhost:5000/employee/getEmployeeById`, data)
-        .then((response) => {
+    
+      // axios.post(`http://localhost:5000/employee/getEmployeeById`, data)
+      //   .then((response) => {
 
-
-        });
+      //    if(response)
+      //    setIsLoggedIn(true);
+      //   else
+      //   setIsLoggedIn(false);
+      //   });
 
     }
   }, []);

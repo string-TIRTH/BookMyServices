@@ -70,12 +70,21 @@ export default function AddEmployee() {
 
          
           if (!isEmailValid) {
-            alert('Invalid email address. Please enter a valid email.');
+            Swal.fire({
+              title: 'Invalid email address!',
+              text: ' Please enter a valid email.',
+              icon: 'warning',
+              confirmButtonText: 'Re-Enter'
+            })
           }
 
           if (!isPasswordValid) {
-            alert('Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.');
-          }
+            Swal.fire({
+              title: 'Invalid password!',
+              text: ' Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.',
+              icon: 'warning',
+              confirmButtonText: 'Re-Enter'
+            })          }
 
 
           if (!isEmailValid || !isPasswordValid) {
@@ -122,11 +131,13 @@ export default function AddEmployee() {
                 icon: 'success',
                 text: "email has been sent",
                 confirmButtonText: 'Close'
-              })
+              }).then(
+                
+            
+              window.location.href = '/Admin/Employee'
+              )
       
       
-              console.log('Data sent successfully:', response.data);
-              window.location.href = '/Admin/Employee';
             } catch (error) {
               Swal.fire({
                 title: 'Something Went Wrong... :/',

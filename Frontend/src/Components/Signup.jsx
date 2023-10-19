@@ -5,6 +5,7 @@ import NavBar from './NavBar';
 import { useEffect } from 'react';
 import axios from 'axios';
 import md5 from 'md5';
+import Swal from 'sweetalert2'
 // import {  useHistory } from 'react-router-dom'; // Import Link for navigation
 
 const Signup = () => {
@@ -73,7 +74,12 @@ const Signup = () => {
       const emailExists = await checkEmailExists(data);
           
       if (emailExists) {
-            alert("Email address is already exist");
+        Swal.fire({
+            title: ' email already Exist address!',
+            text: ' Please enter another email.',
+            icon: 'warning',
+            confirmButtonText: 'Re-Enter'
+          })
             setEmail('');
             setPassword('');
             setConfirmPassword('')
@@ -85,12 +91,21 @@ const Signup = () => {
 
     // Display validation messages
     if (!isEmailValid) {
-      alert('Invalid email address. Please enter a valid email.');
+        Swal.fire({
+            title: 'Invalid email address!',
+            text: ' Please enter a valid email.',
+            icon: 'warning',
+            confirmButtonText: 'Re-Enter'
+          })
     }
 
     if (!isPasswordValid) {
-      alert('Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.');
-    }
+        Swal.fire({
+            title: 'Invalid password!',
+            text: ' Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.',
+            icon: 'warning',
+            confirmButtonText: 'Re-Enter'
+          }) }
 
 
     if (!isEmailValid || !isPasswordValid) {
@@ -131,14 +146,29 @@ const Signup = () => {
             }
 
             const response = await axios.post('http://localhost:5000/customer/createCustomer',data);
-            alert('Signup Successfully now you can login');
+           
           
-            if(response)
-            setlog(true);
+            if(response){
+                Swal.fire({
+                    text:'Signup Successfully now you can login in.... ',
+                    icon: 'success',
+                    title: "signup Successfully!!!",
+                    confirmButtonText: 'Close'
+                  })
+                setlog(true);
+            }
+            
             console.log('Data sent successfully:', response.data);
           } catch (error) {
-            alert('Signup fails :(')
-            console.error('Error sending data:', error);
+            Swal.fire({
+                title: 'Something Went Wrong!',
+                text: 'Please Try Again Later',
+                icon: 'question',
+                confirmButtonText: 'Got It!'
+              })
+              console.error('Error sending data:', error);
+          
+           
   
           }
         }

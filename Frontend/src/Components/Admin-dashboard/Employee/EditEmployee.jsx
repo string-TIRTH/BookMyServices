@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import md5 from "md5"
+import Swal from 'sweetalert2';
 // import { Link } from 'react-router-dom';
 import axios from 'axios';
 const EditEmployee = (props) => {
@@ -84,7 +85,12 @@ const EditEmployee = (props) => {
     }
     const emailExists = await checkEmailExists(data);
     if (emailExists) {
-      alert("Email address is already exist");
+      Swal.fire({
+        title: ' email already Exist address!',
+        text: ' Please enter another email.',
+        icon: 'warning',
+        confirmButtonText: 'Re-Enter'
+      })
       setEmail('');
       setpassword('');
     }
@@ -94,12 +100,21 @@ const EditEmployee = (props) => {
 
       // Display validation messages
       if (!isEmailValid) {
-        alert('Invalid email address. Please enter a valid email.');
+        Swal.fire({
+          title: 'Invalid email address!',
+          text: ' Please enter a valid email.',
+          icon: 'warning',
+          confirmButtonText: 'Re-Enter'
+        })
       }
 
       if (!isPasswordValid) {
-        alert('Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.');
-      }
+        Swal.fire({
+          title: 'Invalid password!',
+          text: ' Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.',
+          icon: 'warning',
+          confirmButtonText: 'Re-Enter'
+        })      }
 
 
       if (!isEmailValid || !isPasswordValid) {
@@ -139,14 +154,28 @@ const EditEmployee = (props) => {
           }
 
           const response = await axios.post('http://localhost:5000/employee/updateEmployee', data);
-          alert('Updated Successfully');
+          Swal.fire({
+            text: 'Employee Updated Successfully',
+            icon: 'success',
+            title: "Employee updated!!!",
+            confirmButtonText: 'Close'
+          }).then(
+            
+        
+          window.location.href = '/Admin/Employee'
+          )
 
 
           console.log('Data sent successfully:', response.data);
           window.location.href = '/Admin/Employee';
         } catch (error) {
-          alert('Signup fails :(')
-          console.error('Error sending data:', error);
+          Swal.fire({
+            title: 'Something Went Wrong... :/',
+            icon: 'warning',
+            text: "please try again later",
+            confirmButtonText: 'Got It'
+          })
+        
 
         }
       }
