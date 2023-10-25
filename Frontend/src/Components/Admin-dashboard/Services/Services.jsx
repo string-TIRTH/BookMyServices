@@ -95,7 +95,7 @@ const Services = () => {
                 <div className="centered-form" style={{ width: "900px", height: "100%" }}>
                     <div className="card" style={{ width: "1100px", height: "100%", marginLeft: "3px", marginRight: "0px" }}>
                         <div className="card-title" style={{ marginLeft: "300px" }}>
-                            <h2>Employee Listing</h2>
+                            <h2>Services</h2>
                         </div>
                         <div className="card-body">
                             <div className="divbtn">

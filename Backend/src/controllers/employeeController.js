@@ -97,7 +97,7 @@ module.exports = {
   },
   getEmployeeByEmail: async (req, res) => {
     // const custId = req.body.email;
-    // console.log(req.body.email)
+    console.log(req.body.email)
     try {
       const employee = await Employee.findOne({email:req.body.email});
      if(employee){
@@ -174,6 +174,7 @@ module.exports = {
     // const  {fname,lname,email,password,contact_no}  = req.body;
     try {
         const employee = await Employee.findByIdAndUpdate(empId, update, { new: true });
+        console.log(employee)
         res.send(employee);
     }catch (error) {
         console.error(error);

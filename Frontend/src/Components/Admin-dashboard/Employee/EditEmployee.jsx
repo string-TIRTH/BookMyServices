@@ -34,6 +34,17 @@ const EditEmployee = (props) => {
     axios.post(`http://localhost:5000/employee/getEmployeeById`, data)
       .then((response) => {
         console.log(response.data)
+        setEmail(response.data.email) 
+        setpassword(response.data.password) 
+        setfname(response.data.fname) 
+        setlname(response.data.lname) 
+        setcontact(response.data.contact_no) 
+        setAddress(response.data.address[0].society_name)
+        setlandmark(response.data.address[0].landmark)
+        setcity(response.data.address[0].city)
+        setPincode(response.data.address[0].pincode)
+        sethouse_no(response.data.address[0].house_no)
+
         setuser(response.data);
       })
       .catch((error) => {
@@ -85,16 +96,6 @@ const EditEmployee = (props) => {
     }
     const emailExists = await checkEmailExists(data);
     if (emailExists) {
-      Swal.fire({
-        title: ' email already Exist address!',
-        text: ' Please enter another email.',
-        icon: 'warning',
-        confirmButtonText: 'Re-Enter'
-      })
-      setEmail('');
-      setpassword('');
-    }
-    else {
       const isEmailValid = emailPattern.test(email);
       const isPasswordValid = passwordPattern.test(password);
 

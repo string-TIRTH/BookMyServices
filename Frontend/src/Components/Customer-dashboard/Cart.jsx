@@ -233,6 +233,7 @@ const Cart = () => {
             const placeOrderData = {
                 custId: id._id,
                 address: address,
+                payment_method : "CASH",
                 lat: lat,
                 lng: lng
             }
@@ -287,6 +288,7 @@ const Cart = () => {
             const placeOrderData = {
                 custId: id._id,
                 address: address,
+                payment_method : "CREDIT-CARD",
                 lat: lat,
                 lng: lng
             }

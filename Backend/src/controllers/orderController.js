@@ -150,7 +150,7 @@ module.exports = {
                         service_endTime: service_endTime,
                         service_date: ser.date,
                         address: address,
-                        payment_mode: req.body.payment_mode ?? "Cash",
+                        payment_mode: req.body.payment_method ?? "Cash",
                         amount: price,
                         status: "assigned",
                         promocode: req.body.promocode ?? null,

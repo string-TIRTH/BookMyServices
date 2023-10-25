@@ -158,7 +158,7 @@ const Today = (props) => {
 
             axios.post("http://localhost:5000/order/activeService",data)
                 .then((response) => {
-             
+                    console.log(response)
                     setActiveHomeState(true);
                     setToday(false);
                  

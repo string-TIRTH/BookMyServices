@@ -1,10 +1,8 @@
 
 import './App.css';
-// import Admin from './Components/Admin-dashboard/Admin'
 import Login from './Components/Login';
 import Signup from './Components/Signup';
 import Home from './Components/Customer-dashboard/Home'
-// import Sidebar from './Components/Admin-dashboard/Sidebar';
 import Dashboard from './Components/Admin-dashboard/Dashboard';
 import Places from './Components/Customer-dashboard/Place';
 import Customer from './Components/Admin-dashboard/Customer/Customer';
@@ -33,9 +31,6 @@ import Sample2 from './Components/Customer-dashboard/Sample2';
 import EmpSer from './Components/Admin-dashboard/EmpSer/EmpSer';
 import AddOn from './Components/Admin-dashboard/AddOn/AddOn';
 import EmpDashBoard, { AppContext } from './Components/Employee-dashboard/Dashboard';
-// import CreateCustomer from './Components/Admin-dashboard/CreateCustomer';
-// import Employee from './Components/Admin-dashboard/Employee';
-// import Services from './Components/Admin-dashboard/Services';
 import CustProfile from './Components/Customer-dashboard/CustProfile';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CustEditProfile from './Components/Customer-dashboard/CustEditProfile';
@@ -43,7 +38,6 @@ import CustOrder from './Components/Customer-dashboard/CustOrder';
 import Feedback from './Components/Customer-dashboard/Feedback';
 import Success from './Components/Customer-dashboard/Success';
 import Failed from './Components/Customer-dashboard/Failed';
-// import Contact from './Components/Customer-dashboard/';
 import img from './Components/img/AdminLock.jpg'
 import { useEffect, useState } from "react";
 import Dialog from '@mui/material/Dialog';
@@ -101,7 +95,6 @@ function App() {
           <Route path="/Customer/About/" element={<About />} />
           <Route path="/Customer/Contact/" element={<Contact />} />
           <Route path="/Home/DetailsServices/:id" element={<HomeserDetails />} />
-          {/* <Route path="/Customer/Cart/" element={<CustomerCart />} /> */}
           <Route path="/Customer/SetTime/:id" element={<SetTime />} />
           <Route path="/Customer/OrderCart/:id" element={<OrderCart />} />
           <Route path="/Customer/Cart" element={<Cart />} />
