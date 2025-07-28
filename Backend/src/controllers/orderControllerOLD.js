@@ -28,13 +28,13 @@ module.exports = {
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-                console.log(serTimeList)
+                //console.log(serTimeList)
                 let orderList = []
                 let foundEmpId = null;
                 let empFound = false;
                 for (let eid of empIdList) {
                     const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: serDate, service_startTime: { $in: serTimeList } })
-                    console.log(availOrderList)
+                    //console.log(availOrderList)
                     if (availOrderList != null && availOrderList != "") {
                         orderList.push(availOrderList)
                     } else {
@@ -46,7 +46,7 @@ module.exports = {
 
                 if (empFound) {
                     let serRes = await ServiceModel.findById(ser.serId, { time: true, price: true });
-                    console.log(serRes);
+                    //console.log(serRes);
                     let price = 0;
                     if (req.body.discount != "") {
                         price = serRes.price;
@@ -70,29 +70,29 @@ module.exports = {
                         status: "assigned",
                         promocode: req.body.promocode,
                     });
-                    // console.log(order);
+                    // //console.log(order);
                     i++;
                     const newOrder = await order.save();
-                    console.log(newOrder)
+                    //console.log(newOrder)
 
                 }
 
             }
             let responseAck = {}
-            console.log(i)
+            //console.log(i)
             if (i == 0) {
-                console.log("employee not found")
+                //console.log("employee not found")
                 responseAck.serviceAssign = 0;
                 responseAck.status = "employee not found"
                 responseAck.code = 2
             }
             else if (i < serList.length) {
-                console.log("employee not found")
+                //console.log("employee not found")
                 responseAck.serviceAssign = i;
                 responseAck.status = "ok"
                 responseAck.code = 1; // some employee assigned
             } else {
-                console.log("employee assigned")
+                //console.log("employee assigned")
                 responseAck.serviceAssign = i;
                 responseAck.status = "success"
                 responseAck.code = 0; //

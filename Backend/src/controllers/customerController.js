@@ -6,7 +6,7 @@ const ServiceModel = require('../models/ServiceModel');
 const CustomerModel = require('../models/CustomerModel');
 module.exports = {
   getAllCustomers: async (req, res) => {
-    // console.log("Hello");
+    // //console.log("Hello");
     try {
       const customer = await Customer.find({});
       res.status(200).json(customer);
@@ -19,10 +19,10 @@ module.exports = {
     const email = req.body.email;
     const password = req.body.password
     const customer = await Customer.findOne({"email": email},{password:true});
-    // console.log(customer)
+    // //console.log(customer)
     if(customer != '' && customer != null){
     if(customer.password == password){
-      console.log("success")
+      //console.log("success")
       res.json({message:true});
     }else{
       res.json({message:false});
@@ -34,7 +34,7 @@ module.exports = {
   },
   createCustomer: async (req, res) => {
     try {
-      // console.log(req);
+      // //console.log(req);
     const customer = new Customer({
         fname : req.body.fname,
         lname : req.body.lname,
@@ -81,7 +81,7 @@ module.exports = {
 
     try {
       const customer = await Customer.findById(custId);
-      console.log(customer)
+      //console.log(customer)
       res.status(200).json(customer);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
@@ -89,36 +89,36 @@ module.exports = {
   },
   getCustomerbyemail: async (req, res) => {
     // const custId = req.body.email;
-    // console.log(req.body.email)
+    // //console.log(req.body.email)
     try {
       const customer = await Customer.findOne({email:req.body.email});
      if(customer){
-      console.log("true");
+      //console.log("true");
     
      res.status(200).json({message : true})
     }
     else{
-      console.log("false")
+      //console.log("false")
       res.status(200).json({message : false});
     }
      
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       res.status(500).json({ mess: false });
     }
   },
   updateCustomer: async(req,res)=>{
     const custId  = req.body._id;
     const update  = req.body;
-    // console.log(custId)
-    // console.log(req.body)
+    // //console.log(custId)
+    // //console.log(req.body)
     try {
         const customer = await Customer.findByIdAndUpdate(custId,update, { new: true });
       
         res.send(customer);
         
     }catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).json({ error: 'Server error' });
     }
   },
@@ -138,7 +138,7 @@ module.exports = {
   activeCustomer : async (req, res) => {
     const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Customer.findByIdAndUpdate(custId,{ status: 'active' },{new:true});
         
@@ -152,7 +152,7 @@ module.exports = {
   getActiveCustomer : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Customer.find({status:'active'});
         
@@ -166,7 +166,7 @@ module.exports = {
   getInActiveCustomer : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Customer.find({status:'inactive'});
         
@@ -227,9 +227,9 @@ module.exports = {
         serList.push(serRecord);
         customer.cart.serList = serList;
       }
-      // console.log(customer);
+      // //console.log(customer);
       const newCustomer = await Customer.findByIdAndUpdate(custId,customer);
-      // console.log(newCustomer);
+      // //console.log(newCustomer);
       res.send("ok");
     } catch (error) {
       res.status(500).json(error);
@@ -253,16 +253,16 @@ module.exports = {
       }
       customer.cart.serList = serList;
       
-      // console.log(customer);
+      // //console.log(customer);
       const newCustomer = await Customer.findByIdAndUpdate(custId,customer);
-      // console.log(newCustomer);
+      // //console.log(newCustomer);
       res.send("ok");
     } catch (error) {
       res.status(500).json(error);
     }
   },
   cart : async (req, res) =>{
-    // console.log(req.body)
+    // //console.log(req.body)
     const custId = req.body.custId;
     try{
       const customer = await Customer.findById(custId);
@@ -272,7 +272,7 @@ module.exports = {
       }else{
         res.send(customer);
       }
-      // console.log(customer);
+      // //console.log(customer);
       
     } catch (error) {
       res.status(500).json(error);
@@ -284,9 +284,9 @@ module.exports = {
       const customer = await Customer.findById(custId);
         customer.cart.serList = null;
       
-      // console.log(customer);
+      // //console.log(customer);
       const newCustomer = await Customer.findByIdAndUpdate(custId,customer);
-      console.log(newCustomer);
+      //console.log(newCustomer);
       res.send("ok");
     } catch (error) {
       res.status(500).json(error);

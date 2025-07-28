@@ -4,7 +4,7 @@ const moment = require("moment-timezone")
 const uploadImage = require("../Helper/imageUploader.js")
 module.exports = {
   createService:  async  (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const service = new ServiceModel({
         name: req.body.name,
         price: req.body.price,
@@ -22,7 +22,7 @@ module.exports = {
     ext = ext.substring(ext.indexOf(".") + 1);
     image.name = id + "." + ext;
     folderPath = "Services";
-    // console.log(image.name)
+    // //console.log(image.name)
     // Move the uploaded file to a specific location (e.g., 'uploads/')
     image.mv('src/assets/uploads/' + image.name, async (err) => {
         if (err) {
@@ -30,7 +30,7 @@ module.exports = {
         }
         const result = await uploadImage(id,folderPath,image.name);
         service.url = result.secure_url;
-        console.log(result)
+        //console.log(result)
         service.imageId = result.public_id;
         const newService = await service.save();
         res.json(newService);
@@ -55,14 +55,14 @@ getService:  async (req, res) => {
 getServiceById:  async (req, res) => {
 const serId = req.body.serId;   
 
-console.log(req.body.serId) 
+//console.log(req.body.serId) 
 try {
         
         const service = await ServiceModel.findById(serId);
         res.json(service);
     }
     catch (err) {
-        console.log(err);
+        //console.log(err);
         res.json({
             message: err
         });

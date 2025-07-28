@@ -36,14 +36,14 @@ module.exports = {
       const newAdmin = await admin.save();
       res.status(201).json(newAdmin);
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       res.status(400).json({ error: 'Bad request' });
     }
   },
 
   getAdminById: async (req, res) => {
     const empId = req.body._id;
-    // console.log(req.body)
+    // //console.log(req.body)
 
     try {
       const admin = await Admin.findById(empId);
@@ -55,28 +55,28 @@ module.exports = {
   },
   getAdminByEmail: async (req, res) => {
     // const custId = req.body.email;
-    // console.log(req.body.email)
+    // //console.log(req.body.email)
     try {
       const admin = await Admin.findOne({email:req.body.email});
      if(admin){
-      // console.log("true");
+      // //console.log("true");
     
      res.status(200).json({mess : true})
     }
     else{
-      // console.log("false")
+      // //console.log("false")
       res.status(200).json({mess : false});
     }
      
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       res.status(500).json({ mess: false });
     }
   },
   updateAdmin: async(req,res)=>{
     const empId  = req.body._id;
     const update  = req.body;
-    // console.log(req.body)
+    // //console.log(req.body)
     // const  {fname,lname,email,password,contact_no}  = req.body;
     try {
         const admin = await Admin.findByIdAndUpdate(empId, update, { new: true });
@@ -100,7 +100,7 @@ module.exports = {
   activeAdmin : async (req, res) => {
     const empId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const admin = await Admin.findByIdAndUpdate(empId,{ isActive:true },{new:true});
         
@@ -114,7 +114,7 @@ module.exports = {
   getActiveCustomer : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Admin.find({status:'active'});
         
@@ -128,7 +128,7 @@ module.exports = {
   getInActiveCustomer : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Admin.find({status:'inactive'});
         

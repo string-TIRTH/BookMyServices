@@ -2,7 +2,7 @@ const transporter = require("../config/email.config");
 
 async function empAccCreationEmail(employee){
     const mailData = {
-        from: 'bookmyservice@noreply.com',  // sender address
+        from: 'bookmyservice@no-reply.com',  // sender address
         to: employee.email,   // list of receivers
         subject: 'Welcome To BookMyServices',
         text: 'Please login using given password and change it',

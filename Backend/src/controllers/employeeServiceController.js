@@ -15,9 +15,9 @@ module.exports = {
     try {
       const empId = req.body.empId;
       const serId = req.body.serId;
-      console.log(empId)
+      //console.log(empId)
       const empSer = await EmpSerModel.findOne({ "empId": empId });
-      console.log(empSer)
+      //console.log(empSer)
       if (empSer == null || empSer == '') {
 
         const serList = {
@@ -37,7 +37,7 @@ module.exports = {
           const _id = empSer._id;
 
           const serList = empSer.serList;
-          console.log(empSer)
+          //console.log(empSer)
           serList.push({ serId: serId });
           empSer.serList = serList;
           const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer)
@@ -49,12 +49,12 @@ module.exports = {
       }
     }
     catch (err) {
-      console.log(err)
+      //console.log(err)
       res.status(500).send(err);
     }
   },
   removeService: async (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     try {
       const empId = req.body.empId;
       const serId = req.body.serId;
@@ -78,14 +78,14 @@ module.exports = {
           }
           empSer.serList = serList;
 
-          // console.log(customer);
+          // //console.log(customer);
           const newEmpSer = await EmpSerModel.findByIdAndUpdate(_id, empSer);
           res.status(200).json("removed");
         }
       }
     }
     catch (err) {
-      console.log(err)
+      //console.log(err)
       res.status(500).send(err);
     }
   },

@@ -2,7 +2,7 @@
 const transporter = require("../config/email.config");
 async function sendOrderCompletionOTP(email,order) {
     const mailData = {
-        from: 'bookmyservice@noreply.com',  // sender address
+        from: 'bookmyservice@no-reply.com',  // sender address
         to: email,   // list of receivers
         subject: 'OTP for service completion',
         text: 'OTP for service completion kindly submit it to our employee',

@@ -43,7 +43,7 @@ module.exports = {
     try{
         const email = req.body.email;
     const role = req.body.role;
-    console.log(role)
+    //console.log(role)
     if(role === "customer"){
         const user = await Customer.findOne({"email": email});
         if(user != null || user!=''){

@@ -18,7 +18,7 @@ module.exports = {
             const date = req.body.date
             const time = req.body.time
             const empIdList = await EmpSerModel.distinct("empId", { "serList.serId": serId }, { empId: true });
-            // console.log(empIdList)
+            // //console.log(empIdList)
             serTimeList = [];
             const startTime = time;
             hour = startTime[0] + startTime[1]
@@ -32,14 +32,14 @@ module.exports = {
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
             serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-            // console.log(serTimeList)
+            // //console.log(serTimeList)
             let orderList = []
             let foundEmpId = null;
             let empFound = false;
             for (let eid of empIdList) {
-                // console.log(eid)
+                // //console.log(eid)
                 const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: date, service_startTime: { $in: serTimeList }, isActive: true })
-                // console.log(availOrderList)
+                // //console.log(availOrderList)
                 if (availOrderList != null && availOrderList != "") {
                     orderList.push(availOrderList)
                 } else {
@@ -57,7 +57,7 @@ module.exports = {
                     message: false
                 }
             }
-            // console.log(responseAck)
+            // //console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -72,18 +72,18 @@ module.exports = {
             const address = req.body.address;
             const custLat = req.body.lat;
             const custLng = req.body.lng;
-            // console.log(address)
-            // console.log(custId)
+            // //console.log(address)
+            // //console.log(custId)
 
             const customer = await CustomerModel.findById(custId, { cart: true });
-            // console.log(customer)
+            // //console.log(customer)
             address.lat = custLat;
             address.lng = custLng;
-            console.log(custLat)
-            console.log(custLng)
+            //console.log(custLat)
+            //console.log(custLng)
             const serList = customer.cart.serList;
             // const serList = req.body.serList;
-            // console.log(serList)
+            // //console.log(serList)
             let temp = [];
             const serDate = req.body.service_date;
             let i = 0;
@@ -94,7 +94,7 @@ module.exports = {
                 let empIdList = await EmpSerModel.distinct("empId", { "serList.serId": ser.serId }, { empId: true });
                 serTimeList = [];
                 const startTime = ser.time;
-                // console.log(startTime);
+                // //console.log(startTime);
                 hour = startTime[0] + startTime[1]
                 minute = startTime[3] + startTime[4]
                 var st = moment({ hour: hour, minute: minute, seconds: 0 });
@@ -106,24 +106,24 @@ module.exports = {
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
                 serTimeList.push(t.add(60, 'minute').format('HH:mm:ss'))
-                // console.log(serTimeList)
+                // //console.log(serTimeList)
                 let orderList = []
                 let foundEmpId = null;
                 let empFound = false;
                 for (let eid of empIdList) {
                     const availOrderList = await OrderModel.findOne({ "empId": eid, service_date: ser.date, service_startTime: { $in: serTimeList }, isActive: true })
-                    // console.log(availOrderList)
+                    // //console.log(availOrderList)
                     if (availOrderList != null && availOrderList != "") {
                         orderList.push(availOrderList)
                     } else {
                         foundEmpId = eid;
                         const employee = await EmployeeModel.findById(eid, { address: true });
                         const distance = distanceCalc(custLat, custLng, employee.address[0].lat, employee.address[0].lng)
-                        console.log(distance)
-                        console.log(employee)
+                        //console.log(distance)
+                        //console.log(employee)
                         if (distance <= 10) {
                             empFound = true;
-                            console.log("hherere")
+                            //console.log("hherere")
                             break;
                         }
                     }
@@ -131,7 +131,7 @@ module.exports = {
 
                 if (empFound) {
                     let serRes = await ServiceModel.findById(ser.serId, { time: true, price: true });
-                    // console.log(serRes);
+                    // //console.log(serRes);
                     let price = 0;
                     if (req.body.discount != "") {
                         price = serRes.price;
@@ -155,36 +155,36 @@ module.exports = {
                         status: "assigned",
                         promocode: req.body.promocode ?? null,
                     });
-                    // console.log(order);
+                    // //console.log(order);
                     i++;
                     const newOrder = await order.save();
-                    // console.log(newOrder)
+                    // //console.log(newOrder)
 
                 }
 
             }
             let responseAck = {}
-            // console.log(i)
+            // //console.log(i)
             if (i == 0) {
-                // console.log("employee not found")
+                // //console.log("employee not found")
                 responseAck.serviceAssign = 0;
                 responseAck.status = "employee not found"
                 responseAck.code = 2
             }
             else if (i < serList.length) {
-                // console.log("employee not found")
+                // //console.log("employee not found")
                 const result = await OrderModel.deleteMany({ orderId: orderId });
                 responseAck.serviceAssign = i;
                 responseAck.status = "ok"
                 responseAck.code = 1; // some employee assigned
             } else {
-                // console.log("employee assigned")
+                // //console.log("employee assigned")
                 responseAck.serviceAssign = i;
                 responseAck.status = "success";
                 responseAck.orderId = orderId;
                 responseAck.code = 0; //
             }
-            console.log(responseAck)
+            //console.log(responseAck)
             res.json(responseAck);
         }
         catch (err) {
@@ -195,7 +195,7 @@ module.exports = {
     },
     test: async (req, res) => {
         try {
-            // console.log(moment().unix());
+            // //console.log(moment().unix());
             res.send("he;;pw");
         }
         catch (err) {
@@ -331,11 +331,11 @@ module.exports = {
 
                 ],
             )
-            // console.log(completedOrders)
+            // //console.log(completedOrders)
             res.json({ completedOrders: completedOrders, pendingOrders: pendingOrders });
         }
         catch (err) {
-            console.log(err)
+            //console.log(err)
             res.json({
                 message: err
             });
@@ -345,7 +345,7 @@ module.exports = {
         try {
             const empId = req.body.empId;
             const date = moment().format('YYYY-MM-DD');
-            // console.log(date)
+            // //console.log(date)
             const pendingOrders = await OrderModel.aggregate(
                 [
                     { $match: { empId: new mongoose.Types.ObjectId(empId), service_date: date, status: "assigned" } },
@@ -396,11 +396,11 @@ module.exports = {
 
                 ],
             )
-            // console.log(pendingOrders)
+            // //console.log(pendingOrders)
             res.json({ pendingOrders: pendingOrders });
         }
         catch (err) {
-            console.log(err)
+            //console.log(err)
             res.send(
                 err
             );
@@ -422,7 +422,7 @@ module.exports = {
                 }
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
@@ -442,7 +442,7 @@ module.exports = {
                 }
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
@@ -462,7 +462,7 @@ module.exports = {
                 }
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.status(400).send("Invalid Action");
         }
     },
@@ -470,7 +470,7 @@ module.exports = {
         try {
             const empId = req.body.empId;
             const date = moment().format('YYYY-MM-DD');
-            console.log(date)
+            //console.log(date)
             const upcomingOrders = await OrderModel.aggregate(
                 [
                     { $match: { empId: new mongoose.Types.ObjectId(empId), service_date: { $not: { $eq: date } }, status: "assigned" } },
@@ -521,11 +521,11 @@ module.exports = {
 
                 ],
             )
-            // console.log(upcomingOrders)
+            // //console.log(upcomingOrders)
             res.json({ upcomingOrders: upcomingOrders });
         }
         catch (err) {
-            console.log(err)
+            //console.log(err)
             res.send(
                 err
             );
@@ -533,9 +533,9 @@ module.exports = {
     },
     createCheckout: async (req, res) => {
 
-        // console.log(req.body)
+        // //console.log(req.body)
         const services = req.body.products
-        console.log(services)
+        //console.log(services)
         const lineItems = services.map((services)=>({
             price_data:{
                 
@@ -554,8 +554,8 @@ module.exports = {
             success_url: `http://localhost:3000/Customer/Checkout/success`,
             cancel_url: `http://localhost:3000/Customer/Checkout/failed`,
         });
-        console.log("session Data:")
-        console.log(session)
+        //console.log("session Data:")
+        //console.log(session)
         // session.orderId = 10001;
         res.json({id:session.id});
 
@@ -563,9 +563,9 @@ module.exports = {
     success : async (req, res) => {
         const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
         // const customer = await stripe.customers.retrieve(session.customer);
-        console.log("orderId")
-        console.log(session.status)
-        // console.log(customer)
+        //console.log("orderId")
+        //console.log(session.status)
+        // //console.log(customer)
         
         // res.send(`<html><body><h1>Thanks for your order!</h1></body></html>`);
         res.redirect("http://localhost:3000/Customer/CustOrder");
@@ -575,7 +575,7 @@ module.exports = {
         try {
             const empId = req.body.empId;
             // const date = moment().format('YYYY-MM-DD');
-            // console.log(date)
+            // //console.log(date)
             const history = await OrderModel.aggregate(
                 [
                     { $match: { empId: new mongoose.Types.ObjectId(empId), status: "completed" } },
@@ -626,11 +626,11 @@ module.exports = {
 
                 ],
             )
-            // console.log(history)
+            // //console.log(history)
             res.json({ "history": history });
         }
         catch (err) {
-            console.log(err)
+            //console.log(err)
             res.send(
                 err
             );
@@ -681,10 +681,10 @@ module.exports = {
 
         const id = req.body.orderId;
         const otp = Math.round(Math.random() * (987654 - 123456) + 123456);
-        // console.log(otp)
+        // //console.log(otp)
         try {
             // const orderOLD = await OrderModel.find({"orderId" : id},{_id:true});
-            // console.log(orderOLD);
+            // //console.log(orderOLD);
             const order = await OrderModel.findById(id);
             if (order.otp != null) {
                 const oldOTPs = order.otp;
@@ -722,12 +722,12 @@ module.exports = {
                         "startTime": newOrder.service_startTime,
                         "otp": otp
                     }).then(async () => {
-                        // console.log(responseAck);
+                        // //console.log(responseAck);
                     });
                 }).then(() => {
                     res.json({ message: true });
                 }).catch((error) => {
-                    console.log(error)
+                    //console.log(error)
                     res.json({ message: false, code: 1 });
                 });
         } catch (error) {
@@ -736,13 +736,13 @@ module.exports = {
         }
     },
     addAddons: async (req, res) => {
-        // console.log(req.body)
+        // //console.log(req.body)
         try {
             const orderId = req.body.orderId;
             const addOnId = { item: req.body.addOnId };
             const order = await OrderModel.findById(orderId);
             const addOns = order.addOns;
-            // console.log(addOn)
+            // //console.log(addOn)
             if (addOns === '' || addOns === null) {
                 addOns.push(addOnId);
             } else {
@@ -756,7 +756,7 @@ module.exports = {
             res.send(newOrder)
 
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.json(err)
         }
     },
@@ -767,7 +767,7 @@ module.exports = {
             const order = await OrderModel.findById(orderId);
             const serId = order.serId;
             const addOnList = order.addOns
-            // console.log(addOnList)
+            // //console.log(addOnList)
             let addOnRes = []
             let total = 0;
             for (const item of addOnList) {
@@ -787,10 +787,10 @@ module.exports = {
             }
 
             // addOnRes.total = total;
-            // console.log(addOnRes)
+            // //console.log(addOnRes)
             res.json({ addOnList: addOnRes, subtotal: total })
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.json(err)
         }
     },
@@ -815,7 +815,7 @@ module.exports = {
             // res.json("ok")
 
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.json(err)
         }
     },
@@ -851,7 +851,7 @@ module.exports = {
             } else {
                 res.json({ message: false, code: 1 }) // code 1 : incorrect OTP
             }
-            //    console.log(order)
+            //    //console.log(order)
         } catch (error) {
             console.error(error);
             res.status(500).send(error);
@@ -921,7 +921,7 @@ module.exports = {
                 await EmployeeModel.findByIdAndUpdate(empId, { isBusy: true }, { new: true })
                 order.status = "working";
                 const newOrder = await OrderModel.findByIdAndUpdate(orderId, order);
-                // console.log(newOrder)
+                // //console.log(newOrder)
                 res.json(newOrder)
             } else {
                 res.json({ "message": false, code: 1 })

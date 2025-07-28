@@ -41,7 +41,7 @@ module.exports = {
       const speCharList = "!@#$%^&*()~_+=";
       password += speCharList[Math.floor(Math.random() * 13)];
       
-      console.log(password)
+      //console.log(password)
       const employee = new Employee({
           fname : fname,
           lname : lname,
@@ -50,7 +50,7 @@ module.exports = {
           contact_no : req.body.contact_no,
           address : req.body.address
       });
-      console.log(employee)
+      //console.log(employee)
       const newEmployee = await employee.save();
       emailSender({email:email,password:password})
       res.status(201).json(newEmployee);
@@ -72,20 +72,20 @@ module.exports = {
       }
       const speCharList = "!@#$%^&*()~_+=";
       password += speCharList[Math.floor(Math.random() * 13)];
-      console.log(password)
+      //console.log(password)
       
       emailSender({email:email,password:password})
 
       res.status(201).json('ok');
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       res.status(400).json(error);
     }
   },
 
   getEmployeeById: async (req, res) => {
     const empId = req.body._id;
-    // console.log(req.body)
+    // //console.log(req.body)
 
     try {
       const employee = await Employee.findById(empId);
@@ -97,34 +97,34 @@ module.exports = {
   },
   getEmployeeByEmail: async (req, res) => {
     // const custId = req.body.email;
-    console.log(req.body.email)
+    //console.log(req.body.email)
     try {
       const employee = await Employee.findOne({email:req.body.email});
      if(employee){
-      // console.log("true");
+      // //console.log("true");
     
      res.status(200).json({mess : true})
     }
     else{
-      // console.log("false")
+      // //console.log("false")
       res.status(200).json({mess : false});
     }
      
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       res.status(500).json({ mess: false });
     }
   },
   getTodaySchedules : async (req, res) => {
     const empId  = req.body.empId;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     const date = moment().format('YYYY-MM-DD')
-    // console.log(date)
+    // //console.log(date)
     try {
         const order = await OrderModel.find({empId:empId,service_date:date,status:'assigned'});
         
-        // console.log(order)
+        // //console.log(order)
         res.send(order);
     }catch (error) {
         console.error(error);
@@ -134,13 +134,13 @@ module.exports = {
   getUpcomingSchedules : async (req, res) => {
     const empId  = req.body.empId;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     const date = moment().format('YYYY-MM-DD')
-    // console.log(date)
+    // //console.log(date)
     try {
         const order = await OrderModel.find({empId:empId,service_date:{$nin :date},status:'assigned'});
         
-        // console.log(order)
+        // //console.log(order)
         res.send(order);
     }catch (error) {
         console.error(error);
@@ -170,11 +170,11 @@ module.exports = {
   updateEmployee: async(req,res)=>{
     const empId  = req.body._id;
     const update  = req.body;
-    // console.log(req.body)
+    // //console.log(req.body)
     // const  {fname,lname,email,password,contact_no}  = req.body;
     try {
         const employee = await Employee.findByIdAndUpdate(empId, update, { new: true });
-        console.log(employee)
+        //console.log(employee)
         res.send(employee);
     }catch (error) {
         console.error(error);
@@ -195,7 +195,7 @@ module.exports = {
   activeEmployee : async (req, res) => {
     const empId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const employee = await Employee.findByIdAndUpdate(empId,{ isActive:true },{new:true});
         
@@ -209,7 +209,7 @@ module.exports = {
   getActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Employee.find({isActive:true});
         
@@ -223,7 +223,7 @@ module.exports = {
   getInActiveEmployee : async (req, res) => {
     // const custId  = req.body._id;
     // const status = req.body.status
-    // console.log(req.body); 
+    // //console.log(req.body); 
     try {
         const customer = await Employee.find({isActive:false});
         

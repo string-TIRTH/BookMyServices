@@ -48,7 +48,7 @@ module.exports = {
             res.json({message:true});
         }
         catch (err) {
-            console.log(err)
+            //console.log(err)
             res.json({
                 message: false
             });

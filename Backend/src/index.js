@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 
@@ -47,7 +48,7 @@ app.use(express.static('public'));
 //     await client.connect();
 //     // Send a ping to confirm a successful connection
 //     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+//     //console.log("Pinged your deployment. You successfully connected to MongoDB!");
 //   } finally {
 //     // Ensures that the client will close when you finish/error
 //     await client.close();
@@ -58,10 +59,10 @@ app.use(express.static('public'));
 
 
 // const url = "mongodb://127.0.0.1:27017/bookmyservices";
-const url = "mongodb+srv://bookmyservicesone:Ce109Ce114@cluster0.rg4p8ay.mongodb.net/bookMyServices"
+const url = process.env.DB_URL
 mongoose.connect(url).then(()=>{
     console.log("Connected to DB")
-    app.listen(5000,()=>{
+    app.listen(process.env.PORT,()=>{
         console.log("port 5000");
     })
 }).catch((err)=>{
