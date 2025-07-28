@@ -62,7 +62,7 @@ app.use(express.static('public'));
 const url = process.env.DB_URL
 mongoose.connect(url).then(()=>{
     console.log("Connected to DB")
-    app.listen(process.env.PORT,()=>{
+    app.listen(process.env.PORT | 5000,()=>{
         console.log("port 5000");
     })
 }).catch((err)=>{
